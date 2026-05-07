@@ -11,10 +11,11 @@ export default function Navbar() {
             </Link>
           </div>
           <div className="hidden md:flex space-x-8">
-            <Link href="/" className="text-gray-700 hover:text-[#FA8F27] px-3 py-2 rounded-md font-medium">Home</Link>
-            <Link href="/services" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md font-medium">Services</Link>
-            <Link href="/hosting" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md font-medium">Hosting</Link>
-            <Link href="/contact" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md font-medium">Contact</Link>
+            <Link href="/about-us" className="text-gray-700 hover:text-[#FA8F27] px-3 py-2 rounded-md font-medium">About Us</Link>
+            <Link href="/services" className="text-gray-700 hover:text-[#FA8F27] px-3 py-2 rounded-md font-medium">Services</Link>
+            <Link href="/portfolio" className="text-gray-700 hover:text-[#FA8F27] px-3 py-2 rounded-md font-medium">Portfolio</Link>
+            <Link href="/#contacto" className="text-gray-700 hover:text-[#FA8F27] px-3 py-2 rounded-md font-medium">Contact</Link>
+            <Link href="/blog" className="text-gray-700 hover:text-[#FA8F27] px-3 py-2 rounded-md font-medium">Blog</Link>
           </div>
         </div>
       </div>
