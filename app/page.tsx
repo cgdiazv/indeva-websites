@@ -3,17 +3,14 @@ export default function Home() {
     <div className="flex flex-col items-center justify-center py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
       <div className="max-w-4xl text-center">
         <h1 className="text-5xl font-extrabold text-gray-900 tracking-tight sm:text-6xl">
-          Digital Excellence with <span className="text-blue-600">Indeva Websites</span>
+          Stop Losing Customers to a <span className="text-[#FA8F27]">Slow, Outdated Website.</span>
         </h1>
         <p className="mt-6 text-xl text-gray-600 max-w-2xl mx-auto">
-          Delivering precision-engineered web design, high-performance hosting, and scalable reseller services since 2009.
+          We build high-performance digital sales engines that turn silent visitors into high-value leads. Precision-engineered for Houston businesses that are ready to scale.
         </p>
         <div className="mt-10 flex justify-center gap-4">
-          <a href="/services" className="px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 md:text-lg">
-            Our Services
-          </a>
-          <a href="/contact" className="px-8 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 md:text-lg">
-            Get in Touch
+          <a href="/book-free-audit" className="px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-[#FA8F27] hover:bg-orange-600 md:text-lg">
+            Get My Free Growth Audit
           </a>
         </div>
       </div>
