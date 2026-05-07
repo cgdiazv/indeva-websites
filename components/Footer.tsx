@@ -29,15 +29,7 @@
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.1fr_minmax(320px,420px)] lg:items-center">
             
             {/* Left: Phone UI with New Image */}
-            <div className="flex items-center justify-center lg:justify-start">
-              <div className="relative w-full max-w-sm overflow-hidden rounded-[40px] bg-slate-100 p-6 shadow-[0_20px_80px_rgba(15,23,42,0.12)]">
-                <div className="absolute left-6 top-6 h-2.5 w-14 rounded-full bg-white/90" />
-                <div className="mt-6 h-[420px] rounded-[32px] bg-white p-6 shadow-inner flex flex-col">
-                  <div className="flex justify-between items-center mb-6">
-                    <span className="h-2.5 w-24 rounded-full bg-slate-200 block" />
-                    <span className="h-2.5 w-14 rounded-full bg-slate-200 block" />
-                  </div>
-                  
+            <div className="flex items-center justify-center lg:justify-start">     
                   {/* Replaced Text Bubbles with Clickable Image */}
                   <a 
                     href="/book-free-audit" 
@@ -48,9 +40,7 @@
                       alt="Mobile Growth Audit" 
                       className="h-full w-full object-contain" 
                     />
-                  </a>
-                </div>
-              </div>
+                  </a>  
             </div>
 
             {/* Right: Contact Information */}
