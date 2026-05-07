@@ -17,26 +17,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Value Proposition Section */}
-      <section className="w-full bg-gray-50 py-24">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-            Built with Industrial Precision, Designed for Explosive Growth
-          </h2>
-          <div className="mx-auto mb-8 h-1 w-24 rounded-full bg-[#FA8F27]"></div>
-          <p className="mx-auto max-w-2xl text-lg text-gray-600">
-            With 25 years of experience and a foundation in <strong>Lean/Kaizen principles</strong>, we don’t just ‘design’, we optimize. We eliminate digital waste to ensure every pixel on your site serves one purpose: <strong>Generating Revenue.</strong>
-          </p>
-          <div className="mt-12 flex justify-center">
-            <img
-              src="/3-step-method.webp"
-              alt="3 Step Method"
-              className="w-full max-w-4xl rounded-3xl shadow-xl"
-            />
-          </div>
-        </div>
-      </section>
-
       {/* Problem Agitation Section */}
       <section className="w-full bg-white py-24">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -65,6 +45,26 @@ export default function Home() {
               <h3 className="text-2xl font-bold text-[#FA8F27] mb-4">Slow</h3>
               <p className="text-gray-600">40% of users leave if a site takes over 3 seconds to load. You're paying for clicks you're losing.</p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Value Proposition Section */}
+      <section className="w-full bg-gray-50 py-24">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+            Built with Industrial Precision, Designed for Explosive Growth
+          </h2>
+          <div className="mx-auto mb-8 h-1 w-24 rounded-full bg-[#FA8F27]"></div>
+          <p className="mx-auto max-w-2xl text-lg text-gray-600">
+            With 25 years of experience and a foundation in <strong>Lean/Kaizen principles</strong>, we don’t just ‘design’, we optimize. We eliminate digital waste to ensure every pixel on your site serves one purpose: <strong>Generating Revenue.</strong>
+          </p>
+          <div className="mt-12 flex justify-center">
+            <img
+              src="/3-step-method.webp"
+              alt="3 Step Method"
+              className="w-full max-w-4xl rounded-3xl shadow-xl"
+            />
           </div>
         </div>
       </section>
