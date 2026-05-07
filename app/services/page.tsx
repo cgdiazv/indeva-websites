@@ -2,18 +2,19 @@ import Link from 'next/link';
 
 export default function ServicesPage() {
   return (
-    <div className="min-h-screen bg-white py-24 px-4 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-6xl text-center">
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-900">
-          Our Solutions
-        </h1>
-        <div className="mx-auto mt-4 h-1 w-24 rounded-full bg-[#FA8F27]"></div>
-        <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-600">
-          Outcome-based digital growth for businesses that want fewer headaches and more sales.
-        </p>
-      </div>
+    <div className="min-h-screen bg-gray-50 py-24 px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-6xl rounded-3xl bg-white border border-gray-200 p-8 shadow-sm">
+        <div className="text-center">
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900">
+            Our Solutions
+          </h1>
+          <div className="mx-auto mt-4 h-1 w-24 rounded-full bg-[#FA8F27]"></div>
+          <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-600">
+            Outcome-based digital growth for businesses that want fewer headaches and more sales.
+          </p>
+        </div>
 
-      <div className="mt-16 grid gap-8 md:grid-cols-3">
+        <div className="mt-16 grid gap-8 md:grid-cols-3">
         <div className="space-y-6 rounded-3xl border border-gray-200 p-8 shadow-sm">
           <div className="flex justify-center">
             <img src="/authority_builder.webp" alt="The Authority Builder" className="h-24 w-24 object-contain" />
@@ -52,15 +53,16 @@ export default function ServicesPage() {
             <li>Predictable growth and scaling.</li>
           </ul>
         </div>
-      </div>
+        </div>
 
-      <div className="mt-16 flex justify-center">
-        <Link
-          href="/book-free-audit"
-          className="inline-flex items-center justify-center rounded-full bg-[#FA8F27] px-8 py-4 text-base font-semibold text-white shadow-[0_20px_50px_-20px_rgba(250,143,39,0.8)] transition hover:bg-orange-600"
-        >
-          Book A Strategy Call
-        </Link>
+        <div className="mt-16 flex justify-center">
+          <Link
+            href="/book-free-audit"
+            className="px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-[#FA8F27] hover:bg-orange-600 md:text-lg"
+          >
+            Book A Strategy Call
+          </Link>
+        </div>
       </div>
     </div>
   );
