@@ -1,14 +1,15 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Montserrat } from 'next/font/google'
 import './globals.css'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 
-const inter = Inter({ subsets: ['latin'] })
+// This pulls in Montserrat and optimizes it
+const montserrat = Montserrat({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Indeva Websites | Web Design & Hosting',
-  description: 'Professional web design, robust hosting solutions, and reseller services.',
+  description: 'Professional web design services and robust hosting solutions.',
 }
 
 export default function RootLayout({
@@ -19,7 +20,7 @@ export default function RootLayout({
   // The suppressHydrationWarning goes directly on the html tag below
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className={montserrat.className}>
         <Navbar />
         <main className="min-h-screen">{children}</main>
         <Footer />
