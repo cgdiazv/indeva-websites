@@ -64,10 +64,10 @@ export async function POST(request: Request) {
 
     const resend = getResendClient();
     const data = await resend.emails.send({
-      from: 'Indeva Website <onboarding@resend.dev>',
-      to: 'web@indevasa.com',
-      subject: `Free Audit Request from ${name || email}`,
-      text: emailBody,
+      from: 'Indeva Websites <contact@indevasa.com>', // Your newly verified domain
+      to: 'web@indevasa.com', // Your desired destination
+      subject: `New Lead from ${name}`,
+      text: `Name: ${name}\nEmail: ${email}\nMessage:\n${message}`,
     });
 
     return NextResponse.json({ success: true, data });
