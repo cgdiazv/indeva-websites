@@ -83,7 +83,7 @@ export default function Home() {
           <div className="mt-16 grid gap-8 md:grid-cols-3 text-left">
             <div className="space-y-6 rounded-3xl border border-gray-200 p-8">
               <div className="flex justify-center">
-                <img src="/authorithy_builder.webp" alt="The Authority Builder" className="h-24 w-24 object-contain" />
+                <img src="/authority_builder.webp" alt="The Authority Builder" className="h-24 w-24 object-contain" />
               </div>
               <h3 className="text-xl font-semibold text-gray-900 text-center">The Authority Builder</h3>
               <ul className="mt-4 space-y-3 text-gray-600 list-disc list-inside">
