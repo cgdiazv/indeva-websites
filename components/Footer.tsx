@@ -102,7 +102,7 @@
                         <path d="M8 19c7.2 0 11.2-6 11.2-11.2v-.5A8 8 0 0 0 21 5.2a7.9 7.9 0 0 1-2.3.6 4 4 0 0 0 1.7-2.2 8 8 0 0 1-2.6 1A4 4 0 0 0 11.5 8a11.4 11.4 0 0 1-8.3-4.2 4 4 0 0 0 1.2 5.3 4 4 0 0 1-1.8-.5v.1a4 4 0 0 0 3.2 4 4 4 0 0 1-1.7.1 4 4 0 0 0 3.7 2.7A8 8 0 0 1 2 17.6 11.4 11.4 0 0 0 8 19Z" />
                       </svg>
                     </a>
-                    <a href="https://linkedin.com/indevawebsites" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="transition hover:text-[#FA8F27]">
+                    <a href="https://linkedin.com/company/indevawebsites" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="transition hover:text-[#FA8F27]">
                       <svg viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6">
                         <path d="M6.94 4.5a2.1 2.1 0 1 1 .02 0h-.02Zm-2.1 3.9h4.2v11.1h-4.2V8.4Zm8.05 0h4v1.5h.1c.5-.9 1.7-1.9 3.5-1.9 3.8 0 4.5 2.5 4.5 5.8v6.7h-4.2v-6c0-1.4 0-3.2-2-3.2-2 0-2.3 1.5-2.3 3.1v6.1h-4.2V8.4Z" />
                       </svg>
