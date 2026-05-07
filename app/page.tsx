@@ -15,21 +15,33 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="mt-24 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl w-full">
-        {/* Feature 1 */}
-        <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
-          <h3 className="text-2xl font-bold text-gray-900 mb-4">Web Design</h3>
-          <p className="text-gray-600">Custom, responsive interfaces built for optimal performance and user experience.</p>
-        </div>
-        {/* Feature 2 */}
-        <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
-          <h3 className="text-2xl font-bold text-gray-900 mb-4">Web Hosting</h3>
-          <p className="text-gray-600">Secure, high-uptime server environments tailored to keep your operations running smoothly.</p>
-        </div>
-        {/* Feature 3 */}
-        <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
-          <h3 className="text-2xl font-bold text-gray-900 mb-4">Reseller Services</h3>
-          <p className="text-gray-600">Scalable backend solutions to help you manage and grow your own client portfolio efficiently.</p>
+      {/* Problem Agitation Section */}
+      <div className="mt-32 w-full max-w-6xl">
+        <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-16">
+          Is Your Website An Asset Or A Liability?
+        </h2>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+          {/* Problem 1 */}
+          <div className="flex flex-col items-center">
+            <img src="/invisible.webp" alt="Invisible Website Concept" className="h-40 object-contain mb-6" />
+            <h3 className="text-2xl font-bold text-[#FA8F27] mb-4">Invisible</h3>
+            <p className="text-gray-600">You're on page 4 of Google while your competitors take your leads.</p>
+          </div>
+
+          {/* Problem 2 */}
+          <div className="flex flex-col items-center">
+            <img src="/leaky.webp" alt="Leaky Funnel Concept" className="h-40 object-contain mb-6" />
+            <h3 className="text-2xl font-bold text-[#FA8F27] mb-4">Leaky</h3>
+            <p className="text-gray-600">You get traffic, but your "Contact Us" form is a ghost town.</p>
+          </div>
+
+          {/* Problem 3 */}
+          <div className="flex flex-col items-center">
+            <img src="/slow.webp" alt="Slow Website Concept" className="h-40 object-contain mb-6" />
+            <h3 className="text-2xl font-bold text-[#FA8F27] mb-4">Slow</h3>
+            <p className="text-gray-600">40% of users leave if a site takes over 3 seconds to load. You're paying for clicks you're losing.</p>
+          </div>
         </div>
       </div>
     </div>
