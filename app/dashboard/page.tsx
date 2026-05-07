@@ -9,17 +9,23 @@ export default function SalesDashboard() {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Order ID</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Customer</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Total</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order ID</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {salesData.map((sale) => (
-              <tr key={sale["Order ID"]}>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#{sale["Order ID"]}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{sale["Customer Name"]}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${sale["Total Sales"]}</td>
+              <tr key={sale.order_number} className="hover:bg-gray-50">
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                  #{sale.order_number}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {sale.customer}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  ${sale.net_sales}
+                </td>
               </tr>
             ))}
           </tbody>
