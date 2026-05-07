@@ -1,22 +1,44 @@
 export default function Home() {
   return (
-    <div className="flex flex-col items-center justify-center py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
-      <div className="max-w-4xl text-center">
-        <h1 className="text-5xl font-extrabold text-gray-900 tracking-tight sm:text-6xl">
-          Stop Losing Customers to a <span className="text-[#FA8F27]">Slow, Outdated Website.</span>
-        </h1>
-        <p className="mt-6 text-xl text-gray-600 max-w-2xl mx-auto">
-          We build high-performance digital sales engines that turn silent visitors into high-value leads. Precision-engineered for Houston businesses that are ready to scale.
-        </p>
-        <div className="mt-10 flex justify-center gap-4">
-          <a href="/book-free-audit" className="px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-[#FA8F27] hover:bg-orange-600 md:text-lg">
-            Get My Free Growth Audit
-          </a>
+    <>
+      <div className="flex flex-col items-center justify-center py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
+        <div className="max-w-4xl text-center">
+          <h1 className="text-5xl font-extrabold text-gray-900 tracking-tight sm:text-6xl">
+            Stop Losing Customers to a <span className="text-[#FA8F27]">Slow, Outdated Website.</span>
+          </h1>
+          <p className="mt-6 text-xl text-gray-600 max-w-2xl mx-auto">
+            We build high-performance digital sales engines that turn silent visitors into high-value leads. Precision-engineered for Houston businesses that are ready to scale.
+          </p>
+          <div className="mt-10 flex justify-center gap-4">
+            <a href="/book-free-audit" className="px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-[#FA8F27] hover:bg-orange-600 md:text-lg">
+              Get My Free Growth Audit
+            </a>
+          </div>
         </div>
       </div>
 
+      {/* Value Proposition Section */}
+      <section className="w-full bg-gray-50 py-24">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+            Built with Industrial Precision, Designed for Explosive Growth
+          </h2>
+          <div className="mx-auto mb-8 h-1 w-24 rounded-full bg-[#FA8F27]"></div>
+          <p className="mx-auto max-w-2xl text-lg text-gray-600">
+            With 25 years of experience and a foundation in <strong>Lean/Kaizen principles</strong>, we don’t just ‘design’, we optimize. We eliminate digital waste to ensure every pixel on your site serves one purpose: <strong>Generating Revenue.</strong>
+          </p>
+          <div className="mt-12 flex justify-center">
+            <img
+              src="/3-step-method.webp"
+              alt="3 Step Method"
+              className="w-full max-w-4xl rounded-3xl shadow-xl"
+            />
+          </div>
+        </div>
+      </section>
+
       {/* Problem Agitation Section */}
-      <section className="w-full bg-white py-24 mt-20">
+      <section className="w-full bg-white py-24">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-16">
             Is Your Website An Asset Or A Liability?
@@ -46,6 +68,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-    </div>
+    </>
   )
 }
