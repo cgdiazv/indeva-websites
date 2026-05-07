@@ -68,6 +68,60 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Our Solutions Section */}
+      <section className="w-full bg-white py-24">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+            Our Solutions
+          </h2>
+          <div className="mx-auto mt-4 mb-6 h-1 w-24 rounded-full bg-[#FA8F27]"></div>
+          <p className="mx-auto max-w-2xl text-lg text-gray-600">
+            Outcome-based digital growth for businesses that want fewer headaches and more sales.
+          </p>
+
+          <div className="mt-16 grid gap-8 md:grid-cols-3 text-left">
+            <div className="space-y-6 rounded-3xl border border-gray-200 p-8">
+              <div className="flex justify-center">
+                <img src="/authorithy_builder.webp" alt="The Authority Builder" className="h-24 w-24 object-contain" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 text-center">The Authority Builder</h3>
+              <ul className="mt-4 space-y-3 text-gray-600 list-disc list-inside">
+                <li>Professional 5-page sites.</li>
+                <li>Ideal for firms that want to present a strong professional image.</li>
+                <li>Establishes credibility and trust.</li>
+                <li>SEO-ready structure.</li>
+              </ul>
+            </div>
+
+            <div className="space-y-6 rounded-3xl border border-gray-200 p-8">
+              <div className="flex justify-center">
+                <img src="/lead_machine.webp" alt="The Lead Machine" className="h-24 w-24 object-contain" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 text-center">The Lead Machine</h3>
+              <ul className="mt-4 space-y-3 text-gray-600 list-disc list-inside">
+                <li>High-conversion landing pages.</li>
+                <li>SEO for service businesses.</li>
+                <li>Direct form submissions and calls.</li>
+                <li>Maximum ROI and lead generation.</li>
+              </ul>
+            </div>
+
+            <div className="space-y-6 rounded-3xl border border-gray-200 p-8">
+              <div className="flex justify-center">
+                <img src="/growth_partner.webp" alt="The Growth Partner" className="h-24 w-24 object-contain" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 text-center">The Growth Partner</h3>
+              <ul className="mt-4 space-y-3 text-gray-600 list-disc list-inside">
+                <li>Monthly optimization and AB testing.</li>
+                <li>Security and malware protection.</li>
+                <li>Performance monitoring.</li>
+                <li>Predictable growth and scaling.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
     </>
   )
 }
