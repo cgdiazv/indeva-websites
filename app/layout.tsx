@@ -10,6 +10,9 @@ const montserrat = Montserrat({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'Indeva Websites | Web Design & Hosting',
   description: 'Professional web design services and robust hosting solutions.',
+  icons: {
+    icon: '/logo-indeva.png',
+  },
 }
 
 export default function RootLayout({
