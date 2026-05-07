@@ -4,7 +4,7 @@ export const projects = [
     title: "Andrade Custom Trim",
     thumbnail: "/portfolio/andradecustomtrim.webp",
     description: "Modern web design for a custom trim and woodworking service.",
-    liveUrl: "",
+    liveUrl: "https://andradecustomtrim.com",
     tags: ["Web Design"]
   },
   {
@@ -12,7 +12,7 @@ export const projects = [
     title: "Asturias y Asociados",
     thumbnail: "/portfolio/asturias.webp",
     description: "Professional site design for a legal and consulting firm.",
-    liveUrl: "",
+    liveUrl: "https://asturiasyasociados.com",
     tags: ["Branding", "Web Design"]
   },
   {
@@ -20,7 +20,7 @@ export const projects = [
     title: "Chispa Safety",
     thumbnail: "/portfolio/chispa.webp",
     description: "Safety-focused website design for industrial and commercial clients.",
-    liveUrl: "",
+    liveUrl: "https://chispasafety.com",
     tags: ["Web Design"]
   },
   {
@@ -28,7 +28,7 @@ export const projects = [
     title: "Cinnabon",
     thumbnail: "/portfolio/cinnabon.webp",
     description: "A sweet, customer-friendly website for a bakery brand.",
-    liveUrl: "",
+    liveUrl: "https://cinnabon.hn",
     tags: ["Web Design"]
   },
   {
@@ -36,7 +36,7 @@ export const projects = [
     title: "Citadel Christian School",
     thumbnail: "/portfolio/citadel.webp",
     description: "A modern education site designed for enrollment and community engagement.",
-    liveUrl: "",
+    liveUrl: "https://citadelchristian.org",
     tags: ["Education", "Web Design"]
   },
   {
@@ -44,7 +44,7 @@ export const projects = [
     title: "Deborah Maid Services",
     thumbnail: "/portfolio/deborah.webp",
     description: "Responsive website design for a residential cleaning service.",
-    liveUrl: "",
+    liveUrl: "https://deborahmaidservices.com",
     tags: ["Web Design"]
   },
   {
@@ -52,7 +52,7 @@ export const projects = [
     title: "Lácteos Don Guayo",
     thumbnail: "/portfolio/donguayo.webp",
     description: "Digital storefront and branding for a dairy producer.",
-    liveUrl: "",
+    liveUrl: "https://lacteosdonguayo.com",
     tags: ["E-commerce", "Web Design"]
   },
   {
@@ -60,7 +60,7 @@ export const projects = [
     title: "Dubai Luxury Brands",
     thumbnail: "/portfolio/dubai.webp",
     description: "Premium website design for a luxury goods and lifestyle brand.",
-    liveUrl: "",
+    liveUrl: "https://dubailuxurybrands.com",
     tags: ["Luxury", "Web Design"]
   },
   {
@@ -68,7 +68,7 @@ export const projects = [
     title: "ESARAH",
     thumbnail: "/portfolio/esarah.webp",
     description: "A sleek portfolio site for an international business service.",
-    liveUrl: "",
+    liveUrl: "https://grupoand.com",
     tags: ["Web Design"]
   },
   {
@@ -76,7 +76,7 @@ export const projects = [
     title: "Experenta",
     thumbnail: "/portfolio/experenta.webp",
     description: "Dynamic website design for a modern experiential brand.",
-    liveUrl: "",
+    liveUrl: "https://experenta.com",
     tags: ["Web Design"]
   },
   {
@@ -84,7 +84,7 @@ export const projects = [
     title: "Harvverse",
     thumbnail: "/portfolio/harvverse.webp",
     description: "An immersive digital experience tailored for a future-forward brand.",
-    liveUrl: "",
+    liveUrl: "https://harvverse.com",
     tags: ["Branding", "Web Design"]
   },
   {
@@ -92,7 +92,7 @@ export const projects = [
     title: "Industria Alimenticia",
     thumbnail: "/portfolio/industria.webp",
     description: "A polished website for a food industry company.",
-    liveUrl: "",
+    liveUrl: "https://industriaalimenticiasadecv.com",
     tags: ["Web Design"]
   },
   {
@@ -100,7 +100,7 @@ export const projects = [
     title: "Kebabalicious",
     thumbnail: "/portfolio/kebabalicious.webp",
     description: "A vibrant website for a fast-casual restaurant brand.",
-    liveUrl: "",
+    liveUrl: "https://eatkebabalicious.com",
     tags: ["Food", "Web Design"]
   },
   {
@@ -108,7 +108,7 @@ export const projects = [
     title: "Hotel Las Glorias",
     thumbnail: "/portfolio/lasglorias.webp",
     description: "Hospitality website designed to drive bookings and reservations.",
-    liveUrl: "",
+    liveUrl: "https://hotellasglorias.com",
     tags: ["Travel", "Web Design"]
   },
   {
@@ -116,7 +116,7 @@ export const projects = [
     title: "Oscar Tobacco",
     thumbnail: "/portfolio/oscartobacco.webp",
     description: "A premium product showcase for a tobacco brand.",
-    liveUrl: "",
+    liveUrl: "https://oscartobacco.com",
     tags: ["Web Design"]
   },
   {
@@ -124,7 +124,7 @@ export const projects = [
     title: "PG Carpentry Plus",
     thumbnail: "/portfolio/pgcarpentry.webp",
     description: "A clean site design for a carpentry and home improvement business.",
-    liveUrl: "",
+    liveUrl: "https://pgcarpentryplus.com",
     tags: ["Web Design"]
   },
   {
@@ -132,7 +132,7 @@ export const projects = [
     title: "Portomerchants",
     thumbnail: "/portfolio/portomerchants.webp",
     description: "An optimized online presence for a wholesale trading company.",
-    liveUrl: "",
+    liveUrl: "https://portomerchants.com",
     tags: ["Web Design"]
   },
   {
@@ -140,7 +140,7 @@ export const projects = [
     title: "RKJ Maternity",
     thumbnail: "/portfolio/rkj.webp",
     description: "A warm, welcoming website for a maternity and parenting brand.",
-    liveUrl: "",
+    liveUrl: "https://rkmaternity.shop",
     tags: ["Web Design"]
   },
   {
@@ -148,7 +148,7 @@ export const projects = [
     title: "Su Auto Honduras",
     thumbnail: "/portfolio/suauto.webp",
     description: "Responsive site design for an auto service and parts provider.",
-    liveUrl: "",
+    liveUrl: "https://suautohonduras.com",
     tags: ["Automotive", "Web Design"]
   },
   {
@@ -156,7 +156,7 @@ export const projects = [
     title: "Sweet Home Cookie Co.",
     thumbnail: "/portfolio/sweethome.webp",
     description: "A delicious website experience for a dessert and bakery brand.",
-    liveUrl: "",
+    liveUrl: "https://sweethomecookieco.com",
     tags: ["Food", "Web Design"]
   },
   {
@@ -164,7 +164,7 @@ export const projects = [
     title: "Tamarron Services",
     thumbnail: "/portfolio/tamarron.webp",
     description: "A polished site for a service provider with a strong local presence.",
-    liveUrl: "",
+    liveUrl: "https://tamarronservices.com",
     tags: ["Web Design"]
   },
   {
@@ -172,7 +172,7 @@ export const projects = [
     title: "TekDrive",
     thumbnail: "/portfolio/tekdrive.webp",
     description: "A technology-focused website for an innovative solutions company.",
-    liveUrl: "",
+    liveUrl: "https://tekdrivehn.com",
     tags: ["Web Design"]
   },
   {
@@ -180,7 +180,7 @@ export const projects = [
     title: "The Works Lawn Services",
     thumbnail: "/portfolio/theworks.webp",
     description: "A clean, service-oriented website for landscaping and lawn care.",
-    liveUrl: "",
+    liveUrl: "https://theworkslawnservice.com",
     tags: ["Service", "Web Design"]
   },
   {
@@ -188,7 +188,7 @@ export const projects = [
     title: "Auto Repuestos Yibrin",
     thumbnail: "/portfolio/yibrin.webp",
     description: "An auto parts website designed for easy navigation and contact.",
-    liveUrl: "",
+    liveUrl: "https://yibrin.com",
     tags: ["Automotive", "Web Design"]
   }
 ];

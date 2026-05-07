@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { projects } from '@/data/portfolio';
 
 export default function PortfolioPage() {
@@ -14,7 +13,13 @@ export default function PortfolioPage() {
       {/* Portfolio Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {projects.map((project) => (
-          <Link href={`/portfolio/${project.slug}`} key={project.slug} className="group cursor-pointer">
+          <a
+            href={project.liveUrl}
+            target="_blank"
+            rel="noreferrer noopener"
+            key={project.slug}
+            className="group cursor-pointer"
+          >
             <div className="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300">
               
               {/* Thumbnail Image */}
@@ -42,7 +47,7 @@ export default function PortfolioPage() {
               </div>
 
             </div>
-          </Link>
+          </a>
         ))}
       </div>
     </div>
