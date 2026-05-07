@@ -27,40 +27,33 @@
       <div className="border-t border-gray-200 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.1fr_minmax(320px,420px)] lg:items-center">
+            
+            {/* Left: Phone UI with New Image */}
             <div className="flex items-center justify-center lg:justify-start">
               <div className="relative w-full max-w-sm overflow-hidden rounded-[40px] bg-slate-100 p-6 shadow-[0_20px_80px_rgba(15,23,42,0.12)]">
                 <div className="absolute left-6 top-6 h-2.5 w-14 rounded-full bg-white/90" />
-                <div className="mt-6 h-[420px] rounded-[32px] bg-white p-6 shadow-inner">
+                <div className="mt-6 h-[420px] rounded-[32px] bg-white p-6 shadow-inner flex flex-col">
                   <div className="flex justify-between items-center mb-6">
                     <span className="h-2.5 w-24 rounded-full bg-slate-200 block" />
                     <span className="h-2.5 w-14 rounded-full bg-slate-200 block" />
                   </div>
-                  <div className="mt-8 space-y-6">
-                    <div className="rounded-3xl bg-[#FA8F27] p-4 text-white shadow-lg">
-                      <p className="text-sm uppercase tracking-[0.2em] opacity-90">Indeva Growth Audit</p>
-                      <p className="mt-4 text-base font-semibold leading-7">
-                        See your website as a high-performing sales channel.
-                      </p>
-                    </div>
-                    <div className="rounded-3xl border border-slate-200 bg-slate-50 p-4">
-                      <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
-                        Website Audit
-                      </p>
-                      <p className="mt-3 text-base leading-7 text-slate-700">
-                        15-minute review • Conversion clarity • Growth roadmap
-                      </p>
-                    </div>
-                    <div className="rounded-3xl bg-slate-800 p-4 text-white">
-                      <p className="text-sm uppercase tracking-[0.2em] opacity-90">Ready in minutes</p>
-                      <p className="mt-4 text-base leading-7">
-                        No pressure. Just a strategic plan you can act on immediately.
-                      </p>
-                    </div>
-                  </div>
+                  
+                  {/* Replaced Text Bubbles with Clickable Image */}
+                  <a 
+                    href="/book-free-audit" 
+                    className="mt-4 flex flex-1 w-full items-center justify-center overflow-hidden rounded-2xl cursor-pointer transition-transform duration-300 hover:scale-[1.02]"
+                  >
+                    <img 
+                      src="/hand-holding-mobile.webp" 
+                      alt="Mobile Growth Audit" 
+                      className="h-full w-full object-contain" 
+                    />
+                  </a>
                 </div>
               </div>
             </div>
 
+            {/* Right: Contact Information */}
             <div className="space-y-10">
               <div>
                 <h3 className="text-3xl font-bold tracking-tight text-slate-900">Contact Us</h3>
