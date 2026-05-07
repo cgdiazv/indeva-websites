@@ -16,34 +16,36 @@ export default function Home() {
       </div>
 
       {/* Problem Agitation Section */}
-      <div className="mt-32 w-full max-w-6xl">
-        <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-16">
-          Is Your Website An Asset Or A Liability?
-        </h2>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
-          {/* Problem 1 */}
-          <div className="flex flex-col items-center">
-            <img src="/invisible.webp" alt="Invisible Website Concept" className="h-40 object-contain mb-6" />
-            <h3 className="text-2xl font-bold text-[#FA8F27] mb-4">Invisible</h3>
-            <p className="text-gray-600">You're on page 4 of Google while your competitors take your leads.</p>
-          </div>
+      <section className="w-full bg-white py-24 mt-20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-16">
+            Is Your Website An Asset Or A Liability?
+          </h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+            {/* Problem 1 */}
+            <div className="flex flex-col items-center">
+              <img src="/invisible.webp" alt="Invisible Website Concept" className="h-40 object-contain mb-6" />
+              <h3 className="text-2xl font-bold text-[#FA8F27] mb-4">Invisible</h3>
+              <p className="text-gray-600">You're on page 4 of Google while your competitors take your leads.</p>
+            </div>
 
-          {/* Problem 2 */}
-          <div className="flex flex-col items-center">
-            <img src="/leaky.webp" alt="Leaky Funnel Concept" className="h-40 object-contain mb-6" />
-            <h3 className="text-2xl font-bold text-[#FA8F27] mb-4">Leaky</h3>
-            <p className="text-gray-600">You get traffic, but your "Contact Us" form is a ghost town.</p>
-          </div>
+            {/* Problem 2 */}
+            <div className="flex flex-col items-center">
+              <img src="/leaky.webp" alt="Leaky Funnel Concept" className="h-40 object-contain mb-6" />
+              <h3 className="text-2xl font-bold text-[#FA8F27] mb-4">Leaky</h3>
+              <p className="text-gray-600">You get traffic, but your "Contact Us" form is a ghost town.</p>
+            </div>
 
-          {/* Problem 3 */}
-          <div className="flex flex-col items-center">
-            <img src="/slow.webp" alt="Slow Website Concept" className="h-40 object-contain mb-6" />
-            <h3 className="text-2xl font-bold text-[#FA8F27] mb-4">Slow</h3>
-            <p className="text-gray-600">40% of users leave if a site takes over 3 seconds to load. You're paying for clicks you're losing.</p>
+            {/* Problem 3 */}
+            <div className="flex flex-col items-center">
+              <img src="/slow.webp" alt="Slow Website Concept" className="h-40 object-contain mb-6" />
+              <h3 className="text-2xl font-bold text-[#FA8F27] mb-4">Slow</h3>
+              <p className="text-gray-600">40% of users leave if a site takes over 3 seconds to load. You're paying for clicks you're losing.</p>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
     </div>
   )
 }
