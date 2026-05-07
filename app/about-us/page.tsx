@@ -2,7 +2,7 @@ export default function AboutUsPage() {
   return (
     <main className="bg-gray-50 min-h-screen py-24 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl space-y-16">
-        <section className="rounded-3xl bg-white border border-gray-200 p-10 shadow-sm">
+        <div className="p-10">
           <div className="text-center">
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
               Built with Industrial Precision, Designed for Explosive Growth
@@ -19,9 +19,9 @@ export default function AboutUsPage() {
               className="w-full max-w-4xl rounded-3xl shadow-xl"
             />
           </div>
-        </section>
+        </div>
 
-        <section className="rounded-3xl bg-white border border-gray-200 p-10 shadow-sm">
+        <div className="rounded-3xl bg-white border border-gray-200 p-10 shadow-sm">
           <div className="text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
               Our Core Values
@@ -65,7 +65,7 @@ export default function AboutUsPage() {
               </p>
             </div>
           </div>
-        </section>
+        </div>
       </div>
     </main>
   )
