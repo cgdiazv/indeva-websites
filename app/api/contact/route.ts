@@ -1,8 +1,13 @@
 ﻿import { Resend } from 'resend';
 import { NextResponse } from 'next/server';
 
-// Initialize Resend with your secret key
-const resend = new Resend(process.env.RESEND_API_KEY);
+function getResendClient() {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    throw new Error('Missing RESEND_API_KEY environment variable');
+  }
+  return new Resend(apiKey);
+}
 
 export async function POST(request: Request) {
   try {
@@ -57,6 +62,7 @@ export async function POST(request: Request) {
       message,
     ].join('\n');
 
+    const resend = getResendClient();
     const data = await resend.emails.send({
       from: 'Indeva Website <onboarding@resend.dev>',
       to: 'web@indevasa.com',
