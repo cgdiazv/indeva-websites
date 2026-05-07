@@ -3,7 +3,7 @@ import Link from 'next/link';
 export default function ServicesPage() {
   return (
     <div className="min-h-screen bg-gray-50 py-24 px-4 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-6xl rounded-3xl bg-white border border-gray-200 p-8 shadow-sm">
+      <div className="mx-auto max-w-6xl">
         <div className="text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900">
             Our Solutions
