@@ -11,15 +11,26 @@ export default function BookFreeAuditPage() {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setSubmissionError('');
+    
+    const formData = new FormData(event.currentTarget);
+    const name = formData.get('name')?.toString() ?? '';
+    const email = formData.get('email')?.toString() ?? '';
+    const phone = formData.get('phone')?.toString() ?? '';
+
+    // Manual Validation Backup
+    if (!name || !email || !phone) {
+      setSubmissionError('Please fill out all required fields (Name, Email, and Phone).');
+      return;
+    }
+
     setIsSubmitting(true);
 
-    const formData = new FormData(event.currentTarget);
     const challenge = formData.getAll('challenge').map((value) => value.toString());
 
     const payload = {
-      name: formData.get('name')?.toString() ?? '',
-      email: formData.get('email')?.toString() ?? '',
-      phone: formData.get('phone')?.toString() ?? '',
+      name,
+      email,
+      phone,
       website: formData.get('website')?.toString() ?? '',
       goal: formData.get('goal')?.toString() ?? '',
       message: formData.get('message')?.toString() ?? '',
@@ -60,43 +71,39 @@ export default function BookFreeAuditPage() {
           </p>
         </div>
 
-        {/* Removed the border, shadow, background, and padding classes here */}
         <form onSubmit={handleSubmit} className="space-y-8">
           <div>
-            <label htmlFor="name" className="sr-only">
-              Name
-            </label>
+            <label htmlFor="name" className="sr-only">Name</label>
             <input
               type="text"
               id="name"
               name="name"
-              placeholder="Name"
+              placeholder="Name *"
+              required
               className="block w-full rounded-2xl border border-gray-200 bg-gray-50 px-5 py-4 text-gray-900 placeholder-gray-400 focus:border-[#FA8F27] focus:outline-none focus:ring-2 focus:ring-[#FA8F27]/20"
             />
           </div>
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
-              <label htmlFor="email" className="sr-only">
-                Email
-              </label>
+              <label htmlFor="email" className="sr-only">Email</label>
               <input
                 type="email"
                 id="email"
                 name="email"
-                placeholder="Email"
+                placeholder="Email *"
+                required
                 className="block w-full rounded-2xl border border-gray-200 bg-gray-50 px-5 py-4 text-gray-900 placeholder-gray-400 focus:border-[#FA8F27] focus:outline-none focus:ring-2 focus:ring-[#FA8F27]/20"
               />
             </div>
             <div>
-              <label htmlFor="phone" className="sr-only">
-                Phone
-              </label>
+              <label htmlFor="phone" className="sr-only">Phone</label>
               <input
                 type="tel"
                 id="phone"
                 name="phone"
-                placeholder="Phone"
+                placeholder="Phone *"
+                required
                 className="block w-full rounded-2xl border border-gray-200 bg-gray-50 px-5 py-4 text-gray-900 placeholder-gray-400 focus:border-[#FA8F27] focus:outline-none focus:ring-2 focus:ring-[#FA8F27]/20"
               />
             </div>
@@ -129,26 +136,22 @@ export default function BookFreeAuditPage() {
 
             <div className="space-y-4">
               <div>
-                <label htmlFor="website" className="sr-only">
-                  What is your current website URL?
-                </label>
+                <label htmlFor="website" className="sr-only">Website URL</label>
                 <input
                   type="url"
                   id="website"
                   name="website"
-                  placeholder="What is your current website URL?"
+                  placeholder="Current website URL"
                   className="block w-full rounded-2xl border border-gray-200 bg-gray-50 px-5 py-4 text-gray-900 placeholder-gray-400 focus:border-[#FA8F27] focus:outline-none focus:ring-2 focus:ring-[#FA8F27]/20"
                 />
               </div>
               <div>
-                <label htmlFor="goal" className="sr-only">
-                  What is your primary goal for the next 6 months?
-                </label>
+                <label htmlFor="goal" className="sr-only">Primary Goal</label>
                 <input
                   type="text"
                   id="goal"
                   name="goal"
-                  placeholder="What is your primary goal for the next 6 months?"
+                  placeholder="Goal for the next 6 months"
                   className="block w-full rounded-2xl border border-gray-200 bg-gray-50 px-5 py-4 text-gray-900 placeholder-gray-400 focus:border-[#FA8F27] focus:outline-none focus:ring-2 focus:ring-[#FA8F27]/20"
                 />
               </div>
@@ -156,9 +159,7 @@ export default function BookFreeAuditPage() {
           </div>
 
           <div>
-            <label htmlFor="message" className="sr-only">
-              Additional Message
-            </label>
+            <label htmlFor="message" className="sr-only">Message</label>
             <textarea
               id="message"
               name="message"
