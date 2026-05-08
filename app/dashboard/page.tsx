@@ -5,7 +5,6 @@ export default function SalesDashboard() {
     <div className="max-w-[95rem] mx-auto px-4 py-24">
       <h1 className="text-3xl font-bold mb-8">Sales Dashboard</h1>
       
-      {/* overflow-x-auto allows horizontal scrolling for the wide table */}
       <div className="bg-white rounded-lg shadow overflow-x-auto border border-gray-200">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
@@ -47,8 +46,9 @@ export default function SalesDashboard() {
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {sale.customer_type}
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-500 max-w-[250px] truncate" title={sale.products}>
-                  {sale.products}
+                {/* Fix applied here: Added fallback for null products */}
+                <td className="px-6 py-4 text-sm text-gray-500 max-w-[250px] truncate" title={sale.products || ""}>
+                  {sale.products || "-"}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-center font-medium text-gray-900">
                   {sale.items_sold}
