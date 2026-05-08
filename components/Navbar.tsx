@@ -53,7 +53,9 @@ export default function Navbar() {
       {/* Mobile Dark Overlay (Click to close) */}
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden transition-opacity"
+          // Changing bg-black (pure black) to bg-slate-800 (dark gray)
+          // Decreasing opacity from 50 (50% opaque) to 30 (30% opaque, making it more transparent)
+          className="fixed inset-0 bg-slate-800 bg-opacity-30 z-40 md:hidden transition-opacity"
           onClick={closeDrawer}
         />
       )}
