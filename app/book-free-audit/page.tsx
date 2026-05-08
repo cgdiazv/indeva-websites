@@ -60,7 +60,8 @@ export default function BookFreeAuditPage() {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-8 bg-white p-8 rounded-3xl border border-gray-200 shadow-sm">
+        {/* Removed the border, shadow, background, and padding classes here */}
+        <form onSubmit={handleSubmit} className="space-y-8">
           <div>
             <label htmlFor="name" className="sr-only">
               Name

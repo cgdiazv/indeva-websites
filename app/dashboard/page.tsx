@@ -51,14 +51,8 @@ export default function SalesDashboard() {
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-center font-medium text-gray-900">
                   {sale.items_sold}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {sale.coupons || '-'}
-                </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 text-right">
                   ${sale.net_sales}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 capitalize">
-                  {sale.attribution || 'Direct'}
                 </td>
               </tr>
             ))}
