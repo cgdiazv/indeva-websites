@@ -1,9 +1,20 @@
 import { salesData } from '@/data/sales';
+import { logout } from '../actions/auth';
 
 export default function SalesDashboard() {
   return (
     <div className="max-w-[95rem] mx-auto px-4 py-24">
-      <h1 className="text-3xl font-bold mb-8">Sales Dashboard</h1>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold">Sales Dashboard</h1>
+        <form action={logout}>
+          <button
+            type="submit"
+            className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md transition-colors cursor-pointer"
+          >
+            Cerrar Sesión
+          </button>
+        </form>
+      </div>
       
       <div className="bg-white rounded-lg shadow overflow-x-auto border border-gray-200">
         <table className="min-w-full divide-y divide-gray-200">
