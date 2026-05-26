@@ -14,6 +14,9 @@ export async function POST(request: Request) {
   const body = await request.text();
   const sig = request.headers.get('stripe-signature');
 
+  console.log("🚀 Webhook hit! Type received:", JSON.parse(body)?.type); 
+  console.log("🔑 Signature exists:", !!sig, "Secret configured:", !!endpointSecret);
+
   let event: Stripe.Event;
 
   // 1. Security Check: Verify the request genuinely came from Stripe
@@ -52,18 +55,18 @@ export async function POST(request: Request) {
       // Gather traffic attribution markers from your checkout session metadata metadata
       const attribution = session.metadata?.utm_source || 'Direct';
 
-      // 3. Map values to your 10 Dashboard Columns
+      // 3. Map values to your 10 Dashboard Columns safely
       const salePayload = {
         date: new Date().toISOString(),                       // Column 1: Date
         order_number: session.invoice?.toString() || Math.floor(100000 + Math.random() * 900000).toString(), // Column 2: Order #
-        status: 'Completed',                                   // Column 3: Status
-        customer: customerName,                                // Column 4: Customer
+        status: session.payment_status || 'Completed',        // Column 3: Status
+        customer: customerName || 'Unknown Customer',          // Column 4: Customer
         customer_type: session.customer ? 'Registered' : 'Guest', // Column 5: Customer Type
-        products: productNames,                                // Column 6: Product(s)
-        items_sold: totalItems,                                // Column 7: Items Sold
-        coupons: couponApplied,                                // Column 8: Coupon(s)
-        net_sales: netSales,                                   // Column 9: Net Sales
-        attribution: attribution                               // Column 10: Attribution
+        products: productNames || 'No items listed',          // Column 6: Product(s)
+        items_sold: Number(totalItems) || 0,                  // Column 7: Items Sold
+        coupons: couponApplied || '-',                        // Column 8: Coupon(s)
+        net_sales: Number(netSales) || 0,                     // Column 9: Net Sales
+        attribution: attribution || 'Direct'                  // Column 10: Attribution
       };
 
       // 4. Save seamlessly to Firestore
