@@ -19,8 +19,14 @@ export default async function SalesDashboard() {
     return <div className="p-24 text-red-500">Error loading live data from Firestore. Check logs.</div>;
   }
 
+  // Calculate Metrics Aggregations
+  const totalRevenue = salesData.reduce((acc: number, sale: any) => acc + parseFloat(sale.net_sales || 0), 0);
+  const totalOrders = salesData.length;
+  const totalItemsSold = salesData.reduce((acc: number, sale: any) => acc + parseInt(sale.items_sold || 0, 10), 0);
+
   return (
     <div className="max-w-[95rem] mx-auto px-4 py-24">
+      {/* Header Section */}
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Sales Dashboard</h1>
@@ -31,7 +37,26 @@ export default async function SalesDashboard() {
           Firebase Active
         </span>
       </div>
+
+      {/* Analytics Cards Row */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="bg-white rounded-lg shadow p-6 border border-gray-200">
+          <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">Total Revenue</p>
+          <p className="text-3xl font-bold text-gray-900 mt-2">${totalRevenue.toFixed(2)}</p>
+        </div>
+        
+        <div className="bg-white rounded-lg shadow p-6 border border-gray-200">
+          <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">Total Orders</p>
+          <p className="text-3xl font-bold text-gray-900 mt-2">{totalOrders}</p>
+        </div>
+
+        <div className="bg-white rounded-lg shadow p-6 border border-gray-200">
+          <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">Items Sold</p>
+          <p className="text-3xl font-bold text-gray-900 mt-2">{totalItemsSold}</p>
+        </div>
+      </div>
       
+      {/* Data Table */}
       <div className="bg-white rounded-lg shadow overflow-x-auto border border-gray-200">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">

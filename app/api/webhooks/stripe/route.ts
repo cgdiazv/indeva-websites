@@ -1,11 +1,14 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { db } from '@/lib/firebaseAdmin';
+import { Resend } from 'resend';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-10-28' as any,
 });
 
+// Initialize Resend with your API key
+const resend = new Resend(process.env.RESEND_API_KEY);
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
 export async function POST(request: Request) {
@@ -42,24 +45,38 @@ export async function POST(request: Request) {
         console.log('ℹ️ Could not pull standard line items, using mode default.');
       }
 
-      // Extract metadata fallback cleanly
+      // NEW: Retrieve the formatted, sequential invoice number from Stripe
+      let orderNumber = Math.floor(100000 + Math.random() * 900000).toString();
+      if (session.invoice) {
+        try {
+          const invoiceDetails = await stripe.invoices.retrieve(session.invoice as string);
+          if (invoiceDetails.number) {
+            orderNumber = invoiceDetails.number; // Captures formatted string like "INV-0001"
+          }
+        } catch (invoiceError) {
+          console.error('❌ Could not retrieve invoice details, using internal reference fallback:', invoiceError);
+          orderNumber = session.invoice.toString();
+        }
+      } else if (session.id) {
+        // Fallback prefix naming conversion for one-time sessions without explicit serial invoices
+        orderNumber = session.id.replace('cs_live_', 'CH_');
+      }
+
       const customerName = session.customer_details?.name || 'Unknown Customer';
+      const customerEmail = session.customer_details?.email;
       const netSales = (session.amount_total || 0) / 100;
 
-      // Extract coupon codes if applied safely
       let couponApplied = '-';
       const totalDetails = session.total_details as any;
       if (totalDetails?.breakdown?.discounts?.length > 0) {
         couponApplied = totalDetails.breakdown.discounts[0]?.discount?.coupon?.id || '-';
       }
 
-      // Gather traffic attribution markers safely
       const attribution = session.metadata?.utm_source || 'Direct';
 
-      // 3. Map values safely to your 10 Dashboard Columns (Guaranteed no undefined values)
       const salePayload = {
         date: new Date().toISOString(),
-        order_number: session.invoice?.toString() || Math.floor(100000 + Math.random() * 900000).toString(),
+        order_number: orderNumber, // Uses the clean invoice sequence number
         status: session.payment_status === 'paid' ? 'Completed' : 'Pending',
         customer: String(customerName),
         customer_type: session.customer ? 'Registered' : 'Guest',
@@ -70,12 +87,48 @@ export async function POST(request: Request) {
         attribution: String(attribution)
       };
 
-      // 4. Save seamlessly to Firestore
+      // 3. Save to Firestore
       await db.collection('sales').add(salePayload);
-      console.log(`✅ Sale successfully logged to Firebase for order #${salePayload.order_number}`);
+      console.log(`Base synced: ✅ Sale successfully logged to Firebase for order #${orderNumber}`);
+
+      // 4. Send Custom HTML Email via Resend if email exists
+      if (customerEmail) {
+        await resend.emails.send({
+          from: 'Indeva Websites <web@indevasa.com>',
+          to: customerEmail,
+          subject: `Your Receipt for Order #${orderNumber}`,
+          html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px;">
+              <h2 style="color: #4F46E5; text-align: center;">Thank You for Your Purchase!</h2>
+              <p>Hi ${customerName},</p>
+              <p>We've successfully processed your payment. Here are your order details:</p>
+              
+              <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+                <tr style="background-color: #F9FAFB;">
+                  <td style="padding: 10px; border: 1px solid #E5E7EB; font-weight: bold;">Order Number</td>
+                  <td style="padding: 10px; border: 1px solid #E5E7EB; text-align: right;">#${orderNumber}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 10px; border: 1px solid #E5E7EB; font-weight: bold;">Product</td>
+                  <td style="padding: 10px; border: 1px solid #E5E7EB; text-align: right;">${productNames}</td>
+                </tr>
+                <tr style="background-color: #F9FAFB;">
+                  <td style="padding: 10px; border: 1px solid #E5E7EB; font-weight: bold;">Total Amount</td>
+                  <td style="padding: 10px; border: 1px solid #E5E7EB; text-align: right; font-weight: bold; color: #10B981;">$${netSales.toFixed(2)} USD</td>
+                </tr>
+              </table>
+
+              <p style="font-size: 13px; color: #6B7280; text-align: center; margin-top: 30px;">
+                If you have any questions about this invoice, reply directly to this email.
+              </p>
+            </div>
+          `,
+        });
+        console.log(`✉️ Receipt email sent successfully to ${customerEmail}`);
+      }
 
     } catch (dbError) {
-      console.error('❌ Error processing or saving checkout data to Firebase:', dbError);
+      console.error('❌ Error processing or saving data:', dbError);
       return NextResponse.json({ error: 'Database insertion failed' }, { status: 500 });
     }
   }
