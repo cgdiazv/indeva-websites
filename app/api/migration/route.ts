@@ -3,7 +3,7 @@ import Stripe from 'stripe';
 import { db } from '@/lib/firebaseAdmin';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-10-28' as any,
+  apiVersion: '2026-04-22.dahlia' as any, // Matches your active Stripe workspace version
 });
 
 export const dynamic = 'force-dynamic';
