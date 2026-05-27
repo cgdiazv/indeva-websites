@@ -1,4 +1,5 @@
 import { db } from '@/lib/firebaseAdmin';
+import { logout } from '@/app/actions/auth';
 
 // Tells Next.js to bypass caching so your sales dashboard is always real-time
 export const dynamic = 'force-dynamic';
@@ -27,32 +28,45 @@ export default async function SalesDashboard() {
   return (
     <div className="max-w-[95rem] mx-auto px-4 py-24">
       {/* Header Section */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Sales Dashboard</h1>
           <p className="text-sm text-gray-500 mt-1">Live streaming revenue engine via Stripe & Firebase</p>
         </div>
-        <span className="bg-orange-100 text-orange-800 text-sm font-medium px-3 py-1 rounded-full flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-orange-500 animate-pulse"></span>
-          Firebase Active
-        </span>
+        <div className="flex items-center gap-4">
+          <span className="bg-orange-100 text-orange-800 text-sm font-medium px-3 py-1 rounded-full flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-orange-500 animate-pulse"></span>
+            Firebase Active
+          </span>
+          <form action={logout}>
+            <button
+              type="submit"
+              className="text-gray-500 hover:text-gray-700 transition-colors bg-white border border-gray-200 p-2 rounded-full shadow-sm hover:shadow-md"
+              title="Logout"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
+              </svg>
+            </button>
+          </form>
+        </div>
       </div>
 
       {/* Analytics Cards Row */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="bg-white rounded-lg shadow p-6 border border-gray-200">
-          <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">Total Revenue</p>
-          <p className="text-3xl font-bold text-gray-900 mt-2">${totalRevenue.toFixed(2)}</p>
+      <div className="grid grid-cols-3 gap-2 sm:gap-6 mb-8">
+        <div className="bg-white rounded-lg shadow p-3 sm:p-6 border border-gray-200 overflow-hidden">
+          <p className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-gray-400 truncate">Total Revenue</p>
+          <p className="text-base sm:text-3xl font-bold text-gray-900 mt-1 sm:mt-2 truncate">${totalRevenue.toFixed(2)}</p>
         </div>
         
-        <div className="bg-white rounded-lg shadow p-6 border border-gray-200">
-          <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">Total Orders</p>
-          <p className="text-3xl font-bold text-gray-900 mt-2">{totalOrders}</p>
+        <div className="bg-white rounded-lg shadow p-3 sm:p-6 border border-gray-200 overflow-hidden">
+          <p className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-gray-400 truncate">Total Orders</p>
+          <p className="text-base sm:text-3xl font-bold text-gray-900 mt-1 sm:mt-2 truncate">{totalOrders}</p>
         </div>
 
-        <div className="bg-white rounded-lg shadow p-6 border border-gray-200">
-          <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">Items Sold</p>
-          <p className="text-3xl font-bold text-gray-900 mt-2">{totalItemsSold}</p>
+        <div className="bg-white rounded-lg shadow p-3 sm:p-6 border border-gray-200 overflow-hidden">
+          <p className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-gray-400 truncate">Items Sold</p>
+          <p className="text-base sm:text-3xl font-bold text-gray-900 mt-1 sm:mt-2 truncate">{totalItemsSold}</p>
         </div>
       </div>
       
@@ -68,7 +82,6 @@ export default async function SalesDashboard() {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Customer Type</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[200px]">Product(s)</th>
               <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Items Sold</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Coupon(s)</th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Net Sales</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Attribution</th>
             </tr>
@@ -76,7 +89,7 @@ export default async function SalesDashboard() {
           <tbody className="bg-white divide-y divide-gray-200">
             {salesData.length === 0 ? (
               <tr>
-                <td colSpan={10} className="px-6 py-12 text-center text-sm text-gray-500">
+                <td colSpan={9} className="px-6 py-12 text-center text-sm text-gray-500">
                   No live sales found in Firestore yet.
                 </td>
               </tr>
@@ -109,9 +122,6 @@ export default async function SalesDashboard() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-center font-medium text-gray-900">
                     {sale.items_sold}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {sale.coupons || '-'}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 text-right">
                     ${parseFloat(sale.net_sales || 0).toFixed(2)}
