@@ -26,7 +26,7 @@ export default async function SalesDashboard() {
   const totalItemsSold = salesData.reduce((acc: number, sale: any) => acc + parseInt(sale.items_sold || 0, 10), 0);
 
   return (
-    <div className="max-w-[95rem] mx-auto px-4 py-24">
+    <div className="max-w-[95rem] mx-auto px-4 pt-4 sm:pt-24 pb-24">
       {/* Header Section */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
         <div>
