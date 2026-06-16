@@ -7,7 +7,7 @@ export async function login(prevState: any, formData: FormData) {
   const password = formData.get('password') as string;
   
   // Use environment variable for the admin password, or a strong default fallback if not set.
-  const adminPassword = process.env.ADMIN_PASSWORD || 'Admin2130@';
+  const adminPassword = process.env.ADMIN_PASSWORD || 'Admin2240@';
   
   if (password === adminPassword) {
     const cookieStore = await cookies();

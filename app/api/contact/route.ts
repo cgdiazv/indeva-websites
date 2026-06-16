@@ -124,7 +124,7 @@ export async function POST(request: Request) {
     
     // Using the html field instead of text to render the template
     const data = await resend.emails.send({
-      from: 'Indeva Websites <contact@indevasa.com>', 
+      from: 'Indeva Websites <notifications@indevasa.com>', 
       to: 'web@indevasa.com', 
       subject: `🔥 New Strategy Call Request: ${name}`,
       html: htmlEmail, 
