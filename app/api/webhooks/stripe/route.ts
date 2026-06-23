@@ -26,7 +26,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: `Webhook Error: ${err.message}` }, { status: 400 });
   }
 
-  // 2. Handle successful INITIAL subscription sign-up
+  // 2. Handle successful INITIAL subscription sign-up & One-time checkouts
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object as Stripe.Checkout.Session;
 
@@ -132,83 +132,86 @@ export async function POST(request: Request) {
     }
   }
 
-  // NEW: 3. Handle subsequent RECURRING monthly cycle charges
+  // 3. Handle ALL successful invoice payments (Initial, Manual, and Monthly cycles)
   if (event.type === 'invoice.paid') {
     const invoice = event.data.object as Stripe.Invoice;
 
-    // Only map the record if it is an automatic, recurring monthly billing cycle charge
-    if (invoice.billing_reason === 'subscription_cycle') {
-      try {
-        const orderNumber = invoice.number || invoice.id;
-        const customerName = invoice.customer_name || invoice.customer_email || 'Subscription Customer';
-        const customerEmail = invoice.customer_email;
-        const netSales = (invoice.amount_paid || 0) / 100;
-        
-        // Map line items from the recurring invoice object
-        let productNames = 'Subscription Renewal';
-        let totalItems = 0;
-        if (invoice.lines?.data?.length > 0) {
-          productNames = invoice.lines.data.map(line => line.description).join(', ');
-          totalItems = invoice.lines.data.reduce((acc, line) => acc + (line.quantity || 0), 0);
-        }
+    try {
+      const orderNumber = invoice.number || invoice.id;
+      const customerName = invoice.customer_name || invoice.customer_email || 'Subscription Customer';
+      const customerEmail = invoice.customer_email;
+      const netSales = (invoice.amount_paid || 0) / 100;
+      
+      // Dynamically label the attribution type based on the invoice context reason
+      const isRenewal = invoice.billing_reason === 'subscription_cycle';
+      const attributionType = isRenewal ? 'Subscription Renewal' : (invoice.billing_reason || 'Manual Invoice');
 
-        const salePayload = {
-          date: new Date().toISOString(),
-          order_number: orderNumber,
-          status: 'Completed',
-          customer: String(customerName),
-          customer_type: 'Registered', // Subscriptions imply a returning system account profile
-          products: String(productNames),
-          items_sold: Number(totalItems) || 1,
-          coupons: '-',
-          net_sales: Number(netSales) || 0,
-          attribution: 'Subscription Renewal'
-        };
-
-        // Save recurring record seamlessly to Firestore
-        await db.collection('sales').add(salePayload);
-        console.log(`Cycle synced: 🔄 Recurring subscription payment captured for invoice #${orderNumber}`);
-
-        // Email recurring customer cycle invoice receipt statement via Resend
-        if (customerEmail) {
-          await resend.emails.send({
-            from: 'Indeva Websites <web@indevasa.com>',
-            to: customerEmail,
-            subject: `Your Subscription Renewal Invoice #${orderNumber}`,
-            html: `
-              <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px;">
-                <h2 style="color: #4F46E5; text-align: center;">Subscription Renewed Successfully</h2>
-                <p>Hi ${customerName},</p>
-                <p>Your automatic monthly recurring plan has renewed cleanly. Here are your transaction parameters:</p>
-                
-                <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
-                  <tr style="background-color: #F9FAFB;">
-                    <td style="padding: 10px; border: 1px solid #E5E7EB; font-weight: bold;">Invoice Number</td>
-                    <td style="padding: 10px; border: 1px solid #E5E7EB; text-align: right;">#${orderNumber}</td>
-                  </tr>
-                  <tr>
-                    <td style="padding: 10px; border: 1px solid #E5E7EB; font-weight: bold;">Product Service Plan</td>
-                    <td style="padding: 10px; border: 1px solid #E5E7EB; text-align: right;">${productNames}</td>
-                  </tr>
-                  <tr style="background-color: #F9FAFB;">
-                    <td style="padding: 10px; border: 1px solid #E5E7EB; font-weight: bold;">Amount Processed</td>
-                    <td style="padding: 10px; border: 1px solid #E5E7EB; text-align: right; font-weight: bold; color: #10B981;">$${netSales.toFixed(2)} USD</td>
-                  </tr>
-                </table>
-
-                <p style="font-size: 13px; color: #6B7280; text-align: center; margin-top: 30px;">
-                  Thank you for remaining a valued partner. Manage subscriptions securely within your client area dashboard settings profile anytime.
-                </p>
-              </div>
-            `,
-          });
-          console.log(`✉️ Renewal invoice statement sent to ${customerEmail}`);
-        }
-
-      } catch (cycleError) {
-        console.error('❌ Error mapping automated invoice cycle background processes:', cycleError);
-        return NextResponse.json({ error: 'Background insertion failed' }, { status: 500 });
+      // Map line items from the invoice object
+      let productNames = 'Service Plan Purchase';
+      let totalItems = 0;
+      if (invoice.lines?.data?.length > 0) {
+        productNames = invoice.lines.data.map(line => line.description).join(', ');
+        totalItems = invoice.lines.data.reduce((acc, line) => acc + (line.quantity || 0), 0);
       }
+
+      const salePayload = {
+        date: new Date().toISOString(),
+        order_number: orderNumber,
+        status: 'Completed',
+        customer: String(customerName),
+        customer_type: 'Registered',
+        products: String(productNames),
+        items_sold: Number(totalItems) || 1,
+        coupons: '-',
+        net_sales: Number(netSales) || 0,
+        attribution: attributionType
+      };
+
+      // Save record seamlessly to Firestore
+      await db.collection('sales').add(salePayload);
+      console.log(`Invoice synced: ✅ Payment captured for invoice #${orderNumber}`);
+
+      // Email customer invoice receipt statement via Resend
+      if (customerEmail) {
+        await resend.emails.send({
+          from: 'Indeva Websites <web@indevasa.com>',
+          to: customerEmail,
+          subject: isRenewal 
+            ? `Your Subscription Renewal Invoice #${orderNumber}`
+            : `Your Receipt for Invoice #${orderNumber}`,
+          html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px;">
+              <h2 style="color: #4F46E5; text-align: center;">Payment Processed Successfully</h2>
+              <p>Hi ${customerName},</p>
+              <p>We've successfully processed your invoice payment. Here are your transaction parameters:</p>
+              
+              <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+                <tr style="background-color: #F9FAFB;">
+                  <td style="padding: 10px; border: 1px solid #E5E7EB; font-weight: bold;">Invoice Number</td>
+                  <td style="padding: 10px; border: 1px solid #E5E7EB; text-align: right;">#${orderNumber}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 10px; border: 1px solid #E5E7EB; font-weight: bold;">Product / Service Plan</td>
+                  <td style="padding: 10px; border: 1px solid #E5E7EB; text-align: right;">${productNames}</td>
+                </tr>
+                <tr style="background-color: #F9FAFB;">
+                  <td style="padding: 10px; border: 1px solid #E5E7EB; font-weight: bold;">Amount Processed</td>
+                  <td style="padding: 10px; border: 1px solid #E5E7EB; text-align: right; font-weight: bold; color: #10B981;">$${netSales.toFixed(2)} USD</td>
+                </tr>
+              </table>
+
+              <p style="font-size: 13px; color: #6B7280; text-align: center; margin-top: 30px;">
+                Thank you for your business. If you have any questions, reply directly to this email.
+              </p>
+            </div>
+          `,
+        });
+        console.log(`✉️ Invoice statement sent to ${customerEmail}`);
+      }
+
+    } catch (cycleError) {
+      console.error('❌ Error processing automated invoice event webhook:', cycleError);
+      return NextResponse.json({ error: 'Invoice webhook insertion failed' }, { status: 500 });
     }
   }
 
