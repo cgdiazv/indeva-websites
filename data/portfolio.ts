@@ -1,5 +1,13 @@
 export const projects = [
   {
+    slug: "oneway-ministries",
+    title: "OneWay Ministries",
+    thumbnail: "/portfolio/oneway.webp",
+    description: "A modern website for a Christian ministry organization.",
+    liveUrl: "https://onewayministries.co",
+    tags: ["Web Design"]
+  },
+  {
     slug: "andrade-custom-trim",
     title: "Andrade Custom Trim",
     thumbnail: "/portfolio/andradecustomtrim.webp",
