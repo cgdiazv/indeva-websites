@@ -13,7 +13,7 @@ export const blogPosts: BlogPost[] = [
     title: "La importancia de la sostenibilidad en la industria moderna",
     slug: "importancia-sostenibilidad-industria",
     date: "2024-03-20",
-    excerpt: "Descubre por qué la sostenibilidad se ha convertido en el pilar fundamental para las empresas industriales del futuro.",
+    excerpt: "Descubre por qué la sostenibilidad se ha convertido del pilar fundamental para las empresas industriales del futuro.",
     author: "Equipo Indeva",
     content: `
       <p>La sostenibilidad ya no es solo una opción ética, sino una necesidad operativa y económica en el sector industrial actual.</p>
@@ -44,7 +44,7 @@ export const blogPosts: BlogPost[] = [
         Los sistemas tradicionales como WordPress operan bajo un modelo de procesamiento en tiempo real. Cada vez que un usuario visita tu sitio, el servidor debe ejecutar código interno, realizar consultas a una base de datos y construir la página de forma dinámica antes de mostrarla. Este proceso consume valiosos segundos y recursos del servidor.
       </p>
       <p class="mb-4 text-gray-600 leading-relaxed">
-        Nuestra infraestructura cambia por completo las reglas del juego mediante el <strong>Pre-renderizado Avanzado</strong>:
+        Our infraestructura cambia por completo las reglas del juego mediante el <strong>Pre-renderizado Avanzado</strong>:
       </p>
       <ul class="list-disc pl-6 mb-6 text-gray-600 space-y-2">
         <li><strong>Compilación por adelantado:</strong> Las páginas de tu sitio web se construyen y optimizan antes de que el usuario las solicite. Cuando un visitante entra, el sitio ya existe en su forma final y se sirve de manera inmediata, reduciendo el tiempo de carga a fracciones de segundo.</li>
@@ -66,7 +66,7 @@ export const blogPosts: BlogPost[] = [
 
       <h2 class="text-2xl font-bold mt-8 mb-4 text-gray-900">3. Distribución global elástica en la nube</h2>
       <p class="mb-4 text-gray-600 leading-relaxed">
-        Alojar un sistema clásico requiere servidores web tradicionales (VPS o hosting compartido) que tienen límites físicos de memoria y procesamiento. Ante un pico inesperado de tráfico —debido a una campaña publicitaria o una mención en medios—, estos servidores suelen saturarse y colapsar.
+        Alojar un sistema clásico requiere servidores web tradicionales (VPS o hosting compartido) que tienen límites físicos de memoria y procesamiento. Ante un pico inesperado de tráfico —due to a una campaña publicitaria o una mención en medios—, estos servidores suelen saturarse y colapsar.
       </p>
       <p class="mb-4 text-gray-600 leading-relaxed">
         Nuestra plataforma utiliza un ecosistema de <strong>Infraestructura Serverless de Distribución Global</strong>:
@@ -140,6 +140,51 @@ export const blogPosts: BlogPost[] = [
       </div>
     `,
     image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=2070"
+  },
+  {
+    title: "El error de los $1,000 USD: Por qué una página web \"bonita\" no es suficiente para tu negocio",
+    slug: "error-pagina-web-bonita-conversion",
+    date: "2026-06-27",
+    excerpt: "Confundir un catálogo digital pasivo con una herramienta activa de conversión es un fallo costoso. Descubre cómo transformar tu web en tu mejor vendedor mediante automatización e infraestructura estratégica.",
+    author: "Equipo Indeva",
+    content: `
+      <p class="mb-6 text-gray-600 leading-relaxed">
+        Imagínalo por un momento: acabas de lanzar el sitio web de tu empresa. El diseño es moderno, los colores reflejan tu marca a la perfección, las animaciones se ven increíbles y, en papel, todo parece listo para el éxito. Pasan las semanas, los meses... y el teléfono no suena. Las notificaciones de ventas no llegan.
+      </p>
+      <p class="mb-6 text-gray-600 leading-relaxed">
+        ¿Qué salió mal? Tu sitio es, visualmente, una obra de arte. El problema es simple pero devastador: <strong>confundiste un catálogo digital pasivo con una herramienta activa de ventas.</strong>
+      </p>
+      <p class="mb-8 text-gray-600 leading-relaxed">
+        En el mercado actual, las empresas ya no necesitan simplemente "estar en internet". Necesitan infraestructura digital que trabaje por ellas. Si tu página web no está diseñada para capturar la atención de un cliente potencial, resolver sus dudas en segundos y cerrar la transacción de forma automatizada, tienes un gasto, no una inversión.
+      </p>
+
+      <h2 class="text-2xl font-bold mt-8 mb-4 text-gray-900">De folleto digital a tu mejor vendedor: Los 3 pilares indispensables</h2>
+      <p class="mb-4 text-gray-600 leading-relaxed">
+        Para que un sitio web genere ingresos reales de manera constante, debe estructurarse bajo tres principios de ingeniería digital que en <strong>Indeva Websites</strong> consideramos mandatorios:
+      </p>
+
+      <h3 class="text-xl font-bold mt-6 mb-3 text-gray-900">1. Claridad radical sobre la estética vacía</h3>
+      <p class="mb-4 text-gray-600 leading-relaxed">
+        El usuario promedio toma una decisión sobre tu negocio en los primeros <strong>5 segundos</strong> de entrar a tu sitio. Si lo primero que ve es un texto genérico como <em>"Somos líderes en innovación desde 2009"</em>, lo has perdido. Tu sitio debe responder tres preguntas de inmediato: ¿Qué problema resuelves?, ¿Cómo lo resuelves? y ¿Cuál es el siguiente paso que debo dar? (Tu Llamado a la Acción o CTA).
+      </p>
+
+      <h3 class="text-xl font-bold mt-6 mb-3 text-gray-900">2. Automatización de procesos de punta a punta</h3>
+      <p class="mb-4 text-gray-600 leading-relaxed">
+        Un verdadero vendedor digital no duerme. Si un cliente decide contratar tus servicios de consultoría, un plan de hosting o un servicio especializado a las 11:00 PM en un día feriado, tu plataforma debe ser capaz de procesar el pago de forma segura instantáneamente (integrando pasarelas robustas como Stripe), emitir su recibo de manera automatizada (usando herramientas como Resend) y aprovisionar el servicio de inmediato sin que muevas un solo dedo. Cuando automatizas el flujo de caja, tu negocio escala de verdad.
+      </p>
+
+      <h3 class="text-xl font-bold mt-6 mb-3 text-gray-900">3. Velocidad y rendimiento técnico (El factor invisible)</h3>
+      <p class="mb-6 text-gray-600 leading-relaxed">
+        Puedes tener el mejor texto de ventas del mundo, pero si tu página web tarda más de 3 segundos en cargar en un dispositivo móvil, más del 50% de tus visitantes se irán antes de verla. Construir con tecnología moderna y arquitecturas limpias como Next.js y despliegues optimizados en la nube es la diferencia entre aparecer en los primeros resultados de búsqueda o ser invisible para tu mercado.
+      </p>
+
+      <div class="mt-8 p-6 bg-orange-50 border border-orange-200 rounded-lg text-center">
+        <h3 class="text-xl font-bold text-gray-900 mb-2">¿Tu sitio web actual está listo para dar el salto?</h3>
+        <p class="text-gray-750 mb-4">Deja de adivinar. Te ofrecemos una <strong>Auditoría de Crecimiento Digital Gratuita de 15 minutos</strong> para entregarte un mapa de ruta operativo claro.</p>
+        <p class="font-semibold text-orange-600">No hay presión, solo soluciones reales.</p>
+      </div>
+    `,
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=2015"
   }
 ];
 
