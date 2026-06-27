@@ -25,7 +25,7 @@
       </div>
 
       <div className="border-t border-gray-200 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-0">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.1fr_minmax(320px,420px)] lg:items-center">
             
             {/* Left: Phone UI with New Image */}
