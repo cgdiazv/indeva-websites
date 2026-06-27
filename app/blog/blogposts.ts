@@ -170,12 +170,12 @@ export const blogPosts: BlogPost[] = [
 
       <h3 class="text-xl font-bold mt-6 mb-3 text-gray-900">2. Automatización de procesos de punta a punta</h3>
       <p class="mb-4 text-gray-600 leading-relaxed">
-        Un verdadero vendedor digital no duerme. Si un cliente decide contratar tus servicios de consultoría, un plan de hosting o un servicio especializado a las 11:00 PM en un día feriado, tu plataforma debe ser capaz de procesar el pago de forma segura instantáneamente (integrando pasarelas robustas como Stripe), emitir su recibo de manera automatizada (usando herramientas como Resend) y aprovisionar el servicio de inmediato sin que muevas un solo dedo. Cuando automatizas el flujo de caja, tu negocio escala de verdad.
+        Un verdadero vendedor digital no duerme. Si un cliente decide contratar tus servicios de consultoría, un plan de hosting o un servicio especializado a las 11:00 PM en un día feriado, tu plataforma debe ser capaz de procesar el pago de forma segura instantáneamente (integrando pasarelas robustas), emitir su recibo de manera automatizada usando herramientas modernas y automatizar el provisionamiento del servicio de inmediato sin que muevas un solo dedo. Cuando automatizas el flujo de caja, tu negocio escala de verdad.
       </p>
 
       <h3 class="text-xl font-bold mt-6 mb-3 text-gray-900">3. Velocidad y rendimiento técnico (El factor invisible)</h3>
       <p class="mb-6 text-gray-600 leading-relaxed">
-        Puedes tener el mejor texto de ventas del mundo, pero si tu página web tarda más de 3 segundos en cargar en un dispositivo móvil, más del 50% de tus visitantes se irán antes de verla. Construir con tecnología moderna y arquitecturas limpias como Next.js y despliegues optimizados en la nube es la diferencia entre aparecer en los primeros resultados de búsqueda o ser invisible para tu mercado.
+        Puedes tener el mejor texto de ventas del mundo, pero si tu página web tarda más de 3 segundos en cargar en un dispositivo móvil, más del 50% de tus visitantes se irán antes de verla. Construir con tecnología moderna y arquitecturas limpias y despliegues optimizados en la nube es la diferencia entre aparecer en los primeros resultados de búsqueda o ser invisible para tu mercado.
       </p>
 
       <div class="mt-8 p-6 bg-orange-50 border border-orange-200 rounded-lg text-center">
