@@ -52,7 +52,7 @@ export const projects = [
     title: "Deborah Maid Services",
     thumbnail: "/portfolio/deborah.webp",
     description: "Responsive website design for a residential cleaning service.",
-    liveUrl: "https://deborahmaidservices.com",
+    liveUrl: "https://deborahmaidservice.com",
     tags: ["Web Design"]
   },
   {
