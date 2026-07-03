@@ -5,6 +5,7 @@ import './globals.css'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import Analytics from '@/components/Analytics'
+import SecureChatInitializer from '@/components/SecureChatInitializer'
 
 // This pulls in Montserrat and optimizes it
 const montserrat = Montserrat({ subsets: ['latin'] })
@@ -47,6 +48,7 @@ export default function RootLayout({
           data-domain="www.chatbase.co"
           defer
         />
+        <SecureChatInitializer />
 
         <Navbar />
         <main className="min-h-screen">{children}</main>
