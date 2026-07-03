@@ -27,6 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={montserrat.className}>
+        {/* Google Analytics Setup */}
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
           strategy="afterInteractive"
@@ -37,6 +38,15 @@ export default function RootLayout({
             gtag('js', new Date());
             gtag('config', '${GA_ID}', { page_path: window.location.pathname });`}
         </Script>
+
+        {/* Chatbase AI Chatbot Setup */}
+        <Script
+          src="https://www.chatbase.co/embed.min.js"
+          id="teiaJVIZDJR9ssASXZHuj"
+          strategy="afterInteractive"
+          data-domain="www.chatbase.co"
+          defer
+        />
 
         <Navbar />
         <main className="min-h-screen">{children}</main>
