@@ -179,7 +179,7 @@ export default function BookFreeAuditPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="inline-flex items-center justify-center rounded-full border border-[#FA8F27] bg-transparent px-9 py-4 text-base font-semibold uppercase tracking-[0.18em] text-[#FA8F27] shadow-[0_20px_50px_-20px_rgba(250,143,39,0.8)] transition hover:bg-[#FA8F27] hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex items-center justify-center rounded-xl border border-[#FA8F27] bg-transparent px-9 py-4 text-base font-semibold uppercase tracking-[0.18em] text-[#FA8F27] shadow-[0_20px_50px_-20px_rgba(250,143,39,0.8)] transition hover:bg-[#FA8F27] hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
             >
               {isSubmitting ? 'Submitting...' : 'Book my free audit'}
             </button>

@@ -70,58 +70,68 @@ export default function Home() {
       </section>
 
       {/* Our Solutions Section */}
-      <section className="w-full bg-white py-24">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-            Our Solutions
-          </h2>
-          <div className="mx-auto mt-4 mb-6 h-1 w-24 rounded-full bg-[#FA8F27]"></div>
-          <p className="mx-auto max-w-2xl text-lg text-gray-600">
-            Outcome-based digital growth for businesses that want fewer headaches and more sales.
-          </p>
+<section className="w-full bg-white py-24">
+  <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+      Engineered for Impact. Built for Scale.
+    </h2>
+    <div className="mx-auto mt-4 mb-6 h-1 w-24 rounded-full bg-[#FA8F27]"></div>
+    <p className="mx-auto max-w-2xl text-lg text-gray-600">
+      We don't sell generic templates or count pages. We build high-yield digital infrastructure tailored to your business metrics.
+    </p>
 
-          <div className="mt-16 grid gap-8 md:grid-cols-3 text-left">
-            <div className="space-y-6 rounded-3xl border border-gray-200 p-8">
-              <div className="flex justify-center">
-                <img src="/authority_builder.webp" alt="The Authority Builder" className="h-24 w-24 object-contain" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 text-center">The Authority Builder</h3>
-              <ul className="mt-4 space-y-3 text-gray-600 list-disc list-inside">
-                <li>Professional 5-page sites.</li>
-                <li>Ideal for firms that want to present a strong professional image.</li>
-                <li>Establishes credibility and trust.</li>
-                <li>SEO-ready structure.</li>
-              </ul>
-            </div>
-
-            <div className="space-y-6 rounded-3xl border border-gray-200 p-8">
-              <div className="flex justify-center">
-                <img src="/lead_machine.webp" alt="The Lead Machine" className="h-24 w-24 object-contain" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 text-center">The Lead Machine</h3>
-              <ul className="mt-4 space-y-3 text-gray-600 list-disc list-inside">
-                <li>High-conversion landing pages.</li>
-                <li>SEO for service businesses.</li>
-                <li>Direct form submissions and calls.</li>
-                <li>Maximum ROI and lead generation.</li>
-              </ul>
-            </div>
-
-            <div className="space-y-6 rounded-3xl border border-gray-200 p-8">
-              <div className="flex justify-center">
-                <img src="/growth_partner.webp" alt="The Growth Partner" className="h-24 w-24 object-contain" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 text-center">The Growth Partner</h3>
-              <ul className="mt-4 space-y-3 text-gray-600 list-disc list-inside">
-                <li>Monthly optimization and AB testing.</li>
-                <li>Security and malware protection.</li>
-                <li>Performance monitoring.</li>
-                <li>Predictable growth and scaling.</li>
-              </ul>
-            </div>
+    <div className="mt-16 grid gap-8 md:grid-cols-2 max-w-4xl mx-auto text-left">
+      
+      {/* Solution 1 - Corporate/Lead Gen */}
+      <div className="space-y-6 rounded-3xl border border-gray-200 p-8 hover:border-[#FA8F27] transition-all bg-white shadow-sm flex flex-col justify-between">
+        <div>
+          <div className="flex justify-center mb-6">
+            <img src="/lead_machine.webp" alt="The B2B Lead Engine" className="h-20 w-24 object-contain" />
           </div>
+          <h3 className="text-2xl font-bold text-gray-900 text-center mb-2">The B2B Lead Engine</h3>
+          <p className="text-sm text-gray-500 text-center mb-6">Best for mid-sized service, logistics, and manufacturing firms.</p>
+          <ul className="space-y-3 text-gray-600 list-disc list-inside border-t border-gray-100 pt-6">
+            <li><strong>Complete Infrastructure Overhaul:</strong> Migration from vulnerable legacy platforms to next-generation serverless architecture.</li>
+            <li><strong>Sub-Second Loading Speed:</strong> Optimized Core Web Vitals to maximize ad spend ROI and organic Google ranking.</li>
+            <li><strong>Lean Funnel Engineering:</strong> Custom lead capture flows designed to turn passive corporate traffic into qualified inquiries.</li>
+            <li><strong>Bulletproof Security:</strong> Disconnected frontend execution ensuring zero public database exposure.</li>
+          </ul>
         </div>
-      </section>
+        <div className="pt-6">
+          <a href="/book-free-audit" className="block text-center w-full py-3 font-semibold text-white bg-[#FA8F27] rounded-xl hover:bg-orange-600 transition-colors">
+            Analyze My Project
+          </a>
+        </div>
+      </div>
+
+      {/* Solution 2 - E-commerce/Advanced */}
+      <div className="space-y-6 rounded-3xl border-2 border-[#FA8F27] p-8 bg-white shadow-md flex flex-col justify-between relative">
+        <span className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-[#FA8F27] text-white px-4 py-1 text-xs font-bold uppercase tracking-wider rounded-full">
+          High Performance
+        </span>
+        <div>
+          <div className="flex justify-center mb-6 mt-2">
+            <img src="/authority_builder.webp" alt="Headless Commerce & Platforms" className="h-20 w-24 object-contain" />
+          </div>
+          <h3 className="text-2xl font-bold text-gray-900 text-center mb-2">Enterprise Custom Platform</h3>
+          <p className="text-sm text-gray-500 text-center mb-6">Best for complex catalogs, headless e-commerce, or custom workflows.</p>
+          <ul className="space-y-3 text-gray-600 list-disc list-inside border-t border-gray-100 pt-6">
+            <li><strong>Decoupled Architecture:</strong> Complete separation of your inventory database from the user experience for maximum speed.</li>
+            <li><strong>Infinite Scalability:</strong> Cloud-native hosting infrastructure built to handle massive traffic spikes without slowdowns.</li>
+            <li><strong>ERP & API Integrations:</strong> Seamless dynamic sync with your internal inventory, CRM, or order management software.</li>
+            <li><strong>Advanced UI/UX Components:</strong> Tailored interactive product filters, fast checkouts, and custom dashboard engineering.</li>
+          </ul>
+        </div>
+        <div className="pt-6">
+          <a href="/book-free-audit" className="block text-center w-full py-3 font-semibold text-white bg-gray-950 rounded-xl hover:bg-gray-800 transition-colors">
+            Request Custom Scope
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
     </>
   )
 }
