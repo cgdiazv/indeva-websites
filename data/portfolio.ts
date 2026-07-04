@@ -5,7 +5,15 @@ export const projects = [
     thumbnail: "/portfolio/oneway.webp",
     description: "A modern website for a Christian ministry organization.",
     liveUrl: "https://onewayministries.co",
-    tags: ["Web Design"]
+    tags: ["Re-design", "Non-Profit"]
+  },
+  {
+    slug: "tacosqueen",
+    title: "Tacos Queen",
+    thumbnail: "/portfolio/tacosqueen.webp",
+    description: "A vibrant website for a fast-casual Mexican restaurant brand.",
+    liveUrl: "https://tacosqueens.com",
+    tags: ["Online Orders", "Food", "Web Design"]
   },
   {
     slug: "andrade-custom-trim",
@@ -13,7 +21,7 @@ export const projects = [
     thumbnail: "/portfolio/andradecustomtrim.webp",
     description: "Modern web design for a custom trim and woodworking service.",
     liveUrl: "https://andradecustomtrim.com",
-    tags: ["Web Design"]
+    tags: ["Custom Trim", "Web Design"]
   },
   {
     slug: "asturias-y-asociados",
@@ -21,7 +29,7 @@ export const projects = [
     thumbnail: "/portfolio/asturias.webp",
     description: "Professional site design for a legal and consulting firm.",
     liveUrl: "https://asturiasyasociados.com",
-    tags: ["Branding", "Web Design"]
+    tags: ["Law Firm", "Web Design"]
   },
   {
     slug: "chispa-safety",
@@ -29,7 +37,7 @@ export const projects = [
     thumbnail: "/portfolio/chispa.webp",
     description: "Safety-focused website design for industrial and commercial clients.",
     liveUrl: "https://chispasafety.com",
-    tags: ["Web Design"]
+    tags: ["Safety", "Web Design"]
   },
   {
     slug: "cinnabon",
@@ -37,7 +45,7 @@ export const projects = [
     thumbnail: "/portfolio/cinnabon.webp",
     description: "A sweet, customer-friendly website for a bakery brand.",
     liveUrl: "https://cinnabon.hn",
-    tags: ["Web Design"]
+    tags: ["Food", "Web Design"]
   },
   {
     slug: "citadel-christian-school",
@@ -133,7 +141,7 @@ export const projects = [
     thumbnail: "/portfolio/pgcarpentry.webp",
     description: "A clean site design for a carpentry and home improvement business.",
     liveUrl: "https://pgcarpentryplus.com",
-    tags: ["Web Design"]
+    tags: ["Custom Trim", "Web Design"]
   },
   {
     slug: "portomerchants",
@@ -149,7 +157,7 @@ export const projects = [
     thumbnail: "/portfolio/rkj.webp",
     description: "A warm, welcoming website for a maternity and parenting brand.",
     liveUrl: "https://rkmaternity.shop",
-    tags: ["Web Design"]
+    tags: ["E-commerce", "Web Design"]
   },
   {
     slug: "su-auto-honduras",
