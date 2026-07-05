@@ -59,7 +59,7 @@ export default function BookFreeAuditPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white py-24 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50 py-16 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-4xl">
         <div className="text-center mb-16">
           <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 tracking-tight">
@@ -80,7 +80,7 @@ export default function BookFreeAuditPage() {
               name="name"
               placeholder="Name *"
               required
-              className="block w-full rounded-2xl border border-gray-200 bg-gray-50 px-5 py-4 text-gray-900 placeholder-gray-400 focus:border-[#FA8F27] focus:outline-none focus:ring-2 focus:ring-[#FA8F27]/20"
+              className="block w-full rounded-2xl border border-gray-200 bg-gray-100 px-5 py-4 text-gray-900 placeholder-gray-400 focus:border-[#FA8F27] focus:outline-none focus:ring-2 focus:ring-[#FA8F27]/20"
             />
           </div>
 
@@ -93,7 +93,7 @@ export default function BookFreeAuditPage() {
                 name="email"
                 placeholder="Email *"
                 required
-                className="block w-full rounded-2xl border border-gray-200 bg-gray-50 px-5 py-4 text-gray-900 placeholder-gray-400 focus:border-[#FA8F27] focus:outline-none focus:ring-2 focus:ring-[#FA8F27]/20"
+                className="block w-full rounded-2xl border border-gray-200 bg-gray-100 px-5 py-4 text-gray-900 placeholder-gray-400 focus:border-[#FA8F27] focus:outline-none focus:ring-2 focus:ring-[#FA8F27]/20"
               />
             </div>
             <div>
@@ -104,13 +104,13 @@ export default function BookFreeAuditPage() {
                 name="phone"
                 placeholder="Phone *"
                 required
-                className="block w-full rounded-2xl border border-gray-200 bg-gray-50 px-5 py-4 text-gray-900 placeholder-gray-400 focus:border-[#FA8F27] focus:outline-none focus:ring-2 focus:ring-[#FA8F27]/20"
+                className="block w-full rounded-2xl border border-gray-200 bg-gray-100 px-5 py-4 text-gray-900 placeholder-gray-400 focus:border-[#FA8F27] focus:outline-none focus:ring-2 focus:ring-[#FA8F27]/20"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <fieldset className="space-y-3 rounded-3xl border border-gray-200 bg-gray-50 p-6">
+            <fieldset className="space-y-3 rounded-3xl border border-gray-200 bg-gray-100 p-6">
               <legend className="text-sm font-semibold text-gray-900">
                 What is your biggest business challenge right now?*
               </legend>
@@ -142,7 +142,7 @@ export default function BookFreeAuditPage() {
                   id="website"
                   name="website"
                   placeholder="Current website URL"
-                  className="block w-full rounded-2xl border border-gray-200 bg-gray-50 px-5 py-4 text-gray-900 placeholder-gray-400 focus:border-[#FA8F27] focus:outline-none focus:ring-2 focus:ring-[#FA8F27]/20"
+                  className="block w-full rounded-2xl border border-gray-200 bg-gray-100 px-5 py-4 text-gray-900 placeholder-gray-400 focus:border-[#FA8F27] focus:outline-none focus:ring-2 focus:ring-[#FA8F27]/20"
                 />
               </div>
               <div>
@@ -152,7 +152,7 @@ export default function BookFreeAuditPage() {
                   id="goal"
                   name="goal"
                   placeholder="Goal for the next 6 months"
-                  className="block w-full rounded-2xl border border-gray-200 bg-gray-50 px-5 py-4 text-gray-900 placeholder-gray-400 focus:border-[#FA8F27] focus:outline-none focus:ring-2 focus:ring-[#FA8F27]/20"
+                  className="block w-full rounded-2xl border border-gray-200 bg-gray-100 px-5 py-4 text-gray-900 placeholder-gray-400 focus:border-[#FA8F27] focus:outline-none focus:ring-2 focus:ring-[#FA8F27]/20"
                 />
               </div>
             </div>
@@ -165,7 +165,7 @@ export default function BookFreeAuditPage() {
               name="message"
               rows={6}
               placeholder="Additional Message"
-              className="block w-full rounded-3xl border border-gray-200 bg-gray-50 px-5 py-4 text-gray-900 placeholder-gray-400 focus:border-[#FA8F27] focus:outline-none focus:ring-2 focus:ring-[#FA8F27]/20"
+              className="block w-full rounded-3xl border border-gray-200 bg-gray-100 px-5 py-4 text-gray-900 placeholder-gray-400 focus:border-[#FA8F27] focus:outline-none focus:ring-2 focus:ring-[#FA8F27]/20"
             />
           </div>
 

@@ -2,10 +2,11 @@ import { projects } from '@/data/portfolio';
 
 export default function PortfolioPage() {
   return (
-    <div className="max-w-7xl mx-auto px-4 py-24">
+    <div className="min-h-screen bg-gray-50 py-16 px-4 sm:px-6 lg:px-8">
       <div className="text-center mb-16">
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Our Portfolio</h1>
-        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 sm:text-5xl tracking-tight">Our Portfolio</h1>
+        <div className="mx-auto mt-4 h-1 w-24 rounded-full bg-[#FA8F27]"></div>
+        <p className="mt-4 text-xl text-gray-500 max-w-2xl mx-auto">
           Take a look at some of the professional websites we have designed and built to help businesses grow their digital presence.
         </p>
       </div>
