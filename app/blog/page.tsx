@@ -7,11 +7,11 @@ export default function BlogArchivePage() {
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <h1 className="text-4xl font-bold text-gray-900 sm:text-5xl tracking-tight">
-            Nuestro Blog
+            Our Blog
           </h1>
           <div className="mx-auto mt-4 h-1 w-24 rounded-full bg-[#FA8F27]"></div>
           <p className="mt-4 text-xl text-gray-500 max-w-2xl mx-auto">
-            Noticias, actualidad y conocimiento técnico sobre el sector industrial y sostenibilidad.
+            News, updates and technical knowledge about the industrial sector and sustainability.
           </p>
         </div>
 
@@ -33,7 +33,7 @@ export default function BlogArchivePage() {
               <div className="flex-1 p-6 flex flex-col">
                 <div className="flex items-center text-sm text-gray-500 mb-3">
                   <time dateTime={post.date}>
-                    {new Date(post.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}
+                    {new Date(post.date).toLocaleDateString('en-EN', { day: 'numeric', month: 'long', year: 'numeric' })}
                   </time>
                 </div>
                 <Link href={`/blog/${post.slug}`} className="block flex-1">
@@ -52,7 +52,7 @@ export default function BlogArchivePage() {
                     href={`/blog/${post.slug}`}
                     className="text-[#FA8F27] font-bold text-sm hover:text-[#e07d1f] flex items-center transition-colors duration-200"
                   >
-                    Leer más <span className="ml-1">→</span>
+                    Read more <span className="ml-1">→</span>
                   </Link>
                 </div>
               </div>
