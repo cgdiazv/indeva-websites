@@ -63,7 +63,7 @@ export default function Home() {
             <img
               src="/3-step-method.webp"
               alt="3 Step Method"
-              className="w-full max-w-4xl rounded-3xl shadow-xl"
+              className="w-full max-w-4xl"
             />
           </div>
         </div>
