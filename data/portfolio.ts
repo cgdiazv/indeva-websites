@@ -1,5 +1,13 @@
 export const projects = [
   {
+    slug: "qro-construction",
+    title: "QRO Construction LLC",
+    thumbnail: "/portfolio/qroconstruction.webp",
+    description: "A modern website for a construction company.",
+    liveUrl: "https://qroconstructionllc.com",
+    tags: ["Construction", "Web Design"]
+  },
+  {
     slug: "oneway-ministries",
     title: "OneWay Ministries",
     thumbnail: "/portfolio/oneway.webp",
@@ -16,6 +24,14 @@ export const projects = [
     tags: ["Online Orders", "Food", "Web Design"]
   },
   {
+    slug: "pg-carpentry-plus",
+    title: "PG Carpentry Plus",
+    thumbnail: "/portfolio/pgcarpentry.webp",
+    description: "A clean site design for a carpentry and home improvement business.",
+    liveUrl: "https://pgcarpentryplus.com",
+    tags: ["Custom Trim", "Web Design"]
+  },
+  {
     slug: "andrade-custom-trim",
     title: "Andrade Custom Trim",
     thumbnail: "/portfolio/andradecustomtrim.webp",
@@ -24,20 +40,12 @@ export const projects = [
     tags: ["Custom Trim", "Web Design"]
   },
   {
-    slug: "asturias-y-asociados",
-    title: "Asturias y Asociados",
-    thumbnail: "/portfolio/asturias.webp",
-    description: "Professional site design for a legal and consulting firm.",
-    liveUrl: "https://asturiasyasociados.com",
-    tags: ["Law Firm", "Web Design"]
-  },
-  {
-    slug: "chispa-safety",
-    title: "Chispa Safety",
-    thumbnail: "/portfolio/chispa.webp",
-    description: "Safety-focused website design for industrial and commercial clients.",
-    liveUrl: "https://chispasafety.com",
-    tags: ["Safety", "Web Design"]
+    slug: "dubai-luxury-brands",
+    title: "Dubai Luxury Brands",
+    thumbnail: "/portfolio/dubai.webp",
+    description: "Premium website design for a luxury goods and lifestyle brand.",
+    liveUrl: "https://dubailuxurybrands.com",
+    tags: ["Luxury", "Web Design"]
   },
   {
     slug: "cinnabon",
@@ -72,22 +80,6 @@ export const projects = [
     tags: ["E-commerce", "Web Design"]
   },
   {
-    slug: "dubai-luxury-brands",
-    title: "Dubai Luxury Brands",
-    thumbnail: "/portfolio/dubai.webp",
-    description: "Premium website design for a luxury goods and lifestyle brand.",
-    liveUrl: "https://dubailuxurybrands.com",
-    tags: ["Luxury", "Web Design"]
-  },
-  {
-    slug: "esarah",
-    title: "ESARAH",
-    thumbnail: "/portfolio/esarah.webp",
-    description: "A sleek portfolio site for an international business service.",
-    liveUrl: "https://grupoand.com",
-    tags: ["Web Design"]
-  },
-  {
     slug: "experenta",
     title: "Experenta",
     thumbnail: "/portfolio/experenta.webp",
@@ -120,44 +112,12 @@ export const projects = [
     tags: ["Food", "Web Design"]
   },
   {
-    slug: "hotel-las-glorias",
-    title: "Hotel Las Glorias",
-    thumbnail: "/portfolio/lasglorias.webp",
-    description: "Hospitality website designed to drive bookings and reservations.",
-    liveUrl: "https://hotellasglorias.com",
-    tags: ["Travel", "Web Design"]
-  },
-  {
     slug: "oscar-tobacco",
     title: "Oscar Tobacco",
     thumbnail: "/portfolio/oscartobacco.webp",
     description: "A premium product showcase for a tobacco brand.",
     liveUrl: "https://oscartobacco.com",
     tags: ["Web Design"]
-  },
-  {
-    slug: "pg-carpentry-plus",
-    title: "PG Carpentry Plus",
-    thumbnail: "/portfolio/pgcarpentry.webp",
-    description: "A clean site design for a carpentry and home improvement business.",
-    liveUrl: "https://pgcarpentryplus.com",
-    tags: ["Custom Trim", "Web Design"]
-  },
-  {
-    slug: "portomerchants",
-    title: "Portomerchants",
-    thumbnail: "/portfolio/portomerchants.webp",
-    description: "An optimized online presence for a wholesale trading company.",
-    liveUrl: "https://portomerchants.com",
-    tags: ["Web Design"]
-  },
-  {
-    slug: "rkj-maternity",
-    title: "RKJ Maternity",
-    thumbnail: "/portfolio/rkj.webp",
-    description: "A warm, welcoming website for a maternity and parenting brand.",
-    liveUrl: "https://rkmaternity.shop",
-    tags: ["E-commerce", "Web Design"]
   },
   {
     slug: "su-auto-honduras",
@@ -200,11 +160,59 @@ export const projects = [
     tags: ["Service", "Web Design"]
   },
   {
+    slug: "rkj-maternity",
+    title: "RKJ Maternity",
+    thumbnail: "/portfolio/rkj.webp",
+    description: "A warm, welcoming website for a maternity and parenting brand.",
+    liveUrl: "https://rkmaternity.shop",
+    tags: ["E-commerce", "Web Design"]
+  },
+  {
     slug: "auto-repuestos-yibrin",
     title: "Auto Repuestos Yibrin",
     thumbnail: "/portfolio/yibrin.webp",
     description: "An auto parts website designed for easy navigation and contact.",
     liveUrl: "https://yibrin.com",
     tags: ["Automotive", "Web Design"]
-  }
+  },
+  {
+    slug: "portomerchants",
+    title: "Portomerchants",
+    thumbnail: "/portfolio/portomerchants.webp",
+    description: "An optimized online presence for a wholesale trading company.",
+    liveUrl: "https://portomerchants.com",
+    tags: ["Web Design"]
+  },
+  {
+    slug: "hotel-las-glorias",
+    title: "Hotel Las Glorias",
+    thumbnail: "/portfolio/lasglorias.webp",
+    description: "Hospitality website designed to drive bookings and reservations.",
+    liveUrl: "https://hotellasglorias.com",
+    tags: ["Travel", "Web Design"]
+  },
+  {
+    slug: "chispa-safety",
+    title: "Chispa Safety",
+    thumbnail: "/portfolio/chispa.webp",
+    description: "Safety-focused website design for industrial and commercial clients.",
+    liveUrl: "https://chispasafety.com",
+    tags: ["Safety", "Web Design"]
+  },
+  {
+    slug: "esarah",
+    title: "ESARAH",
+    thumbnail: "/portfolio/esarah.webp",
+    description: "A sleek portfolio site for an international business service.",
+    liveUrl: "https://grupoand.com",
+    tags: ["Web Design"]
+  },
+  {
+    slug: "asturias-y-asociados",
+    title: "Asturias y Asociados",
+    thumbnail: "/portfolio/asturias.webp",
+    description: "Professional site design for a legal and consulting firm.",
+    liveUrl: "https://asturiasyasociados.com",
+    tags: ["Law Firm", "Web Design"]
+  },
 ];
