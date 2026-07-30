@@ -16,6 +16,14 @@ export const projects = [
     tags: ["Re-design", "Non-Profit"]
   },
   {
+    slug: "perfume-store",
+    title: "Perfume Store Atlanta",
+    thumbnail: "/portfolio/perfumestore.webp",
+    description: "An elegant e-commerce website for a perfume store.",
+    liveUrl: "https://perfumestoreatlanta.com",
+    tags: ["E-commerce", "Web Design"]
+  },
+  {
     slug: "tacosqueen",
     title: "Tacos Queen",
     thumbnail: "/portfolio/tacosqueen.webp",
