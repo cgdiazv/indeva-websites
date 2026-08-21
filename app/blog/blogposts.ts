@@ -10,88 +10,129 @@ export interface BlogPost {
 
 export const blogPosts: BlogPost[] = [
   {
-    title: "The Importance of Sustainability in Modern Industry",
-    slug: "importancia-sostenibilidad-industria",
-    date: "2024-03-20",
-    excerpt: "Sustainability has ceased to be a corporate option and has become the fundamental pillar for operational efficiency and longevity in the modern industrial sector.",
+    title: "Core Web Vitals & Technical SEO in 2026: Turning Page Speed into Revenue",
+    slug: "core-web-vitals-seo-tecnico-conversion",
+    date: "2026-08-21",
+    excerpt: "Search engine algorithms penalize slow sites harder than ever. Discover how optimizing Interaction to Next Paint (INP) and Largest Contentful Paint (LCP) directly increases search visibility and revenue.",
     author: "Indeva Team",
     content: `
       <p class="mb-6 text-gray-600 leading-relaxed">
-        Sustainability is no longer just an ethical choice or a public relations campaign; today, it represents an operational, technical, and economic necessity in the current industrial sector. Global dynamics demand that production plants and supply chains redefine their methodologies to reduce waste, optimize resource utilization, and ensure clean processes over the long term.
-      </p>
-
-      <h2 class="text-2xl font-bold mt-8 mb-4 text-gray-900">Environmental Impact and Operational Efficiency</h2>
-      <p class="mb-4 text-gray-600 leading-relaxed">
-        Reducing the carbon footprint and efficiently managing raw materials not only protect the environment but also directly impact the reduction of long-term operational costs. Applying Lean manufacturing principles makes it possible to identify energy bottlenecks and material waste, transforming residues into optimization opportunities.
+        In 2026, user patience on the web is measured in milliseconds. Search engine indexing algorithms heavily weigh user experience signals when ranking websites, making technical performance a primary driver of organic traffic and sales conversion rates.
       </p>
       <p class="mb-6 text-gray-600 leading-relaxed">
-        When an industrial organization adopts efficiency and process control technologies, it succeeds in mitigating regulatory risks, anticipating international environmental regulations, and building a much more elastic and resilient cost structure against the volatility of the commodities market.
+        If your website experiences input lag or delayed visual loading, users bounce before reading your value proposition. Optimizing for <strong>Core Web Vitals</strong> ensures that your site loads instantly and remains responsive under heavy traffic.
       </p>
 
-      <h2 class="text-2xl font-bold mt-8 mb-4 text-gray-900">Pillars of Sustainable Industrial Transformation</h2>
+      <h2 class="text-2xl font-bold mt-8 mb-4 text-gray-900">The Critical 2026 Core Web Vitals Metrics</h2>
       <p class="mb-4 text-gray-600 leading-relaxed">
-        To advance toward sustainable operational maturity, modern enterprises must concentrate on three fundamental tactical axes:
+        To maintain top search engine rankings and maximize conversions, modern web platforms must optimize three primary performance benchmarks:
       </p>
       <ul class="list-disc pl-6 mb-6 text-gray-600 space-y-2">
-        <li><strong>Precision Energy Optimization:</strong> Monitor and automate energy consumption in heavy machinery and infrastructure to prevent unnecessary peaks and reduce passive demand.</li>
-        <li><strong>Circular Materials Management:</strong> Design production flows where the byproducts of one process are reincorporated as resources for another, eliminating the concept of waste under a philosophy of continuous improvement or Kaizen.</li>
-        <li><strong>Green Logistics and Distribution:</strong> Plan smart transport routes and utilize optimized packaging that reduces dead space and mitigates the impact of freight transportation.</li>
+        <li><strong>Largest Contentful Paint (LCP):</strong> Measures how quickly your main visual content renders. Aim for under 2.0 seconds by using modern image formats (AVIF/WebP) and Edge CDN caching.</li>
+        <li><strong>Interaction to Next Paint (INP):</strong> Evaluates overall page responsiveness when users tap, click, or type. Lowering INP below 200ms requires minimizing long JavaScript tasks on the main thread.</li>
+        <li><strong>Cumulative Layout Shift (CLS):</strong> Quantifies visual stability to prevent unexpected element shifts while reading. Proper aspect ratio reservations for media and web fonts eliminate layout instability completely.</li>
       </ul>
 
-      <h2 class="text-2xl font-bold mt-8 mb-4 text-gray-900">The Role of Digital Infrastructure</h2>
+      <h2 class="text-2xl font-bold mt-8 mb-4 text-gray-900">The Business ROI of High-Performance Web Assets</h2>
+      <p class="mb-4 text-gray-600 leading-relaxed">
+        Technical SEO isn't just about search engine crawlers—it directly transforms your sales funnel:
+      </p>
+      <ul class="list-disc pl-6 mb-6 text-gray-600 space-y-2">
+        <li><strong>Lower Customer Acquisition Costs (CAC):</strong> Higher organic search rankings reduce dependency on paid advertising campaigns.</li>
+        <li><strong>Higher Conversion Rates:</strong> Studies consistently show every 100ms improvement in page speed yields a measurable bump in checkout and lead generation completions.</li>
+        <li><strong>Enhanced Brand Trust:</strong> A fast, glitch-free web interface signals professionalism, technical competence, and reliability to potential clients.</li>
+      </ul>
+
+      <div class="mt-8 p-6 bg-orange-50 border border-orange-200 rounded-lg text-center">
+        <h3 class="text-xl font-bold text-gray-900 mb-2">Want to Audit Your Core Web Vitals?</h3>
+        <p class="text-gray-750 mb-4">We deliver technical SEO optimizations and high-speed web infrastructure built for conversion.</p>
+        <p class="font-semibold text-orange-600">Schedule your free 15-minute speed & growth audit today.</p>
+      </div>
+    `,
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=2070"
+  },
+  {
+    title: "Headless CMS Architecture: Decoupling Content for Maximum Speed and Flexibility",
+    slug: "arquitectura-headless-cms-desacoplada-velocidad",
+    date: "2026-07-17",
+    excerpt: "Learn how separating your content management layer from the front-end presentation enables faster load times, seamless multi-channel publishing, and unmatched developer agility.",
+    author: "Indeva Team",
+    content: `
       <p class="mb-6 text-gray-600 leading-relaxed">
-        Physical sustainability requires robust digital support. Real-time variable monitoring, operational data analysis, and automated reporting allow operations managers to make decisions based on technical realities rather than assumptions. A clean and efficient software infrastructure ensures that information flows run with the same precision as the most advanced production lines.
+        For years, traditional content management systems tightly bound your content database to your visual layout templates. While this all-in-one approach helped launch early digital sites, modern enterprises face multi-device delivery requirements that monolithic systems simply cannot support efficiently.
+      </p>
+      <p class="mb-6 text-gray-600 leading-relaxed">
+        <strong>Headless CMS architecture</strong> changes this paradigm by separating the content storage and authoring backend from the frontend display layer. Content is delivered via lightweight APIs, enabling high-speed rendering across web apps, mobile applications, and IoT devices simultaneously.
+      </p>
+
+      <h2 class="text-2xl font-bold mt-8 mb-4 text-gray-900">Why Decoupled Content Outperforms Legacy Systems</h2>
+      <p class="mb-4 text-gray-600 leading-relaxed">
+        By removing the rendering burden from your CMS database, your organization gains several technical and commercial benefits:
+      </p>
+      <ul class="list-disc pl-6 mb-6 text-gray-600 space-y-2">
+        <li><strong>Single Source of Truth:</strong> Store product descriptions, articles, and marketing copy in one repository and distribute it anywhere via GraphQL or REST APIs.</li>
+        <li><strong>Front-End Freedom:</strong> Developers can build custom, high-performance interfaces using Next.js, React, or modern static site generators without being locked into rigid CMS template tags.</li>
+        <li><strong>Hardened Security:</strong> Because the frontend is decoupled from the content database, attackers cannot exploit standard administrative backdoors or database query vulnerabilities through public URL requests.</li>
+        <li><strong>Omnichannel Readiness:</strong> Push real-time content updates to web applications, native mobile apps, digital signage, or smart devices from a single dashboard.</li>
+      </ul>
+
+      <h2 class="text-2xl font-bold mt-8 mb-4 text-gray-900">Accelerating Time-to-Market</h2>
+      <p class="mb-6 text-gray-600 leading-relaxed">
+        In a headless environment, content creators and software developers work in parallel. Marketing teams can craft campaigns and publish updates freely, while engineering teams optimize frontend components and cloud deployment infrastructure without risk of breaking content workflows.
       </p>
 
       <div class="mt-8 p-6 bg-orange-50 border border-orange-200 rounded-lg text-center">
-        <h3 class="text-xl font-bold text-gray-900 mb-2">Commitment to the Industrial Future</h3>
-        <p class="text-gray-750 mb-4">At Indeva, we are fully committed to implementing processes and solutions that respect the environment without ever compromising the quality, power, and high performance of our industrial architectures.</p>
-        <p class="font-semibold text-orange-600">We build technological assets designed for longevity and real efficiency.</p>
+        <h3 class="text-xl font-bold text-gray-900 mb-2">Ready to Upgrade Your Content Infrastructure?</h3>
+        <p class="text-gray-750 mb-4">At Indeva Websites, we build decoupled headless architecture tailored to your scaling goals.</p>
+        <p class="font-semibold text-orange-600">Contact our engineering team today to modernize your stack.</p>
       </div>
     `,
-    image: "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&q=80&w=2070"
+    image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=2072"
   },
   {
-    title: "The Invisible Bottleneck: How Web Process Automation Frees Up 40% of Your Team's Time",
-    slug: "automatizacion-procesos-web-eficiencia-operativa",
-    date: "2026-04-18",
-    excerpt: "Post-conversion administrative friction sabotages growth. Discover how an automated web infrastructure eliminates manual tasks and unleashes your company's talent.",
+    title: "The $1,000 USD Mistake: Why a \"Pretty\" Website Is Not Enough For Your Business",
+    slug: "error-pagina-web-bonita-conversion",
+    date: "2026-06-27",
+    excerpt: "Confusing a passive digital catalog with an active conversion tool is a costly mistake. Discover how to transform your web into your best salesperson through automation and strategic infrastructure.",
     author: "Indeva Team",
     content: `
       <p class="mb-6 text-gray-600 leading-relaxed">
-        As a company scales, attention usually shifts immediately to increasing sales or doubling the marketing budget. However, there is a silent growth saboteur that most operations leaders overlook: <strong>post-conversion administrative friction.</strong>
+        Imagine it for a moment: you have just launched your company's website. The design is modern, the colors reflect your brand perfectly, the animations look incredible, and, on paper, everything seems ready for success. Weeks pass, months pass... and the phone doesn't ring. Sales notifications don't arrive.
       </p>
       <p class="mb-6 text-gray-600 leading-relaxed">
-        When your website functions purely as a passive messaging channel, every new potential client generates a chain of manual tasks: sending a follow-up email, coordinating meeting schedules, issuing a manual invoice, and registering data across separate systems. If your team spends valuable hours of the day chasing approvals or copying data from one software to another, your digital infrastructure isn't helping you scale; it's holding you back.
+        What went wrong? Visually, your site is a work of art. The problem is simple yet devastating: <strong>you confused a passive digital catalog with an active sales tool.</strong>
+      </p>
+      <p class="mb-8 text-gray-600 leading-relaxed">
+        In today's market, companies no longer need to simply 'be on the internet.' They need a digital infrastructure that works for them. If your web page is not designed to capture a potential client's attention, resolve their doubts in seconds, and close transactions automatically, you have an expense, not an investment.
       </p>
 
-      <h2 class="text-2xl font-bold mt-8 mb-4 text-gray-900">The Anatomy of an Optimized Workflow (Zero Waste)</h2>
+      <h2 class="text-2xl font-bold mt-8 mb-4 text-gray-900">From Digital Brochure to Your Best Salesperson: The 3 Indispensable Pillars</h2>
       <p class="mb-4 text-gray-600 leading-relaxed">
-        Modern software engineering allows for the design of efficient workflows that completely eliminate redundant steps. An optimized web ecosystem must operate under an end-to-end automation principle:
+        For a website to generate real revenue consistently, it must be structured under three digital engineering principles that we at <strong>Indeva Websites</strong> consider mandatory:
       </p>
-      <ul class="list-disc pl-6 mb-6 text-gray-600 space-y-2">
-        <li><strong>Instant Capture and Qualification:</strong> Filter and segment leads in real time based on their specific operational needs, keeping your inbox free of spam.</li>
-        <li><strong>Automated Calendar Synchronization:</strong> Native integration with operational calendars, allowing users to book consulting sessions or technical audits instantly, blocking the correct times without manual intervention.</li>
-        <li><strong>Immediate Cash Flow and Invoicing:</strong> Secure transaction processing in milliseconds through Stripe and automated receipt issuance via advanced APIs at the exact second payment is confirmed.</li>
-      </ul>
 
-      <h2 class="text-2xl font-bold mt-8 mb-4 text-gray-900">Digital Engineering Applied to Business</h2>
+      <h3 class="text-xl font-bold mt-6 mb-3 text-gray-900">1. Radical Clarity Over Empty Aesthetics</h3>
       <p class="mb-4 text-gray-600 leading-relaxed">
-        By eliminating bottlenecks through clean code and decoupled cloud architectures, the benefits directly impact your organization's financial and operational bottom line:
+        The average user makes a decision about your business in the first <strong>5 seconds</strong> of entering your site. If the first thing they see is a generic text like <em>'We are leaders in innovation since 2009,'</em> you've lost them. Your site must answer three questions immediately: What problem do you solve?, How do you solve it?, and What is the next step I should take? (Your Call to Action or CTA).
       </p>
-      <ul class="list-disc pl-6 mb-6 text-gray-600 space-y-2">
-        <li><strong>Elimination of Human Error:</strong> API automations do not forget to attach files, do not mix up emails, and do not duplicate entries in your databases.</li>
-        <li><strong>Elastic Scalability:</strong> Your technical infrastructure can process 5 or 5,000 simultaneous transactions with the same level of precision and speed, without overprotecting or overloading your staff.</li>
-        <li><strong>Talent Liberation:</strong> By delegating repetitive administrative burdens to automated algorithms, your team can concentrate on high-value strategic tasks.</li>
-      </ul>
+
+      <h3 class="text-xl font-bold mt-6 mb-3 text-gray-900">2. End-to-End Process Automation</h3>
+      <p class="mb-4 text-gray-600 leading-relaxed">
+        A true digital salesperson never sleeps. If a client decides to hire your consulting services, a hosting plan, or a specialized service at 11:00 PM on a holiday, your platform must be capable of processing the payment securely and instantly (integrating robust gateways), issuing their receipt automatically using modern tools, and automated provisioning of the service immediately without you lifting a single finger. When you automate cash flow, your business scales for real.
+      </p>
+
+      <h3 class="text-xl font-bold mt-6 mb-3 text-gray-900">3. Speed and Technical Performance (The Invisible Factor)</h3>
+      <p class="mb-6 text-gray-600 leading-relaxed">
+        You can have the best sales copy in the world, but if your web page takes more than 3 seconds to load on a mobile device, over 50% of your visitors will leave before seeing it. Building with modern technology, clean architectures, and optimized cloud deployments is the difference between appearing in the top search results or being invisible to your market.
+      </p>
 
       <div class="mt-8 p-6 bg-orange-50 border border-orange-200 rounded-lg text-center">
         <h3 class="text-xl font-bold text-gray-900 mb-2">Is Your Current Website Ready to Make the Leap?</h3>
-        <p class="text-gray-750 mb-4">We offer you a <strong>Free 15-Minute Digital Growth Audit</strong> to deliver a clear operational roadmap.</p>
+        <p class="text-gray-750 mb-4">Stop guessing. We offer a <strong>Free 15-Minute Digital Growth Audit</strong> to give you a clear operational roadmap.</p>
         <p class="font-semibold text-orange-600">There is no pressure, just real solutions.</p>
       </div>
     `,
-    image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=2070"
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=2015"
   },
   {
     title: "The End of the Monolithic Web Design Era: Why Your Business Needs to Migrate from Traditional Systems",
@@ -211,49 +252,88 @@ export const blogPosts: BlogPost[] = [
     image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=2070"
   },
   {
-    title: "The $1,000 USD Mistake: Why a \"Pretty\" Website Is Not Enough For Your Business",
-    slug: "error-pagina-web-bonita-conversion",
-    date: "2026-06-27",
-    excerpt: "Confusing a passive digital catalog with an active conversion tool is a costly mistake. Discover how to transform your web into your best salesperson through automation and strategic infrastructure.",
+    title: "The Invisible Bottleneck: How Web Process Automation Frees Up 40% of Your Team's Time",
+    slug: "automatizacion-procesos-web-eficiencia-operativa",
+    date: "2026-04-18",
+    excerpt: "Post-conversion administrative friction sabotages growth. Discover how an automated web infrastructure eliminates manual tasks and unleashes your company's talent.",
     author: "Indeva Team",
     content: `
       <p class="mb-6 text-gray-600 leading-relaxed">
-        Imagine it for a moment: you have just launched your company's website. The design is modern, the colors reflect your brand perfectly, the animations look incredible, and, on paper, everything seems ready for success. Weeks pass, months pass... and the phone doesn't ring. Sales notifications don't arrive.
+        As a company scales, attention usually shifts immediately to increasing sales or doubling the marketing budget. However, there is a silent growth saboteur that most operations leaders overlook: <strong>post-conversion administrative friction.</strong>
       </p>
       <p class="mb-6 text-gray-600 leading-relaxed">
-        What went wrong? Visually, your site is a work of art. The problem is simple yet devastating: <strong>you confused a passive digital catalog with an active sales tool.</strong>
-      </p>
-      <p class="mb-8 text-gray-600 leading-relaxed">
-        In today's market, companies no longer need to simply 'be on the internet.' They need a digital infrastructure that works for them. If your web page is not designed to capture a potential client's attention, resolve their doubts in seconds, and close transactions automatically, you have an expense, not an investment.
+        When your website functions purely as a passive messaging channel, every new potential client generates a chain of manual tasks: sending a follow-up email, coordinating meeting schedules, issuing a manual invoice, and registering data across separate systems. If your team spends valuable hours of the day chasing approvals or copying data from one software to another, your digital infrastructure isn't helping you scale; it's holding you back.
       </p>
 
-      <h2 class="text-2xl font-bold mt-8 mb-4 text-gray-900">From Digital Brochure to Your Best Salesperson: The 3 Indispensable Pillars</h2>
+      <h2 class="text-2xl font-bold mt-8 mb-4 text-gray-900">The Anatomy of an Optimized Workflow (Zero Waste)</h2>
       <p class="mb-4 text-gray-600 leading-relaxed">
-        For a website to generate real revenue consistently, it must be structured under three digital engineering principles that we at <strong>Indeva Websites</strong> consider mandatory:
+        Modern software engineering allows for the design of efficient workflows that completely eliminate redundant steps. An optimized web ecosystem must operate under an end-to-end automation principle:
       </p>
+      <ul class="list-disc pl-6 mb-6 text-gray-600 space-y-2">
+        <li><strong>Instant Capture and Qualification:</strong> Filter and segment leads in real time based on their specific operational needs, keeping your inbox free of spam.</li>
+        <li><strong>Automated Calendar Synchronization:</strong> Native integration with operational calendars, allowing users to book consulting sessions or technical audits instantly, blocking the correct times without manual intervention.</li>
+        <li><strong>Immediate Cash Flow and Invoicing:</strong> Secure transaction processing in milliseconds through Stripe and automated receipt issuance via advanced APIs at the exact second payment is confirmed.</li>
+      </ul>
 
-      <h3 class="text-xl font-bold mt-6 mb-3 text-gray-900">1. Radical Clarity Over Empty Aesthetics</h3>
+      <h2 class="text-2xl font-bold mt-8 mb-4 text-gray-900">Digital Engineering Applied to Business</h2>
       <p class="mb-4 text-gray-600 leading-relaxed">
-        The average user makes a decision about your business in the first <strong>5 seconds</strong> of entering your site. If the first thing they see is a generic text like <em>'We are leaders in innovation since 2009,'</em> you've lost them. Your site must answer three questions immediately: What problem do you solve?, How do you solve it?, and What is the next step I should take? (Your Call to Action or CTA).
+        By eliminating bottlenecks through clean code and decoupled cloud architectures, the benefits directly impact your organization's financial and operational bottom line:
       </p>
-
-      <h3 class="text-xl font-bold mt-6 mb-3 text-gray-900">2. End-to-End Process Automation</h3>
-      <p class="mb-4 text-gray-600 leading-relaxed">
-        A true digital salesperson never sleeps. If a client decides to hire your consulting services, a hosting plan, or a specialized service at 11:00 PM on a holiday, your platform must be capable of processing the payment securely and instantly (integrating robust gateways), issuing their receipt automatically using modern tools, and automated provisioning of the service immediately without you lifting a single finger. When you automate cash flow, your business scales for real.
-      </p>
-
-      <h3 class="text-xl font-bold mt-6 mb-3 text-gray-900">3. Speed and Technical Performance (The Invisible Factor)</h3>
-      <p class="mb-6 text-gray-600 leading-relaxed">
-        You can have the best sales copy in the world, but if your web page takes more than 3 seconds to load on a mobile device, over 50% of your visitors will leave before seeing it. Building with modern technology, clean architectures, and optimized cloud deployments is the difference between appearing in the top search results or being invisible to your market.
-      </p>
+      <ul class="list-disc pl-6 mb-6 text-gray-600 space-y-2">
+        <li><strong>Elimination of Human Error:</strong> API automations do not forget to attach files, do not mix up emails, and do not duplicate entries in your databases.</li>
+        <li><strong>Elastic Scalability:</strong> Your technical infrastructure can process 5 or 5,000 simultaneous transactions with the same level of precision and speed, without overprotecting or overloading your staff.</li>
+        <li><strong>Talent Liberation:</strong> By delegating repetitive administrative burdens to automated algorithms, your team can concentrate on high-value strategic tasks.</li>
+      </ul>
 
       <div class="mt-8 p-6 bg-orange-50 border border-orange-200 rounded-lg text-center">
         <h3 class="text-xl font-bold text-gray-900 mb-2">Is Your Current Website Ready to Make the Leap?</h3>
-        <p class="text-gray-750 mb-4">Stop guessing. We offer a <strong>Free 15-Minute Digital Growth Audit</strong> to give you a clear operational roadmap.</p>
+        <p class="text-gray-750 mb-4">We offer you a <strong>Free 15-Minute Digital Growth Audit</strong> to deliver a clear operational roadmap.</p>
         <p class="font-semibold text-orange-600">There is no pressure, just real solutions.</p>
       </div>
     `,
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=2015"
+    image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=2070"
+  },
+  {
+    title: "The Importance of Sustainability in Modern Industry",
+    slug: "importancia-sostenibilidad-industria",
+    date: "2024-03-20",
+    excerpt: "Sustainability has ceased to be a corporate option and has become the fundamental pillar for operational efficiency and longevity in the modern industrial sector.",
+    author: "Indeva Team",
+    content: `
+      <p class="mb-6 text-gray-600 leading-relaxed">
+        Sustainability is no longer just an ethical choice or a public relations campaign; today, it represents an operational, technical, and economic necessity in the current industrial sector. Global dynamics demand that production plants and supply chains redefine their methodologies to reduce waste, optimize resource utilization, and ensure clean processes over the long term.
+      </p>
+
+      <h2 class="text-2xl font-bold mt-8 mb-4 text-gray-900">Environmental Impact and Operational Efficiency</h2>
+      <p class="mb-4 text-gray-600 leading-relaxed">
+        Reducing the carbon footprint and efficiently managing raw materials not only protect the environment but also directly impact the reduction of long-term operational costs. Applying Lean manufacturing principles makes it possible to identify energy bottlenecks and material waste, transforming residues into optimization opportunities.
+      </p>
+      <p class="mb-6 text-gray-600 leading-relaxed">
+        When an industrial organization adopts efficiency and process control technologies, it succeeds in mitigating regulatory risks, anticipating international environmental regulations, and building a much more elastic and resilient cost structure against the volatility of the commodities market.
+      </p>
+
+      <h2 class="text-2xl font-bold mt-8 mb-4 text-gray-900">Pillars of Sustainable Industrial Transformation</h2>
+      <p class="mb-4 text-gray-600 leading-relaxed">
+        To advance toward sustainable operational maturity, modern enterprises must concentrate on three fundamental tactical axes:
+      </p>
+      <ul class="list-disc pl-6 mb-6 text-gray-600 space-y-2">
+        <li><strong>Precision Energy Optimization:</strong> Monitor and automate energy consumption in heavy machinery and infrastructure to prevent unnecessary peaks and reduce passive demand.</li>
+        <li><strong>Circular Materials Management:</strong> Design production flows where the byproducts of one process are reincorporated as resources for another, eliminating the concept of waste under a philosophy of continuous improvement or Kaizen.</li>
+        <li><strong>Green Logistics and Distribution:</strong> Plan smart transport routes and utilize optimized packaging that reduces dead space and mitigates the impact of freight transportation.</li>
+      </ul>
+
+      <h2 class="text-2xl font-bold mt-8 mb-4 text-gray-900">The Role of Digital Infrastructure</h2>
+      <p class="mb-6 text-gray-600 leading-relaxed">
+        Physical sustainability requires robust digital support. Real-time variable monitoring, operational data analysis, and automated reporting allow operations managers to make decisions based on technical realities rather than assumptions. A clean and efficient software infrastructure ensures that information flows run with the same precision as the most advanced production lines.
+      </p>
+
+      <div class="mt-8 p-6 bg-orange-50 border border-orange-200 rounded-lg text-center">
+        <h3 class="text-xl font-bold text-gray-900 mb-2">Commitment to the Industrial Future</h3>
+        <p class="text-gray-750 mb-4">At Indeva, we are fully committed to implementing processes and solutions that respect the environment without ever compromising the quality, power, and high performance of our industrial architectures.</p>
+        <p class="font-semibold text-orange-600">We build technological assets designed for longevity and real efficiency.</p>
+      </div>
+    `,
+    image: "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&q=80&w=2070"
   }
 ];
 

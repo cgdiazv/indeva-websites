@@ -2,6 +2,8 @@ import { blogPosts } from './blogposts';
 import Link from 'next/link';
 
 export default function BlogArchivePage() {
+  const sortedPosts = [...blogPosts].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
   return (
     <main className="min-h-screen bg-gray-50 py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
@@ -16,7 +18,7 @@ export default function BlogArchivePage() {
         </div>
 
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {blogPosts.map((post) => (
+          {sortedPosts.map((post) => (
             <article 
               key={post.slug} 
               className="flex flex-col bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 group"
