@@ -1,5 +1,13 @@
 export const projects = [
   {
+    slug: "tractor-parts-depot",
+    title: "Tractor Parts Depot",
+    thumbnail: "/portfolio/tractorparts.webp",
+    description: "A specialized website for tractor parts and machinery equipment.",
+    liveUrl: "https://tractorpartsdepot.us",
+    tags: ["Automotive", "Web Design"]
+  },
+  {
     slug: "qro-construction",
     title: "QRO Construction LLC",
     thumbnail: "/portfolio/qroconstruction.webp",
@@ -222,5 +230,5 @@ export const projects = [
     description: "Professional site design for a legal and consulting firm.",
     liveUrl: "https://asturiasyasociados.com",
     tags: ["Law Firm", "Web Design"]
-  },
+  }
 ];
