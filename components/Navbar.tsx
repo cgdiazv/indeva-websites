@@ -2,9 +2,16 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { usePathname } from 'next/navigation';
 
 export default function Navbar() {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+
+  // Hide marketing navbar on admin dashboard pages
+  if (pathname?.startsWith('/dashboard')) {
+    return null;
+  }
 
   const toggleDrawer = () => {
     setIsOpen(!isOpen);
