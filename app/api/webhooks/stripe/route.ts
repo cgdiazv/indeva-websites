@@ -3,9 +3,7 @@ import Stripe from 'stripe';
 import { db } from '@/lib/firebaseAdmin';
 import { Resend } from 'resend';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-10-28' as any,
-});
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 // Initialize Resend with your API key
 const resend = new Resend(process.env.RESEND_API_KEY);

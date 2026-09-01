@@ -1,9 +1,7 @@
 import Stripe from 'stripe';
 import type { HostingAccount } from './hostingUtils';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-10-28' as any,
-});
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 /**
  * Creates a dynamic Stripe Checkout Session specifically for a client's hosting renewal,
