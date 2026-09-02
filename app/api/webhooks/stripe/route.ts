@@ -3,12 +3,15 @@ import Stripe from 'stripe';
 import { db } from '@/lib/firebaseAdmin';
 import { Resend } from 'resend';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_dummy_key_for_build', {
   apiVersion: '2025-10-28' as any,
 });
 
-// Initialize Resend with your API key
-const resend = new Resend(process.env.RESEND_API_KEY);
+function getResendClient() {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) return null;
+  return new Resend(apiKey);
+}
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
 export async function POST(request: Request) {
@@ -91,7 +94,8 @@ export async function POST(request: Request) {
       console.log(`Base synced: ✅ Sale successfully logged to Firebase for order #${orderNumber}`);
 
       // Send Custom HTML Email via Resend if email exists
-      if (customerEmail) {
+      const resend = getResendClient();
+      if (customerEmail && resend) {
         await resend.emails.send({
           from: 'Indeva Websites <web@indevasa.com>',
           to: customerEmail,
@@ -172,7 +176,8 @@ export async function POST(request: Request) {
       console.log(`Invoice synced: ✅ Payment captured for invoice #${orderNumber}`);
 
       // Email customer invoice receipt statement via Resend
-      if (customerEmail) {
+      const resend = getResendClient();
+      if (customerEmail && resend) {
         await resend.emails.send({
           from: 'Indeva Websites <web@indevasa.com>',
           to: customerEmail,

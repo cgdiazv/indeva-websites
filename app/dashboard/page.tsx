@@ -1,17 +1,90 @@
 import { db } from '@/lib/firebaseAdmin';
 import { logout } from '@/app/actions/auth';
+import DashboardDateFilter from '@/components/DashboardDateFilter';
 
 // Tells Next.js to bypass caching so your sales dashboard is always real-time
 export const dynamic = 'force-dynamic';
 
-export default async function SalesDashboard() {
-  let salesData: any[] = [];
+type PageProps = {
+  searchParams: Promise<{
+    period?: string;
+    startDate?: string;
+    endDate?: string;
+  }>;
+};
+
+function filterSales(sales: any[], period: string = 'all', startDateStr?: string, endDateStr?: string) {
+  if (period === 'all' || !period) return sales;
+
+  const now = new Date();
+
+  return sales.filter((sale) => {
+    if (!sale.date) return false;
+    const saleDate = new Date(sale.date);
+    if (isNaN(saleDate.getTime())) return false;
+
+    switch (period) {
+      case 'today': {
+        const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
+        return saleDate >= startOfToday;
+      }
+      case 'yesterday': {
+        const startOfYesterday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1, 0, 0, 0, 0);
+        const endOfYesterday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1, 23, 59, 59, 999);
+        return saleDate >= startOfYesterday && saleDate <= endOfYesterday;
+      }
+      case '7d': {
+        const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        return saleDate >= sevenDaysAgo;
+      }
+      case '30d': {
+        const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+        return saleDate >= thirtyDaysAgo;
+      }
+      case 'this_month': {
+        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1, 0, 0, 0, 0);
+        return saleDate >= startOfMonth;
+      }
+      case 'last_month': {
+        const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1, 0, 0, 0, 0);
+        const endOfLastMonth = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59, 999);
+        return saleDate >= startOfLastMonth && saleDate <= endOfLastMonth;
+      }
+      case 'custom': {
+        let isValid = true;
+        if (startDateStr) {
+          const customStart = new Date(`${startDateStr}T00:00:00`);
+          if (!isNaN(customStart.getTime())) {
+            isValid = isValid && saleDate >= customStart;
+          }
+        }
+        if (endDateStr) {
+          const customEnd = new Date(`${endDateStr}T23:59:59.999`);
+          if (!isNaN(customEnd.getTime())) {
+            isValid = isValid && saleDate <= customEnd;
+          }
+        }
+        return isValid;
+      }
+      default:
+        return true;
+    }
+  });
+}
+
+export default async function SalesDashboard({ searchParams }: PageProps) {
+  const resolvedSearchParams = await searchParams;
+  const period = resolvedSearchParams.period || 'all';
+  const startDate = resolvedSearchParams.startDate;
+  const endDate = resolvedSearchParams.endDate;
+
+  let allSalesData: any[] = [];
 
   try {
     // Fetch records from the 'sales' collection sorted by date descending
     const snapshot = await db.collection('sales').orderBy('date', 'desc').get();
     
-    salesData = snapshot.docs.map(doc => ({
+    allSalesData = snapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data(),
     }));
@@ -19,6 +92,9 @@ export default async function SalesDashboard() {
     console.error("Firebase fetch error:", error);
     return <div className="p-24 text-red-500">Error loading live data from Firestore. Check logs.</div>;
   }
+
+  // Filter sales based on selected period / date range
+  const salesData = filterSales(allSalesData, period, startDate, endDate);
 
   // Calculate Metrics Aggregations
   const totalRevenue = salesData.reduce((acc: number, sale: any) => acc + parseFloat(sale.net_sales || 0), 0);
@@ -28,7 +104,7 @@ export default async function SalesDashboard() {
   return (
     <div className="max-w-[95rem] mx-auto px-4 pt-4 sm:pt-24 pb-24">
       {/* Header Section */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Sales Dashboard</h1>
           <p className="text-sm text-gray-500 mt-1">Live streaming revenue engine via Stripe & Firebase</p>
@@ -51,6 +127,21 @@ export default async function SalesDashboard() {
           </form>
         </div>
       </div>
+
+      {/* Date Filter Bar */}
+      <DashboardDateFilter />
+
+      {/* Filter Status Badge */}
+      {period !== 'all' && (
+        <div className="mb-4 flex items-center justify-between text-xs text-gray-500 bg-orange-50/50 border border-orange-100 px-3 py-2 rounded-lg">
+          <span>
+            Showing <strong className="text-gray-900">{salesData.length}</strong> of <strong className="text-gray-900">{allSalesData.length}</strong> total records for timeframe filter: <span className="font-semibold text-orange-600 uppercase">{period.replace('_', ' ')}</span>
+          </span>
+          {startDate && endDate && (
+            <span>Range: {startDate} to {endDate}</span>
+          )}
+        </div>
+      )}
 
       {/* Analytics Cards Row */}
       <div className="grid grid-cols-3 gap-2 sm:gap-6 mb-8">
@@ -90,7 +181,9 @@ export default async function SalesDashboard() {
             {salesData.length === 0 ? (
               <tr>
                 <td colSpan={9} className="px-6 py-12 text-center text-sm text-gray-500">
-                  No live sales found in Firestore yet.
+                  {allSalesData.length === 0
+                    ? "No live sales found in Firestore yet."
+                    : "No sales records match the selected date filter."}
                 </td>
               </tr>
             ) : (
@@ -137,4 +230,4 @@ export default async function SalesDashboard() {
       </div>
     </div>
   );
-}
+}
