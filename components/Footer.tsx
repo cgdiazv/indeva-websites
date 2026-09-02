@@ -1,4 +1,14 @@
-﻿export default function Footer() {
+'use client';
+
+import { usePathname } from 'next/navigation';
+
+export default function Footer() {
+  const pathname = usePathname();
+
+  // Hide footer on admin dashboard pages
+  if (pathname?.startsWith('/dashboard')) {
+    return null;
+  }
   return (
     <footer className="bg-white mt-auto">
       <div className="bg-[#FA8F27] text-white">

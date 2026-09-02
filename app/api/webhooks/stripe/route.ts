@@ -74,7 +74,10 @@ export async function POST(request: Request) {
         couponApplied = totalDetails.breakdown.discounts[0]?.discount?.coupon?.id || '-';
       }
 
-      const attribution = session.metadata?.utm_source || 'Direct';
+      const isHostingRenewal = session.metadata?.type === 'hosting_renewal';
+      const attribution = isHostingRenewal 
+        ? 'Hosting Renewal' 
+        : (session.metadata?.utm_source || 'Direct');
 
       const salePayload = {
         date: new Date().toISOString(),
@@ -89,9 +92,41 @@ export async function POST(request: Request) {
         attribution: String(attribution)
       };
 
-      // Save to Firestore
+      // Save to Firestore sales collection
       await db.collection('sales').add(salePayload);
       console.log(`Base synced: ✅ Sale successfully logged to Firebase for order #${orderNumber}`);
+
+      // If this was a Hosting Renewal, auto-advance the client's hosting renewal date in Firestore
+      if (isHostingRenewal && session.metadata?.hosting_id) {
+        try {
+          const hostingRef = db.collection('hosting_accounts').doc(session.metadata.hosting_id);
+          const hostingDoc = await hostingRef.get();
+          if (hostingDoc.exists) {
+            const hostingData = hostingDoc.data();
+            const currentRenewal = new Date(hostingData?.renewalDate || new Date());
+            let nextRenewal = new Date(currentRenewal);
+            nextRenewal.setFullYear(nextRenewal.getFullYear() + 1);
+
+            const today = new Date();
+            if (nextRenewal < today) {
+              nextRenewal = new Date(today);
+              nextRenewal.setFullYear(today.getFullYear() + 1);
+            }
+
+            const nextRenewalStr = nextRenewal.toISOString().split('T')[0];
+
+            await hostingRef.update({
+              renewalDate: nextRenewalStr,
+              status: 'active',
+              lastPaidOrderNumber: orderNumber,
+              updatedAt: new Date().toISOString(),
+            });
+            console.log(`Hosting auto-renewed: ✅ Hosting account #${session.metadata.hosting_id} (${hostingData?.domain}) renewed until ${nextRenewalStr}`);
+          }
+        } catch (hostingRenewalErr) {
+          console.error('❌ Error auto-advancing hosting renewal in Firestore:', hostingRenewalErr);
+        }
+      }
 
       // Send Custom HTML Email via Resend if email exists
       const resend = getResendClient();
