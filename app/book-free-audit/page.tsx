@@ -80,7 +80,7 @@ export default function BookFreeAuditPage() {
               name="name"
               placeholder="Name *"
               required
-              className="block w-full rounded-2xl border border-gray-200 bg-gray-100 px-5 py-4 text-gray-900 placeholder-gray-400 focus:border-[#FA8F27] focus:outline-none focus:ring-2 focus:ring-[#FA8F27]/20"
+              className="block w-full rounded-2xl border border-gray-200 bg-white px-5 py-4 text-gray-900 placeholder-gray-400 focus:border-[#FA8F27] focus:outline-none focus:ring-2 focus:ring-[#FA8F27]/20"
             />
           </div>
 
@@ -93,7 +93,7 @@ export default function BookFreeAuditPage() {
                 name="email"
                 placeholder="Email *"
                 required
-                className="block w-full rounded-2xl border border-gray-200 bg-gray-100 px-5 py-4 text-gray-900 placeholder-gray-400 focus:border-[#FA8F27] focus:outline-none focus:ring-2 focus:ring-[#FA8F27]/20"
+                className="block w-full rounded-2xl border border-gray-200 bg-white px-5 py-4 text-gray-900 placeholder-gray-400 focus:border-[#FA8F27] focus:outline-none focus:ring-2 focus:ring-[#FA8F27]/20"
               />
             </div>
             <div>
@@ -104,30 +104,30 @@ export default function BookFreeAuditPage() {
                 name="phone"
                 placeholder="Phone *"
                 required
-                className="block w-full rounded-2xl border border-gray-200 bg-gray-100 px-5 py-4 text-gray-900 placeholder-gray-400 focus:border-[#FA8F27] focus:outline-none focus:ring-2 focus:ring-[#FA8F27]/20"
+                className="block w-full rounded-2xl border border-gray-200 bg-white px-5 py-4 text-gray-900 placeholder-gray-400 focus:border-[#FA8F27] focus:outline-none focus:ring-2 focus:ring-[#FA8F27]/20"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <fieldset className="space-y-3 rounded-3xl border border-gray-200 bg-gray-100 p-6">
+            <fieldset className="space-y-3 rounded-3xl border border-gray-200 bg-white p-6">
               <legend className="text-sm font-semibold text-gray-900">
                 What is your biggest business challenge right now?*
               </legend>
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                <label className="inline-flex items-center space-x-3 rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-700 hover:border-[#FA8F27] cursor-pointer">
+              <div className="flex flex-col gap-3">
+                <label className="inline-flex items-center space-x-3 text-sm text-gray-700 cursor-pointer">
                   <input type="checkbox" name="challenge" value="leads" className="h-4 w-4 text-[#FA8F27] focus:ring-[#FA8F27]" />
                   <span>I need more leads/customers</span>
                 </label>
-                <label className="inline-flex items-center space-x-3 rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-700 hover:border-[#FA8F27] cursor-pointer">
+                <label className="inline-flex items-center space-x-3 text-sm text-gray-700 cursor-pointer">
                   <input type="checkbox" name="challenge" value="slowSite" className="h-4 w-4 text-[#FA8F27] focus:ring-[#FA8F27]" />
                   <span>My current website is slow/outdated</span>
                 </label>
-                <label className="inline-flex items-center space-x-3 rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-700 hover:border-[#FA8F27] cursor-pointer">
+                <label className="inline-flex items-center space-x-3 text-sm text-gray-700 cursor-pointer">
                   <input type="checkbox" name="challenge" value="brandImage" className="h-4 w-4 text-[#FA8F27] focus:ring-[#FA8F27]" />
                   <span>I need a professional brand image</span>
                 </label>
-                <label className="inline-flex items-center space-x-3 rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-700 hover:border-[#FA8F27] cursor-pointer">
+                <label className="inline-flex items-center space-x-3 text-sm text-gray-700 cursor-pointer">
                   <input type="checkbox" name="challenge" value="bookings" className="h-4 w-4 text-[#FA8F27] focus:ring-[#FA8F27]" />
                   <span>I want to automate my bookings/sales</span>
                 </label>
@@ -142,7 +142,7 @@ export default function BookFreeAuditPage() {
                   id="website"
                   name="website"
                   placeholder="Current website URL"
-                  className="block w-full rounded-2xl border border-gray-200 bg-gray-100 px-5 py-4 text-gray-900 placeholder-gray-400 focus:border-[#FA8F27] focus:outline-none focus:ring-2 focus:ring-[#FA8F27]/20"
+                  className="block w-full rounded-2xl border border-gray-200 bg-white px-5 py-4 text-gray-900 placeholder-gray-400 focus:border-[#FA8F27] focus:outline-none focus:ring-2 focus:ring-[#FA8F27]/20"
                 />
               </div>
               <div>
@@ -152,7 +152,7 @@ export default function BookFreeAuditPage() {
                   id="goal"
                   name="goal"
                   placeholder="Goal for the next 6 months"
-                  className="block w-full rounded-2xl border border-gray-200 bg-gray-100 px-5 py-4 text-gray-900 placeholder-gray-400 focus:border-[#FA8F27] focus:outline-none focus:ring-2 focus:ring-[#FA8F27]/20"
+                  className="block w-full rounded-2xl border border-gray-200 bg-white px-5 py-4 text-gray-900 placeholder-gray-400 focus:border-[#FA8F27] focus:outline-none focus:ring-2 focus:ring-[#FA8F27]/20"
                 />
               </div>
             </div>
@@ -165,7 +165,7 @@ export default function BookFreeAuditPage() {
               name="message"
               rows={6}
               placeholder="Additional Message"
-              className="block w-full rounded-3xl border border-gray-200 bg-gray-100 px-5 py-4 text-gray-900 placeholder-gray-400 focus:border-[#FA8F27] focus:outline-none focus:ring-2 focus:ring-[#FA8F27]/20"
+              className="block w-full rounded-3xl border border-gray-200 bg-white px-5 py-4 text-gray-900 placeholder-gray-400 focus:border-[#FA8F27] focus:outline-none focus:ring-2 focus:ring-[#FA8F27]/20"
             />
           </div>
 

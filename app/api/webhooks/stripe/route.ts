@@ -23,6 +23,7 @@ export async function POST(request: Request) {
   // 1. Security Check
   try {
     if (!sig) throw new Error('Missing stripe-signature header');
+    if (!endpointSecret) throw new Error('STRIPE_WEBHOOK_SECRET is not configured');
     event = stripe.webhooks.constructEvent(body, sig, endpointSecret);
   } catch (err: any) {
     console.error(`❌ Webhook signature verification failed:`, err.message);
