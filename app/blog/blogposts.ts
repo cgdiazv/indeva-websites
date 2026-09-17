@@ -65,7 +65,7 @@ export const blogPosts: BlogPost[] = [
         <p class="font-semibold text-orange-600">Schedule your free 15-minute technical audit with our engineering team today.</p>
       </div>
     `,
-    image: "https://images.unsplash.com/photo-1677442136019-21780efad99a?auto=format&fit=crop&q=80&w=2064"
+    image: "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?auto=format&fit=crop&q=80&w=2064"
   },
   {
     title: "Core Web Vitals & Technical SEO in 2026: Turning Page Speed into Revenue",
