@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { db } from '@/lib/firebaseAdmin';
+import { getNextOrderNumber } from '@/lib/orderCounter';
 import { Resend } from 'resend';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_dummy_key_for_build', {
@@ -49,21 +50,9 @@ export async function POST(request: Request) {
         console.log('ℹ️ Could not pull standard line items, using mode default.');
       }
 
-      // Retrieve the formatted, sequential invoice number from Stripe
-      let orderNumber = Math.floor(100000 + Math.random() * 900000).toString();
-      if (session.invoice) {
-        try {
-          const invoiceDetails = await stripe.invoices.retrieve(session.invoice as string);
-          if (invoiceDetails.number) {
-            orderNumber = invoiceDetails.number; // Captures formatted string like "INV-0001"
-          }
-        } catch (invoiceError) {
-          console.error('❌ Could not retrieve invoice details, using internal reference fallback:', invoiceError);
-          orderNumber = session.invoice.toString();
-        }
-      } else if (session.id) {
-        orderNumber = session.id.replace('cs_live_', 'CH_');
-      }
+      // Generate sequential numeric order number (starting at 4642)
+      const orderNumber = await getNextOrderNumber();
+      const stripeReference = (session.invoice as string) || session.id || '-';
 
       const customerName = session.customer_details?.name || 'Unknown Customer';
       const customerEmail = session.customer_details?.email;
@@ -90,7 +79,8 @@ export async function POST(request: Request) {
         items_sold: Number(totalItems) || 1,
         coupons: String(couponApplied),
         net_sales: Number(netSales) || 0,
-        attribution: String(attribution)
+        attribution: String(attribution),
+        stripe_reference: String(stripeReference),
       };
 
       // Save to Firestore sales collection
@@ -177,7 +167,8 @@ export async function POST(request: Request) {
     const invoice = event.data.object as Stripe.Invoice;
 
     try {
-      const orderNumber = invoice.number || invoice.id;
+      const orderNumber = await getNextOrderNumber();
+      const stripeReference = invoice.number || invoice.id || '-';
       const customerName = invoice.customer_name || invoice.customer_email || 'Subscription Customer';
       const customerEmail = invoice.customer_email;
       const netSales = (invoice.amount_paid || 0) / 100;
@@ -204,7 +195,8 @@ export async function POST(request: Request) {
         items_sold: Number(totalItems) || 1,
         coupons: '-',
         net_sales: Number(netSales) || 0,
-        attribution: attributionType
+        attribution: attributionType,
+        stripe_reference: String(stripeReference),
       };
 
       // Save record seamlessly to Firestore
@@ -218,17 +210,17 @@ export async function POST(request: Request) {
           from: 'Indeva Websites <web@indevasa.com>',
           to: customerEmail,
           subject: isRenewal 
-            ? `Your Subscription Renewal Invoice #${orderNumber}`
-            : `Your Receipt for Invoice #${orderNumber}`,
+            ? `Your Subscription Renewal Order #${orderNumber}`
+            : `Your Receipt for Order #${orderNumber}`,
           html: `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px;">
               <h2 style="color: #4F46E5; text-align: center;">Payment Processed Successfully</h2>
               <p>Hi ${customerName},</p>
-              <p>We've successfully processed your invoice payment. Here are your transaction parameters:</p>
+              <p>We've successfully processed your payment. Here are your transaction details:</p>
               
               <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
                 <tr style="background-color: #F9FAFB;">
-                  <td style="padding: 10px; border: 1px solid #E5E7EB; font-weight: bold;">Invoice Number</td>
+                  <td style="padding: 10px; border: 1px solid #E5E7EB; font-weight: bold;">Order Number</td>
                   <td style="padding: 10px; border: 1px solid #E5E7EB; text-align: right;">#${orderNumber}</td>
                 </tr>
                 <tr>
