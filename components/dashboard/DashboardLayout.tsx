@@ -263,10 +263,20 @@ export default function DashboardLayout({
           </div>
 
           <div className="flex items-center gap-3">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white border border-gray-200 text-gray-700 shadow-2xs">
-              <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
-              Live Sync
-            </span>
+            {activeTab === 'sales' && (
+              <button
+                type="button"
+                onClick={() => {
+                  window.dispatchEvent(new CustomEvent('open-record-payment-modal'));
+                }}
+                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-semibold text-xs sm:text-sm rounded-xl shadow-xs hover:from-orange-600 hover:to-amber-600 active:scale-98 transition-all cursor-pointer"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                <span>Record Payment</span>
+              </button>
+            )}
           </div>
         </div>
 

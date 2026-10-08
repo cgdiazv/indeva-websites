@@ -43,51 +43,106 @@ export async function POST(request: Request) {
       try {
         const lineItems = await stripe.checkout.sessions.listLineItems(session.id);
         if (lineItems && lineItems.data.length > 0) {
-          productNames = lineItems.data.map(item => item.description).join(', ');
+          productNames = lineItems.data.map(item => item.description).filter(Boolean).join(', ');
           totalItems = lineItems.data.reduce((acc, item) => acc + (item.quantity || 0), 0);
         }
       } catch (lineError) {
         console.log('ℹ️ Could not pull standard line items, using mode default.');
       }
 
-      // Generate sequential numeric order number (starting at 4642)
-      const orderNumber = await getNextOrderNumber();
       const stripeReference = (session.invoice as string) || session.id || '-';
 
-      const customerName = session.customer_details?.name || 'Unknown Customer';
-      const customerEmail = session.customer_details?.email;
-      const netSales = (session.amount_total || 0) / 100;
+      // Deduplication check: verify this checkout session or its invoice hasn't already been recorded
+      const refsToCheck = [session.id];
+      if (session.invoice) refsToCheck.push(session.invoice as string);
+      const existingSale = await db.collection('sales')
+        .where('stripe_reference', 'in', refsToCheck)
+        .limit(1)
+        .get();
 
-      let couponApplied = '-';
-      const totalDetails = session.total_details as any;
-      if (totalDetails?.breakdown?.discounts?.length > 0) {
-        couponApplied = totalDetails.breakdown.discounts[0]?.discount?.coupon?.id || '-';
+      let orderNumber: number;
+      const isAlreadyRecorded = !existingSale.empty;
+
+      if (isAlreadyRecorded) {
+        console.log(`ℹ️ Sale already recorded for session ${session.id} (ref: ${stripeReference}), skipping duplicate sale insertion.`);
+        orderNumber = existingSale.docs[0].data().order_number;
+      } else {
+        // Generate sequential numeric order number
+        orderNumber = await getNextOrderNumber();
+
+        const customerName = session.customer_details?.name || 'Unknown Customer';
+        const customerEmail = session.customer_details?.email;
+        const netSales = (session.amount_total || 0) / 100;
+
+        let couponApplied = '-';
+        const totalDetails = session.total_details as any;
+        if (totalDetails?.breakdown?.discounts?.length > 0) {
+          couponApplied = totalDetails.breakdown.discounts[0]?.discount?.coupon?.id || '-';
+        }
+
+        const isHostingRenewal = session.metadata?.type === 'hosting_renewal';
+        const attribution = isHostingRenewal 
+          ? 'Hosting Renewal' 
+          : (session.metadata?.utm_source || 'Direct');
+
+        const salePayload = {
+          date: new Date().toISOString(),
+          order_number: orderNumber,
+          status: session.payment_status === 'paid' ? 'Completed' : 'Pending',
+          customer: String(customerName),
+          customer_type: session.customer ? 'Registered' : 'Guest',
+          products: String(productNames || 'Subscription Plan'),
+          items_sold: Number(totalItems) || 1,
+          coupons: String(couponApplied),
+          net_sales: Number(netSales) || 0,
+          attribution: String(attribution),
+          stripe_reference: String(stripeReference),
+        };
+
+        // Save to Firestore sales collection
+        await db.collection('sales').add(salePayload);
+        console.log(`Base synced: ✅ Sale successfully logged to Firebase for order #${orderNumber}`);
+
+        // Send Custom HTML Email via Resend if email exists
+        const resend = getResendClient();
+        if (customerEmail && resend) {
+          await resend.emails.send({
+            from: 'Indeva Websites <web@indevasa.com>',
+            to: customerEmail,
+            subject: `Your Receipt for Order #${orderNumber}`,
+            html: `
+              <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px;">
+                <h2 style="color: #fa8f27; text-align: center;">Thank You for Your Purchase!</h2>
+                <p>Hi ${customerName},</p>
+                <p>We've successfully processed your payment. Here are your order details:</p>
+                
+                <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+                  <tr style="background-color: #F9FAFB;">
+                    <td style="padding: 10px; border: 1px solid #E5E7EB; font-weight: bold;">Order Number</td>
+                    <td style="padding: 10px; border: 1px solid #E5E7EB; text-align: right;">#${orderNumber}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 10px; border: 1px solid #E5E7EB; font-weight: bold;">Product</td>
+                    <td style="padding: 10px; border: 1px solid #E5E7EB; text-align: right;">${productNames}</td>
+                  </tr>
+                  <tr style="background-color: #F9FAFB;">
+                    <td style="padding: 10px; border: 1px solid #E5E7EB; font-weight: bold;">Total Amount</td>
+                    <td style="padding: 10px; border: 1px solid #E5E7EB; text-align: right; font-weight: bold; color: #10B981;">$${netSales.toFixed(2)} USD</td>
+                  </tr>
+                </table>
+
+                <p style="font-size: 13px; color: #6B7280; text-align: center; margin-top: 30px;">
+                  If you have any questions about this invoice, reply directly to this email.
+                </p>
+              </div>
+            `,
+          });
+          console.log(`✉️ Receipt email sent successfully to ${customerEmail}`);
+        }
       }
 
-      const isHostingRenewal = session.metadata?.type === 'hosting_renewal';
-      const attribution = isHostingRenewal 
-        ? 'Hosting Renewal' 
-        : (session.metadata?.utm_source || 'Direct');
-
-      const salePayload = {
-        date: new Date().toISOString(),
-        order_number: orderNumber,
-        status: session.payment_status === 'paid' ? 'Completed' : 'Pending',
-        customer: String(customerName),
-        customer_type: session.customer ? 'Registered' : 'Guest',
-        products: String(productNames),
-        items_sold: Number(totalItems) || 1,
-        coupons: String(couponApplied),
-        net_sales: Number(netSales) || 0,
-        attribution: String(attribution),
-        stripe_reference: String(stripeReference),
-      };
-
-      // Save to Firestore sales collection
-      await db.collection('sales').add(salePayload);
-      console.log(`Base synced: ✅ Sale successfully logged to Firebase for order #${orderNumber}`);
-
       // If this was a Hosting Renewal, auto-advance the client's hosting renewal date in Firestore
+      const isHostingRenewal = session.metadata?.type === 'hosting_renewal';
       if (isHostingRenewal && session.metadata?.hosting_id) {
         try {
           const hostingRef = db.collection('hosting_accounts').doc(session.metadata.hosting_id);
@@ -119,74 +174,58 @@ export async function POST(request: Request) {
         }
       }
 
-      // Send Custom HTML Email via Resend if email exists
-      const resend = getResendClient();
-      if (customerEmail && resend) {
-        await resend.emails.send({
-          from: 'Indeva Websites <web@indevasa.com>',
-          to: customerEmail,
-          subject: `Your Receipt for Order #${orderNumber}`,
-          html: `
-            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px;">
-              <h2 style="color: #fa8f27; text-align: center;">Thank You for Your Purchase!</h2>
-              <p>Hi ${customerName},</p>
-              <p>We've successfully processed your payment. Here are your order details:</p>
-              
-              <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
-                <tr style="background-color: #F9FAFB;">
-                  <td style="padding: 10px; border: 1px solid #E5E7EB; font-weight: bold;">Order Number</td>
-                  <td style="padding: 10px; border: 1px solid #E5E7EB; text-align: right;">#${orderNumber}</td>
-                </tr>
-                <tr>
-                  <td style="padding: 10px; border: 1px solid #E5E7EB; font-weight: bold;">Product</td>
-                  <td style="padding: 10px; border: 1px solid #E5E7EB; text-align: right;">${productNames}</td>
-                </tr>
-                <tr style="background-color: #F9FAFB;">
-                  <td style="padding: 10px; border: 1px solid #E5E7EB; font-weight: bold;">Total Amount</td>
-                  <td style="padding: 10px; border: 1px solid #E5E7EB; text-align: right; font-weight: bold; color: #10B981;">$${netSales.toFixed(2)} USD</td>
-                </tr>
-              </table>
-
-              <p style="font-size: 13px; color: #6B7280; text-align: center; margin-top: 30px;">
-                If you have any questions about this invoice, reply directly to this email.
-              </p>
-            </div>
-          `,
-        });
-        console.log(`✉️ Receipt email sent successfully to ${customerEmail}`);
-      }
-
     } catch (dbError) {
       console.error('❌ Error processing or saving data:', dbError);
       return NextResponse.json({ error: 'Database insertion failed' }, { status: 500 });
     }
   }
 
-  // 3. Handle ALL successful invoice payments (Initial, Manual, and Monthly cycles)
-  if (event.type === 'invoice.paid') {
+  // 3. Handle ALL successful invoice payments (invoice.payment_succeeded and invoice.paid)
+  if (event.type === 'invoice.payment_succeeded' || event.type === 'invoice.paid') {
     const invoice = event.data.object as Stripe.Invoice;
 
     try {
-      const orderNumber = await getNextOrderNumber();
       const stripeReference = invoice.number || invoice.id || '-';
+
+      // Deduplication check: verify this invoice hasn't already been processed
+      const existingSale = await db.collection('sales')
+        .where('stripe_reference', 'in', [invoice.id, invoice.number].filter(Boolean))
+        .limit(1)
+        .get();
+
+      if (!existingSale.empty) {
+        console.log(`ℹ️ Sale already exists for invoice ${invoice.id} (${invoice.number}), skipping duplicate.`);
+        return NextResponse.json({ received: true, message: 'Already processed' });
+      }
+
+      const orderNumber = await getNextOrderNumber();
       const customerName = invoice.customer_name || invoice.customer_email || 'Subscription Customer';
       const customerEmail = invoice.customer_email;
       const netSales = (invoice.amount_paid || 0) / 100;
       
       // Dynamically label the attribution type based on the invoice context reason
       const isRenewal = invoice.billing_reason === 'subscription_cycle';
-      const attributionType = isRenewal ? 'Subscription Renewal' : (invoice.billing_reason || 'Manual Invoice');
+      const attributionType = isRenewal 
+        ? 'Subscription Renewal' 
+        : (invoice.billing_reason === 'manual' ? 'Manual Invoice' : (invoice.billing_reason || 'Manual Invoice'));
 
       // Map line items from the invoice object
       let productNames = 'Service Plan Purchase';
       let totalItems = 0;
       if (invoice.lines?.data?.length > 0) {
-        productNames = invoice.lines.data.map(line => line.description).join(', ');
+        const descriptions = invoice.lines.data.map(line => line.description).filter(Boolean);
+        if (descriptions.length > 0) {
+          productNames = descriptions.join(', ');
+        }
         totalItems = invoice.lines.data.reduce((acc, line) => acc + (line.quantity || 0), 0);
       }
 
+      const paymentDate = invoice.status_transitions?.paid_at 
+        ? new Date(invoice.status_transitions.paid_at * 1000).toISOString()
+        : (invoice.created ? new Date(invoice.created * 1000).toISOString() : new Date().toISOString());
+
       const salePayload = {
-        date: new Date().toISOString(),
+        date: paymentDate,
         order_number: orderNumber,
         status: 'Completed',
         customer: String(customerName),
@@ -201,7 +240,7 @@ export async function POST(request: Request) {
 
       // Save record seamlessly to Firestore
       await db.collection('sales').add(salePayload);
-      console.log(`Invoice synced: ✅ Payment captured for invoice #${orderNumber}`);
+      console.log(`Invoice synced: ✅ Payment captured for invoice #${orderNumber} (${stripeReference})`);
 
       // Email customer invoice receipt statement via Resend
       const resend = getResendClient();

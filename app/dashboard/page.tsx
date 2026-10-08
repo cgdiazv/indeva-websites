@@ -1,7 +1,7 @@
 import { db } from '@/lib/firebaseAdmin';
 import { type HostingAccount, calculateRenewalStatus } from '@/lib/hostingUtils';
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
-import DashboardDateFilter from '@/components/DashboardDateFilter';
+import SalesManagement from '@/components/dashboard/SalesManagement';
 
 // Tells Next.js to bypass caching so your sales dashboard is always real-time
 export const dynamic = 'force-dynamic';
@@ -145,119 +145,14 @@ export default async function SalesDashboard({ searchParams }: PageProps) {
   }).length;
 
   const salesTabContent = (
-    <div className="space-y-6">
-      {/* Date Filter Bar */}
-      <DashboardDateFilter />
-
-      {/* Filter Status Badge */}
-      {period !== 'all' && (
-        <div className="flex items-center justify-between text-xs text-gray-500 bg-orange-50/50 border border-orange-100 px-3.5 py-2.5 rounded-xl shadow-xs">
-          <span>
-            Showing <strong className="text-gray-900">{salesData.length}</strong> of <strong className="text-gray-900">{allSalesData.length}</strong> total records for timeframe filter: <span className="font-semibold text-orange-600 uppercase">{period.replace('_', ' ')}</span>
-          </span>
-          {startDate && endDate && (
-            <span>Range: {startDate} to {endDate}</span>
-          )}
-        </div>
-      )}
-
-      {/* Analytics Cards Row */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
-        <div className="bg-white rounded-xl shadow-sm p-5 sm:p-6 border border-slate-200/80">
-          <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Total Revenue</p>
-          <p className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2 truncate">${totalRevenue.toFixed(2)}</p>
-          <p className="text-xs text-slate-400 mt-1">Gross Stripe captured volume</p>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-sm p-5 sm:p-6 border border-slate-200/80">
-          <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Total Orders</p>
-          <p className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2 truncate">{totalOrders}</p>
-          <p className="text-xs text-slate-400 mt-1">Processed transactions</p>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-sm p-5 sm:p-6 border border-slate-200/80">
-          <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Items Sold</p>
-          <p className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2 truncate">{totalItemsSold}</p>
-          <p className="text-xs text-slate-400 mt-1">Subscriptions and services</p>
-        </div>
-      </div>
-
-      {/* Data Table */}
-      <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-slate-200/80">
-        <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-          <h2 className="text-base font-bold text-slate-900">Transaction History</h2>
-          <span className="text-xs text-slate-500">{salesData.length} records</span>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-slate-200 text-sm">
-            <thead className="bg-slate-50/75">
-              <tr>
-                <th className="px-6 py-3.5 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider whitespace-nowrap">Date</th>
-                <th className="px-6 py-3.5 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider whitespace-nowrap">Order #</th>
-                <th className="px-6 py-3.5 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider whitespace-nowrap">Status</th>
-                <th className="px-6 py-3.5 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider whitespace-nowrap">Customer</th>
-                <th className="px-6 py-3.5 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider whitespace-nowrap">Customer Type</th>
-                <th className="px-6 py-3.5 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider min-w-[200px]">Product(s)</th>
-                <th className="px-6 py-3.5 text-center text-xs font-semibold text-slate-600 uppercase tracking-wider whitespace-nowrap">Items Sold</th>
-                <th className="px-6 py-3.5 text-right text-xs font-semibold text-slate-600 uppercase tracking-wider whitespace-nowrap">Net Sales</th>
-                <th className="px-6 py-3.5 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider whitespace-nowrap">Attribution</th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-slate-200">
-              {salesData.length === 0 ? (
-                <tr>
-                  <td colSpan={9} className="px-6 py-16 text-center text-sm text-slate-500">
-                    {allSalesData.length === 0
-                      ? "No live sales found in Firestore yet."
-                      : "No sales records match the selected date filter."}
-                  </td>
-                </tr>
-              ) : (
-                salesData.map((sale: any) => (
-                  <tr key={sale.id} className="hover:bg-slate-50/70 transition-colors">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
-                      {sale.date ? new Date(sale.date).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }) : '-'}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-slate-900">
-                      #{sale.order_number}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-2.5 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                        sale.status?.toLowerCase() === 'completed' || sale.status?.toLowerCase() === 'paid' 
-                          ? 'bg-emerald-100 text-emerald-800' 
-                          : sale.status?.toLowerCase() === 'processing' || sale.status?.toLowerCase() === 'open' 
-                          ? 'bg-blue-100 text-blue-800' 
-                          : 'bg-amber-100 text-amber-800'
-                      }`}>
-                        {sale.status}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">
-                      {sale.customer}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-xs text-slate-500">
-                      {sale.customer_type}
-                    </td>
-                    <td className="px-6 py-4 text-xs text-slate-600 max-w-[250px] truncate" title={sale.products || ""}>
-                      {sale.products || "-"}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-center font-medium text-slate-900">
-                      {sale.items_sold}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-slate-900 text-right">
-                      ${parseFloat(sale.net_sales || 0).toFixed(2)}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-xs text-slate-500 capitalize">
-                      {sale.attribution || 'Direct'}
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
+    <SalesManagement
+      sales={salesData}
+      allSalesCount={allSalesData.length}
+      period={period}
+      startDate={startDate}
+      endDate={endDate}
+      hostings={hostingsData}
+    />
   );
 
   return (
