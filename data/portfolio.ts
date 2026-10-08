@@ -1,5 +1,13 @@
 export const projects = [
   {
+    slug: "jim-cooling-and-heating",
+    title: "Jim Cooling and Heating",
+    thumbnail: "/portfolio/jimhvac.webp",
+    description: "A modern website for residential and commercial HVAC services.",
+    liveUrl: "https://jimcoolingandheating.com",
+    tags: ["HVAC", "Web Design"]
+  },
+  {
     slug: "tractor-parts-depot",
     title: "Tractor Parts Depot",
     thumbnail: "/portfolio/tractorparts.webp",
