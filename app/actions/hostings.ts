@@ -2,7 +2,6 @@
 
 import { db } from '@/lib/firebaseAdmin';
 import { revalidatePath } from 'next/cache';
-import { salesData as historicalSales } from '@/data/sales';
 import { type HostingAccount, calculateRenewalStatus } from '@/lib/hostingUtils';
 import { createHostingRenewalCheckoutSession } from '@/lib/stripeRenewal';
 import { Resend } from 'resend';
@@ -182,74 +181,6 @@ export async function deleteHostingAccount(id: string) {
   }
 }
 
-/**
- * Import past hosting customers from sales history (helper tool)
- */
-export async function seedHostingsFromHistoricalSales() {
-  try {
-    const existing = await db.collection('hosting_accounts').get();
-    const existingDomains = new Set(existing.docs.map(d => d.data().domain?.toLowerCase()));
-
-    // Filter sales with hosting products
-    const hostingSales = historicalSales.filter(sale => 
-      sale.customer && 
-      sale.products && 
-      sale.products.toLowerCase().includes('webhosting')
-    );
-
-    let addedCount = 0;
-    const batch = db.batch();
-
-    // Group by customer to find latest purchase
-    const customerMap = new Map<string, typeof historicalSales[0]>();
-    for (const sale of hostingSales) {
-      if (!customerMap.has(sale.customer!) || new Date(sale.date) > new Date(customerMap.get(sale.customer!)!.date)) {
-        customerMap.set(sale.customer!, sale);
-      }
-    }
-
-    for (const [customer, sale] of customerMap.entries()) {
-      const generatedDomain = customer.toLowerCase().replace(/[^a-z0-9]/g, '') + '.com';
-      if (existingDomains.has(generatedDomain)) continue;
-
-      const saleDate = new Date(sale.date);
-      const renewalDate = new Date(saleDate);
-      renewalDate.setFullYear(saleDate.getFullYear() + 1);
-      const renewalDateStr = renewalDate.toISOString().split('T')[0];
-
-      const docRef = db.collection('hosting_accounts').doc();
-      batch.set(docRef, {
-        customerName: customer,
-        customerEmail: `${customer.toLowerCase().replace(/[^a-z0-9]/g, '.')}@example.com`,
-        customerPhone: '',
-        domain: generatedDomain,
-        planName: 'Webhosting Annual Subscription',
-        amount: sale.net_sales || 86,
-        billingCycle: 'annual',
-        startDate: saleDate.toISOString().split('T')[0],
-        renewalDate: renewalDateStr,
-        status: calculateRenewalStatus(renewalDateStr, 'active'),
-        notes: `Imported from Historical Order #${sale.order_number}`,
-        autoRenew: false,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      });
-
-      existingDomains.add(generatedDomain);
-      addedCount++;
-    }
-
-    if (addedCount > 0) {
-      await batch.commit();
-    }
-
-    revalidatePath('/dashboard');
-    return { success: true, addedCount };
-  } catch (error: any) {
-    console.error('Error importing historical hostings:', error);
-    return { success: false, error: error.message || 'Failed to import historical hostings.' };
-  }
-}
 
 /**
  * Generate a dynamic Stripe Checkout payment link for a hosting account

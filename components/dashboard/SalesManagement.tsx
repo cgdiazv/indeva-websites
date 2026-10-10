@@ -208,28 +208,7 @@ export default function SalesManagement({
         </div>
       )}
 
-      {/* Date Filter Bar */}
-      <div>
-        <DashboardDateFilter />
-      </div>
-
-      {/* Filter Status Badge */}
-      {period !== 'all' && (
-        <div className="flex items-center justify-between text-xs text-gray-500 bg-orange-50/50 border border-orange-100 px-3.5 py-2.5 rounded-xl shadow-2xs">
-          <span>
-            Showing <strong className="text-gray-900">{sales.length}</strong> of{' '}
-            <strong className="text-gray-900">{allSalesCount}</strong> total records for timeframe filter:{' '}
-            <span className="font-semibold text-orange-600 uppercase">{period.replace('_', ' ')}</span>
-          </span>
-          {startDate && endDate && (
-            <span>
-              Range: {startDate} to {endDate}
-            </span>
-          )}
-        </div>
-      )}
-
-      {/* Analytics Cards Row */}
+      {/* Analytics Cards Row (KPI cards) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         {/* Total Revenue */}
         <div className="bg-white rounded-xl shadow-xs p-5 sm:p-6 border border-slate-200/80">
@@ -319,6 +298,27 @@ export default function SalesManagement({
           <p className="text-xs text-slate-400 mt-1">{totalItemsSold} items sold in total</p>
         </div>
       </div>
+
+      {/* Date Filter Bar */}
+      <div>
+        <DashboardDateFilter />
+      </div>
+
+      {/* Filter Status Badge */}
+      {period !== 'all' && (
+        <div className="flex items-center justify-between text-xs text-gray-500 bg-orange-50/50 border border-orange-100 px-3.5 py-2.5 rounded-xl shadow-2xs">
+          <span>
+            Showing <strong className="text-gray-900">{sales.length}</strong> of{' '}
+            <strong className="text-gray-900">{allSalesCount}</strong> total records for timeframe filter:{' '}
+            <span className="font-semibold text-orange-600 uppercase">{period.replace('_', ' ')}</span>
+          </span>
+          {startDate && endDate && (
+            <span>
+              Range: {startDate} to {endDate}
+            </span>
+          )}
+        </div>
+      )}
 
       {/* Data Table */}
       <div className="bg-white rounded-xl shadow-xs overflow-hidden border border-slate-200/80">

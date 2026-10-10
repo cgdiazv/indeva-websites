@@ -3,15 +3,15 @@
 import React, { useState, useEffect, useTransition } from 'react';
 import DashboardDateFilter from '@/components/DashboardDateFilter';
 import { useRouter } from 'next/navigation';
-import { 
-  type ExpenseRecord, 
-  EXPENSE_CATEGORIES, 
-  EXPENSE_PAYMENT_METHODS 
+import {
+  type ExpenseRecord,
+  EXPENSE_CATEGORIES,
+  EXPENSE_PAYMENT_METHODS
 } from '@/lib/expenseUtils';
-import { 
-  createExpense, 
-  updateExpense, 
-  deleteExpense 
+import {
+  createExpense,
+  updateExpense,
+  deleteExpense
 } from '@/app/actions/expenses';
 
 interface ExpensesManagementProps {
@@ -236,11 +236,10 @@ export default function ExpensesManagement({
       {/* Toast Feedback Notification */}
       {feedbackMsg && (
         <div
-          className={`fixed top-5 right-5 z-50 flex items-center gap-3 px-4 py-3 rounded-xl shadow-lg border text-sm font-medium transition-all transform animate-in fade-in slide-in-from-top-4 duration-200 ${
-            feedbackMsg.type === 'success'
+          className={`fixed top-5 right-5 z-50 flex items-center gap-3 px-4 py-3 rounded-xl shadow-lg border text-sm font-medium transition-all transform animate-in fade-in slide-in-from-top-4 duration-200 ${feedbackMsg.type === 'success'
               ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
               : 'bg-rose-50 border-rose-200 text-rose-800'
-          }`}
+            }`}
         >
           {feedbackMsg.type === 'success' ? (
             <svg className="w-5 h-5 text-emerald-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -255,26 +254,6 @@ export default function ExpensesManagement({
         </div>
       )}
 
-      {/* Date Filter Bar */}
-      <div>
-        <DashboardDateFilter />
-      </div>
-
-      {/* Filter Status Badge */}
-      {period !== 'all' && (
-        <div className="flex items-center justify-between text-xs text-gray-500 bg-rose-50/50 border border-rose-100 px-3.5 py-2.5 rounded-xl shadow-2xs">
-          <span>
-            Showing <strong className="text-gray-900">{expenses.length}</strong> of{' '}
-            <strong className="text-gray-900">{allExpensesCount}</strong> total expense records for timeframe filter:{' '}
-            <span className="font-semibold text-rose-600 uppercase">{period.replace('_', ' ')}</span>
-          </span>
-          {startDate && endDate && (
-            <span>
-              Range: {startDate} to {endDate}
-            </span>
-          )}
-        </div>
-      )}
 
       {/* Metrics Cards Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
@@ -336,16 +315,17 @@ export default function ExpensesManagement({
             {topCategory}
           </p>
           <p className="text-xs text-slate-400 mt-1">
-            {topCategoryAmount > 0 
-              ? `$${topCategoryAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} spent` 
+            {topCategoryAmount > 0
+              ? `$${topCategoryAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} spent`
               : 'No expenses recorded'}
           </p>
         </div>
       </div>
 
-      {/* Action and Filter Bar */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs">
-        <div className="flex flex-1 flex-col sm:flex-row items-stretch sm:items-center gap-3">
+      {/* Search and Filters Block */}
+      <div className="bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs space-y-4">
+        {/* Search and Category Dropdown */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
           {/* Search Box */}
           <div className="relative flex-1 max-w-md">
             <input
@@ -373,7 +353,7 @@ export default function ExpensesManagement({
             )}
           </div>
 
-          {/* Category Filter */}
+          {/* Category Filter Dropdown */}
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
@@ -388,20 +368,26 @@ export default function ExpensesManagement({
           </select>
         </div>
 
-        {/* Record Expense Button */}
-        <button
-          type="button"
-          onClick={() => {
-            resetForm();
-            setIsAddModalOpen(true);
-          }}
-          className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-semibold text-sm rounded-xl shadow-xs hover:from-orange-600 hover:to-amber-600 active:scale-98 transition-all cursor-pointer whitespace-nowrap"
-        >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-          </svg>
-          <span>Record Expense</span>
-        </button>
+        {/* Time Filters below search in the same block */}
+        <div className="pt-3 border-t border-slate-100 space-y-3">
+          <DashboardDateFilter embedded />
+
+          {/* Filter Status Badge */}
+          {period !== 'all' && (
+            <div className="flex items-center justify-between text-xs text-gray-500 bg-rose-50/50 border border-rose-100 px-3.5 py-2.5 rounded-xl shadow-2xs">
+              <span>
+                Showing <strong className="text-gray-900">{expenses.length}</strong> of{' '}
+                <strong className="text-gray-900">{allExpensesCount}</strong> total expense records for timeframe filter:{' '}
+                <span className="font-semibold text-rose-600 uppercase">{period.replace('_', ' ')}</span>
+              </span>
+              {startDate && endDate && (
+                <span>
+                  Range: {startDate} to {endDate}
+                </span>
+              )}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Expenses Table */}

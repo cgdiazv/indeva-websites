@@ -5,7 +5,12 @@ import { useState, useEffect } from 'react';
 
 export type DatePeriod = 'all' | 'today' | 'yesterday' | '7d' | '30d' | 'this_month' | 'last_month' | 'custom';
 
-export default function DashboardDateFilter() {
+interface DashboardDateFilterProps {
+  className?: string;
+  embedded?: boolean;
+}
+
+export default function DashboardDateFilter({ className, embedded = false }: DashboardDateFilterProps = {}) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -52,7 +57,13 @@ export default function DashboardDateFilter() {
   ];
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 mb-6 transition-all">
+    <div
+      className={
+        embedded
+          ? `transition-all ${className || ''}`
+          : `bg-white rounded-xl shadow-sm border border-gray-200 p-4 mb-6 transition-all ${className || ''}`
+      }
+    >
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         {/* Presets Row */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-2 md:pb-0 scrollbar-none">
