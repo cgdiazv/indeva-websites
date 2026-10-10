@@ -1,7 +1,9 @@
 import { db } from '@/lib/firebaseAdmin';
 import { type HostingAccount, calculateRenewalStatus } from '@/lib/hostingUtils';
+import type { ExpenseRecord } from '@/lib/expenseUtils';
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
 import SalesManagement from '@/components/dashboard/SalesManagement';
+import ExpensesManagement from '@/components/dashboard/ExpensesManagement';
 
 // Tells Next.js to bypass caching so your sales dashboard is always real-time
 export const dynamic = 'force-dynamic';
@@ -15,55 +17,55 @@ type PageProps = {
   }>;
 };
 
-function filterSales(sales: any[], period: string = 'all', startDateStr?: string, endDateStr?: string) {
-  if (period === 'all' || !period) return sales;
+function filterRecords<T extends { date?: string }>(items: T[], period: string = 'all', startDateStr?: string, endDateStr?: string): T[] {
+  if (period === 'all' || !period) return items;
 
   const now = new Date();
 
-  return sales.filter((sale) => {
-    if (!sale.date) return false;
-    const saleDate = new Date(sale.date);
-    if (isNaN(saleDate.getTime())) return false;
+  return items.filter((item) => {
+    if (!item.date) return false;
+    const itemDate = new Date(item.date);
+    if (isNaN(itemDate.getTime())) return false;
 
     switch (period) {
       case 'today': {
         const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
-        return saleDate >= startOfToday;
+        return itemDate >= startOfToday;
       }
       case 'yesterday': {
         const startOfYesterday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1, 0, 0, 0, 0);
         const endOfYesterday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1, 23, 59, 59, 999);
-        return saleDate >= startOfYesterday && saleDate <= endOfYesterday;
+        return itemDate >= startOfYesterday && itemDate <= endOfYesterday;
       }
       case '7d': {
         const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-        return saleDate >= sevenDaysAgo;
+        return itemDate >= sevenDaysAgo;
       }
       case '30d': {
         const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-        return saleDate >= thirtyDaysAgo;
+        return itemDate >= thirtyDaysAgo;
       }
       case 'this_month': {
         const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1, 0, 0, 0, 0);
-        return saleDate >= startOfMonth;
+        return itemDate >= startOfMonth;
       }
       case 'last_month': {
         const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1, 0, 0, 0, 0);
         const endOfLastMonth = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59, 999);
-        return saleDate >= startOfLastMonth && saleDate <= endOfLastMonth;
+        return itemDate >= startOfLastMonth && itemDate <= endOfLastMonth;
       }
       case 'custom': {
         let isValid = true;
         if (startDateStr) {
           const customStart = new Date(`${startDateStr}T00:00:00`);
           if (!isNaN(customStart.getTime())) {
-            isValid = isValid && saleDate >= customStart;
+            isValid = isValid && itemDate >= customStart;
           }
         }
         if (endDateStr) {
           const customEnd = new Date(`${endDateStr}T23:59:59.999`);
           if (!isNaN(customEnd.getTime())) {
-            isValid = isValid && saleDate <= customEnd;
+            isValid = isValid && itemDate <= customEnd;
           }
         }
         return isValid;
@@ -82,12 +84,14 @@ export default async function SalesDashboard({ searchParams }: PageProps) {
 
   let allSalesData: any[] = [];
   let hostingsData: HostingAccount[] = [];
+  let allExpensesData: ExpenseRecord[] = [];
 
   try {
-    // Fetch records in parallel from 'sales' and 'hosting_accounts' collections
-    const [salesSnapshot, hostingsSnapshot] = await Promise.all([
+    // Fetch records in parallel from 'sales', 'hosting_accounts', and 'expenses' collections
+    const [salesSnapshot, hostingsSnapshot, expensesSnapshot] = await Promise.all([
       db.collection('sales').orderBy('date', 'desc').get(),
       db.collection('hosting_accounts').orderBy('renewalDate', 'asc').get(),
+      db.collection('expenses').get(),
     ]);
 
     allSalesData = salesSnapshot.docs.map(doc => ({
@@ -104,6 +108,13 @@ export default async function SalesDashboard({ searchParams }: PageProps) {
         status: calculated,
       } as HostingAccount;
     });
+
+    allExpensesData = expensesSnapshot.docs
+      .map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      }) as ExpenseRecord)
+      .sort((a, b) => new Date(b.date || '').getTime() - new Date(a.date || '').getTime());
   } catch (error) {
     console.error("Firebase fetch error:", error);
     return (
@@ -116,13 +127,9 @@ export default async function SalesDashboard({ searchParams }: PageProps) {
     );
   }
 
-  // Filter sales based on selected period / date range
-  const salesData = filterSales(allSalesData, period, startDate, endDate);
-
-  // Calculate Metrics Aggregations for Sales
-  const totalRevenue = salesData.reduce((acc: number, sale: any) => acc + parseFloat(sale.net_sales || 0), 0);
-  const totalOrders = salesData.length;
-  const totalItemsSold = salesData.reduce((acc: number, sale: any) => acc + parseInt(sale.items_sold || 0, 10), 0);
+  // Filter sales and expenses based on selected period / date range
+  const salesData = filterRecords(allSalesData, period, startDate, endDate);
+  const expensesData = filterRecords(allExpensesData, period, startDate, endDate);
 
   // Calculate renewal alerts
   const today = new Date();
@@ -152,6 +159,17 @@ export default async function SalesDashboard({ searchParams }: PageProps) {
       startDate={startDate}
       endDate={endDate}
       hostings={hostingsData}
+      expenses={expensesData}
+    />
+  );
+
+  const expensesTabContent = (
+    <ExpensesManagement
+      expenses={expensesData}
+      allExpensesCount={allExpensesData.length}
+      period={period}
+      startDate={startDate}
+      endDate={endDate}
     />
   );
 
@@ -162,6 +180,8 @@ export default async function SalesDashboard({ searchParams }: PageProps) {
       salesCount={salesData.length}
       dueSoonCount={dueSoonCount}
       overdueCount={overdueCount}
+      expensesContent={expensesTabContent}
+      expensesCount={expensesData.length}
     />
   );
 }

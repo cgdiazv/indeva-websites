@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useTransition } from 'react';
 import DashboardDateFilter from '@/components/DashboardDateFilter';
 import type { HostingAccount } from '@/lib/hostingUtils';
+import type { ExpenseRecord } from '@/lib/expenseUtils';
 import { createManualSale } from '@/app/actions/sales';
 import { useRouter } from 'next/navigation';
 
@@ -31,6 +32,7 @@ interface SalesManagementProps {
   startDate?: string;
   endDate?: string;
   hostings: HostingAccount[];
+  expenses?: ExpenseRecord[];
 }
 
 export default function SalesManagement({
@@ -40,6 +42,7 @@ export default function SalesManagement({
   startDate,
   endDate,
   hostings,
+  expenses = [],
 }: SalesManagementProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -77,6 +80,9 @@ export default function SalesManagement({
   const totalRevenue = sales.reduce((acc, sale) => acc + (parseFloat(String(sale.net_sales)) || 0), 0);
   const totalOrders = sales.length;
   const totalItemsSold = sales.reduce((acc, sale) => acc + (parseInt(String(sale.items_sold), 10) || 0), 0);
+  const totalExpenses = (expenses || []).reduce((acc, exp) => acc + (parseFloat(String(exp.amount)) || 0), 0);
+  const netProfit = totalRevenue - totalExpenses;
+  const profitMargin = totalRevenue > 0 ? (netProfit / totalRevenue) * 100 : 0;
 
   const resetForm = () => {
     setCustomerName('');
@@ -224,25 +230,93 @@ export default function SalesManagement({
       )}
 
       {/* Analytics Cards Row */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        {/* Total Revenue */}
         <div className="bg-white rounded-xl shadow-xs p-5 sm:p-6 border border-slate-200/80">
-          <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Total Revenue</p>
+          <div className="flex items-center justify-between">
+            <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Total Revenue</p>
+            <span className="p-2 rounded-lg bg-orange-50 text-orange-600">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </span>
+          </div>
           <p className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2 truncate">
             ${totalRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </p>
           <p className="text-xs text-slate-400 mt-1">Stripe + Zelle + Manual payments</p>
         </div>
 
+        {/* Total Expenses */}
         <div className="bg-white rounded-xl shadow-xs p-5 sm:p-6 border border-slate-200/80">
-          <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Total Orders</p>
-          <p className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2 truncate">{totalOrders}</p>
-          <p className="text-xs text-slate-400 mt-1">Processed transactions</p>
+          <div className="flex items-center justify-between">
+            <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Total Expenses</p>
+            <span className="p-2 rounded-lg bg-rose-50 text-rose-600">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+            </span>
+          </div>
+          <p className="text-2xl sm:text-3xl font-extrabold text-rose-600 mt-2 truncate">
+            ${totalExpenses.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+          </p>
+          <p className="text-xs text-slate-400 mt-1">{(expenses || []).length} registered expenses in period</p>
         </div>
 
+        {/* Net Profit: Revenue - Gastos */}
+        <div className={`rounded-xl shadow-xs p-5 sm:p-6 border transition-all ${
+          netProfit >= 0
+            ? 'bg-gradient-to-br from-white via-white to-emerald-50/50 border-emerald-200/80'
+            : 'bg-gradient-to-br from-white via-white to-rose-50/50 border-rose-200/80'
+        }`}>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1.5">
+              <p className="text-xs font-semibold uppercase tracking-wider text-slate-700">Net Profit</p>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tight">(Revenue - Gastos)</span>
+            </div>
+            <span className={`p-2 rounded-lg ${
+              netProfit >= 0 ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'
+            }`}>
+              {netProfit >= 0 ? (
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                </svg>
+              ) : (
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" />
+                </svg>
+              )}
+            </span>
+          </div>
+          <p className={`text-2xl sm:text-3xl font-extrabold mt-2 truncate ${
+            netProfit >= 0 ? 'text-emerald-700' : 'text-rose-700'
+          }`}>
+            {netProfit < 0 ? '-' : ''}${Math.abs(netProfit).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+          </p>
+          <div className="flex items-center justify-between mt-1 text-xs">
+            <span className="text-slate-500 font-medium">
+              {totalRevenue > 0 ? `${profitMargin.toFixed(1)}% margin` : 'Revenue menos gastos'}
+            </span>
+            <span className={`text-[11px] font-bold px-1.5 py-0.5 rounded ${
+              netProfit >= 0 ? 'bg-emerald-100/70 text-emerald-800' : 'bg-rose-100/70 text-rose-800'
+            }`}>
+              {netProfit >= 0 ? 'Positive Margin' : 'Deficit'}
+            </span>
+          </div>
+        </div>
+
+        {/* Total Orders */}
         <div className="bg-white rounded-xl shadow-xs p-5 sm:p-6 border border-slate-200/80">
-          <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Items Sold</p>
-          <p className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2 truncate">{totalItemsSold}</p>
-          <p className="text-xs text-slate-400 mt-1">Websites, subscriptions & services</p>
+          <div className="flex items-center justify-between">
+            <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Total Orders</p>
+            <span className="p-2 rounded-lg bg-blue-50 text-blue-600">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+              </svg>
+            </span>
+          </div>
+          <p className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2 truncate">{totalOrders}</p>
+          <p className="text-xs text-slate-400 mt-1">{totalItemsSold} items sold in total</p>
         </div>
       </div>
 

@@ -13,6 +13,8 @@ interface DashboardLayoutProps {
   salesCount: number;
   dueSoonCount: number;
   overdueCount: number;
+  expensesContent: React.ReactNode;
+  expensesCount: number;
 }
 
 export default function DashboardLayout({
@@ -21,22 +23,25 @@ export default function DashboardLayout({
   salesCount,
   dueSoonCount,
   overdueCount,
+  expensesContent,
+  expensesCount,
 }: DashboardLayoutProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const initialTab = searchParams.get('tab') === 'hostings' ? 'hostings' : 'sales';
-  const [activeTab, setActiveTab] = useState<'sales' | 'hostings'>(initialTab);
+  const tabParam = searchParams.get('tab');
+  const initialTab = tabParam === 'hostings' || tabParam === 'expenses' ? tabParam : 'sales';
+  const [activeTab, setActiveTab] = useState<'sales' | 'hostings' | 'expenses'>(initialTab);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const tabParam = searchParams.get('tab');
-    if (tabParam === 'hostings' || tabParam === 'sales') {
+    if (tabParam === 'hostings' || tabParam === 'sales' || tabParam === 'expenses') {
       setActiveTab(tabParam);
     }
   }, [searchParams]);
 
-  const switchTab = (tab: 'sales' | 'hostings') => {
+  const switchTab = (tab: 'sales' | 'hostings' | 'expenses') => {
     setActiveTab(tab);
     setIsMobileMenuOpen(false);
     const params = new URLSearchParams(window.location.search);
@@ -180,6 +185,30 @@ export default function DashboardLayout({
                     </span>
                   </div>
                 </button>
+
+                {/* Company Expenses Tab */}
+                <button
+                  onClick={() => switchTab('expenses')}
+                  className={`w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-sm font-medium transition-all ${
+                    activeTab === 'expenses'
+                      ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white font-semibold shadow-sm'
+                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/70'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <svg className={`w-5 h-5 ${activeTab === 'expenses' ? 'text-white' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    <span>Expenses (Gastos)</span>
+                  </div>
+                  <span className={`text-xs px-2 py-0.5 rounded-full font-bold ${
+                    activeTab === 'expenses' 
+                      ? 'bg-white/25 text-white' 
+                      : 'bg-gray-100 text-gray-600'
+                  }`}>
+                    {expensesCount}
+                  </span>
+                </button>
               </nav>
             </div>
 
@@ -253,12 +282,18 @@ export default function DashboardLayout({
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
           <div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
-              {activeTab === 'sales' ? 'Sales & Revenue Stream' : 'Hosting Accounts & Renewals'}
+              {activeTab === 'sales'
+                ? 'Sales & Revenue Stream'
+                : activeTab === 'hostings'
+                  ? 'Hosting Accounts & Renewals'
+                  : 'Company Expenses (Gastos)'}
             </h1>
             <p className="text-sm text-gray-500 mt-1">
               {activeTab === 'sales' 
                 ? 'Real-time sales tracking from Stripe and customer transactions' 
-                : 'Customer domain lifecycle, renewal deadlines, and recurring revenue management'}
+                : activeTab === 'hostings'
+                  ? 'Customer domain lifecycle, renewal deadlines, and recurring revenue management'
+                  : 'Track operational costs, software subscriptions, vendors and business deductions'}
             </p>
           </div>
 
@@ -277,16 +312,33 @@ export default function DashboardLayout({
                 <span>Record Payment</span>
               </button>
             )}
+
+            {activeTab === 'expenses' && (
+              <button
+                type="button"
+                onClick={() => {
+                  window.dispatchEvent(new CustomEvent('open-record-expense-modal'));
+                }}
+                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-semibold text-xs sm:text-sm rounded-xl shadow-xs hover:from-orange-600 hover:to-amber-600 active:scale-98 transition-all cursor-pointer"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                <span>Record Expense</span>
+              </button>
+            )}
           </div>
         </div>
 
         {/* Tab Content */}
         {activeTab === 'sales' ? (
           <div>{salesContent}</div>
-        ) : (
+        ) : activeTab === 'hostings' ? (
           <div>
             <HostingManagement initialHostings={hostings} />
           </div>
+        ) : (
+          <div>{expensesContent}</div>
         )}
       </main>
     </div>
