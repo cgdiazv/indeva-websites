@@ -73,23 +73,23 @@ export default function PortfolioPage() {
                 className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between group"
               >
                 <div>
-                  {/* Browser/Device Mockup frame on soft light-blue background */}
-                  <div className="bg-[#EBF3FA] rounded-2xl p-4 sm:p-6 mb-8 border border-slate-200/60 relative overflow-hidden group-hover:bg-[#E4EEF8] transition-colors">
+                  {/* Browser/Device Mockup frame */}
+                  <div className="mb-8 rounded-2xl border border-slate-200/80 overflow-hidden bg-white shadow-xs group-hover:shadow-md transition-shadow">
                     {/* Simulated Browser Bar */}
-                    <div className="bg-white rounded-t-xl px-3 py-2 border border-b-0 border-slate-200/80 flex items-center justify-between shadow-xs">
+                    <div className="bg-slate-50 px-3.5 py-2.5 border-b border-slate-200/80 flex items-center justify-between">
                       <div className="flex items-center gap-1.5">
                         <span className="w-2.5 h-2.5 rounded-full bg-slate-300" />
                         <span className="w-2.5 h-2.5 rounded-full bg-slate-300" />
                         <span className="w-2.5 h-2.5 rounded-full bg-slate-300" />
                       </div>
-                      <span className="text-[10px] font-mono text-slate-400 truncate max-w-[180px]">
+                      <span className="text-[10px] sm:text-xs font-mono text-slate-400 truncate max-w-[180px] sm:max-w-[240px]">
                         {project.liveUrl.replace('https://', '')}
                       </span>
                       <span className="text-[10px] text-slate-400 font-mono">🔒 SSL</span>
                     </div>
 
                     {/* Screenshot Container */}
-                    <div className="h-60 sm:h-72 w-full overflow-hidden rounded-b-xl border border-slate-200/80 bg-slate-100 shadow-inner relative">
+                    <div className="h-60 sm:h-72 w-full overflow-hidden bg-slate-100 relative">
                       <img
                         src={project.thumbnail}
                         alt={`${project.title} Web Architecture`}
