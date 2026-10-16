@@ -1,134 +1,245 @@
 'use client';
 
+import Link from 'next/link';
+import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 
 export default function Footer() {
   const pathname = usePathname();
+  const [email, setEmail] = useState('');
+  const [subscribed, setSubscribed] = useState(false);
 
   // Hide footer on admin dashboard pages
   if (pathname?.startsWith('/dashboard')) {
     return null;
   }
+
+  const handleSubscribe = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (email) {
+      setSubscribed(true);
+      setEmail('');
+    }
+  };
+
   return (
-    <footer className="bg-white mt-auto">
-      <div className="bg-[#FA8F27] text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
-            <div className="max-w-3xl text-center lg:text-left">
-              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
-                Ready To Turn Your Website Into Your Best Salesperson?
-              </h2>
-              <p className="mt-4 text-base sm:text-lg text-orange-100/95 max-w-2xl">
-                Stop guessing. Get a 15-minute audit of your current digital presence. No pressure, just a roadmap.
-              </p>
-            </div>
-            <div className="flex justify-center lg:justify-end">
-              <a
-                href="/book-free-audit"
-                className="inline-flex items-center justify-center rounded-md border border-white px-7 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-white transition hover:bg-white/10"
-              >
-                Get My Free Growth Audit
-              </a>
-            </div>
+    <footer className="bg-[#0B1220] text-white border-t border-slate-800/80 mt-auto selection:bg-[#F06A1A] selection:text-white">
+      {/* Newsletter / Engineering notes section */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-12 border-b border-slate-800/80">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center justify-between">
+          <div className="lg:col-span-7">
+            <span className="text-xs font-mono tracking-wider text-slate-400 uppercase">
+              Notes from the engineering floor
+            </span>
+            <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-white mt-2">
+              A better signal. Less noise.
+            </h3>
+            <p className="text-slate-400 text-sm sm:text-base mt-2 max-w-xl">
+              Ideas on lean systems, thoughtful design and sustainable digital growth.
+            </p>
+          </div>
+
+          <div className="lg:col-span-5">
+            {subscribed ? (
+              <div className="p-4 rounded-xl bg-slate-800/80 border border-emerald-500/30 text-emerald-300 text-sm flex items-center gap-2">
+                <svg className="w-5 h-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                <span>Thank you. You are on the dispatch list.</span>
+              </div>
+            ) : (
+              <form onSubmit={handleSubscribe} className="flex flex-col gap-2">
+                <div className="relative flex items-center">
+                  <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Your work email"
+                    className="w-full bg-[#121B2C] border border-slate-700/80 rounded-xl px-4 py-3.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#F06A1A] focus:ring-1 focus:ring-[#F06A1A] pr-12 transition-all"
+                  />
+                  <button
+                    type="submit"
+                    aria-label="Subscribe to newsletter"
+                    className="absolute right-2 p-2 rounded-lg bg-[#F06A1A] text-white hover:bg-[#dc580b] transition-all hover:scale-105 active:scale-95 flex items-center justify-center"
+                  >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                  </button>
+                </div>
+                <p className="text-[11px] text-slate-500">
+                  Occasional insights. Unsubscribe anytime. Privacy respected.
+                </p>
+              </form>
+            )}
           </div>
         </div>
       </div>
 
-      <div className="border-t border-gray-200 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-0">
-          <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.1fr_minmax(320px,420px)] lg:items-center">
-            
-            {/* Left: Phone UI with New Image */}
-            <div className="flex items-center justify-center lg:justify-start">     
-                  {/* Replaced Text Bubbles with Clickable Image */}
-                  <a 
-                    href="/book-free-audit" 
-                    className="mt-4 flex flex-1 w-full items-center justify-center overflow-hidden rounded-2xl cursor-pointer transition-transform duration-300 hover:scale-[1.02]"
-                  >
-                    <img 
-                      src="/hand-holding-mobile.webp" 
-                      alt="Mobile Growth Audit" 
-                      className="h-full w-full object-contain" 
-                    />
-                  </a>  
-            </div>
-
-            {/* Right: Contact Information */}
-            <div className="space-y-10">
-              <div>
-                <h3 className="text-3xl font-bold tracking-tight text-slate-900">Contact Us</h3>
+      {/* Main links and brand representation */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8 items-start">
+          
+          {/* Mobile phone teaser card preview from Figma */}
+          <div className="lg:col-span-4 flex justify-center lg:justify-start">
+            <div className="w-full max-w-[280px] bg-gradient-to-b from-slate-900 to-black p-4 rounded-[28px] border border-slate-800 shadow-2xl relative overflow-hidden group">
+              <div className="flex items-center justify-between text-[10px] text-slate-400 font-mono mb-3">
+                <span>3:16</span>
+                <span className="flex items-center gap-1">
+                  <span>●●●</span>
+                </span>
               </div>
+              <div className="space-y-1 mb-4">
+                <span className="text-xs font-bold text-slate-300">indeva.</span>
+                <h4 className="text-xl font-extrabold text-white leading-tight">
+                  Built for what&apos;s next.
+                </h4>
+              </div>
+              <div className="aspect-[4/3] rounded-xl bg-slate-800/80 border border-slate-700/60 overflow-hidden relative mb-4">
+                <img
+                  src="/enterprise_platform_minimal.jpg"
+                  alt="Enterprise Platform preview"
+                  className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+              </div>
+              <Link
+                href="/book-free-audit"
+                className="flex items-center justify-between w-full py-2.5 px-3 rounded-lg bg-[#F06A1A] hover:bg-[#dc580b] text-white text-xs font-semibold transition-colors"
+              >
+                <span>Let&apos;s build better</span>
+                <span>↗</span>
+              </Link>
+              <p className="text-[10px] text-slate-400 text-center mt-2.5">
+                Engineering clarity. Designing possibility.
+              </p>
+            </div>
+          </div>
 
-              <div className="grid gap-8 sm:grid-cols-2">
-                <div>
-                  <h4 className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">Address</h4>
-                  <p className="mt-4 text-base leading-7 text-slate-700">
-                    <a 
-                      href="https://maps.google.com/?q=12828+Willow+Centre+Dr+Ste+D,+Houston,+TX+77066" 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      className="transition-colors hover:text-[#FA8F27]"
-                    >
-                      12828 Willow Centre Dr Ste D
-                      <br />Houston, TX 77066
-                    </a>
-                  </p>
-                </div>
-
-                <div>
-                  <h4 className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">Telephone</h4>
-                  <p className="mt-4 text-base leading-7 text-slate-700">
-                    <a 
-                      href="tel:+12092866546" 
-                      className="transition-colors hover:text-[#FA8F27]"
-                    >
-                      (209) 286-6546
-                    </a>
-                  </p>
-                </div>
-
-                <div>
-                  <h4 className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">Email</h4>
-                  <p className="mt-4 text-base leading-7 text-slate-700">
-                    <a 
-                      href="mailto:web@indevasa.com" 
-                      className="transition-colors hover:text-[#FA8F27]"
-                    >
-                      web@indevasa.com
-                    </a>
-                  </p>
-                </div>
-
-                <div>
-                  <h4 className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">Social</h4>
-                  <div className="mt-4 flex items-center gap-4 text-slate-700">
-                    <a href="https://facebook.com/indevawebsites" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="transition hover:text-[#FA8F27]">
-                      <svg viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6">
-                        <path d="M22 12a10 10 0 1 0-11.5 9.9v-7h-2.3v-2.9h2.3v-2.2c0-2.3 1.4-3.6 3.5-3.6 1 0 2 .1 2.3.1v2.6h-1.5c-1.2 0-1.4.6-1.4 1.3v1.8h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12Z" />
-                      </svg>
-                    </a>
-                    <a href="https://twitter.com/indevawebsites" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="transition hover:text-[#FA8F27]">
-                      <svg viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6">
-                        <path d="M8 19c7.2 0 11.2-6 11.2-11.2v-.5A8 8 0 0 0 21 5.2a7.9 7.9 0 0 1-2.3.6 4 4 0 0 0 1.7-2.2 8 8 0 0 1-2.6 1A4 4 0 0 0 11.5 8a11.4 11.4 0 0 1-8.3-4.2 4 4 0 0 0 1.2 5.3 4 4 0 0 1-1.8-.5v.1a4 4 0 0 0 3.2 4 4 4 0 0 1-1.7.1 4 4 0 0 0 3.7 2.7A8 8 0 0 1 2 17.6 11.4 11.4 0 0 0 8 19Z" />
-                      </svg>
-                    </a>
-                    <a href="https://linkedin.com/company/indevawebsites" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="transition hover:text-[#FA8F27]">
-                      <svg viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6">
-                        <path d="M6.94 4.5a2.1 2.1 0 1 1 .02 0h-.02Zm-2.1 3.9h4.2v11.1h-4.2V8.4Zm8.05 0h4v1.5h.1c.5-.9 1.7-1.9 3.5-1.9 3.8 0 4.5 2.5 4.5 5.8v6.7h-4.2v-6c0-1.4 0-3.2-2-3.2-2 0-2.3 1.5-2.3 3.1v6.1h-4.2V8.4Z" />
-                      </svg>
-                    </a>
-                    <a href="https://instagram.com/indevawebsites" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="transition hover:text-[#FA8F27]">
-                      <svg viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6">
-                        <path d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9A5.5 5.5 0 0 1 16.5 22h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2Zm0 1.5A4 4 0 0 0 3.5 7.5v9A4 4 0 0 0 7.5 20.5h9a4 4 0 0 0 4-4v-9a4 4 0 0 0-4-4h-9Zm9 2.25a.75.75 0 1 1 0 1.5.75.75 0 0 1 0-1.5ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 1.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z" />
-                      </svg>
-                    </a>
-                  </div>
-                </div>
+          {/* Indeva brand identity */}
+          <div className="lg:col-span-4 space-y-4">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-full overflow-hidden bg-[#FA8F27] flex items-center justify-center flex-shrink-0">
+                <img
+                  src="/logo-indeva.png"
+                  alt="Indeva Websites"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="flex flex-col leading-none">
+                <span className="text-lg font-bold text-white tracking-tight">indeva</span>
+                <span className="text-[9px] font-mono text-slate-400 uppercase">Websites</span>
               </div>
             </div>
+
+            <p className="text-slate-300 text-sm max-w-sm leading-relaxed">
+              Precision engineering. Human ambition.
+            </p>
+
+            <div className="pt-2">
+              <a
+                href="https://indevasa.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-sm text-slate-400 hover:text-[#F06A1A] transition-colors"
+              >
+                <span>indevasa.com</span>
+                <span className="text-xs">↗</span>
+              </a>
+            </div>
+
+            <div className="pt-3 text-xs text-slate-500 space-y-1">
+              <p>12828 Willow Centre Dr Ste D, Houston, TX 77066</p>
+              <p>(209) 286-6546 · web@indevasa.com</p>
+            </div>
+          </div>
+
+          {/* Navigation Links Columns */}
+          <div className="lg:col-span-2 space-y-3">
+            <h5 className="text-xs font-mono uppercase tracking-wider text-slate-400">
+              Explore
+            </h5>
+            <ul className="space-y-2 text-sm text-slate-300">
+              <li>
+                <Link href="/about-us" className="hover:text-[#F06A1A] transition-colors">
+                  About Us
+                </Link>
+              </li>
+              <li>
+                <Link href="/services" className="hover:text-[#F06A1A] transition-colors">
+                  Services
+                </Link>
+              </li>
+              <li>
+                <Link href="/portfolio" className="hover:text-[#F06A1A] transition-colors">
+                  Portfolio
+                </Link>
+              </li>
+              <li>
+                <Link href="/blog" className="hover:text-[#F06A1A] transition-colors">
+                  Blog
+                </Link>
+              </li>
+              <li>
+                <Link href="/book-free-audit" className="hover:text-[#F06A1A] transition-colors">
+                  Contact
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div className="lg:col-span-2 space-y-3">
+            <h5 className="text-xs font-mono uppercase tracking-wider text-slate-400">
+              The details
+            </h5>
+            <ul className="space-y-2 text-sm text-slate-300">
+              <li>
+                <Link href="/book-free-audit" className="hover:text-[#F06A1A] transition-colors">
+                  Privacy policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/book-free-audit" className="hover:text-[#F06A1A] transition-colors">
+                  Terms of use
+                </Link>
+              </li>
+              <li>
+                <span className="text-slate-500 cursor-pointer hover:text-slate-400">
+                  Cookie preferences
+                </span>
+              </li>
+              <li className="pt-4 text-xs text-slate-500">
+                © {new Date().getFullYear()} Indeva Websites
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Large Architectural Statement at footer base */}
+        <div className="mt-16 pt-12 border-t border-slate-800/60 flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div className="space-y-2">
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-none">
+              Less friction. More forward.
+            </h2>
+            <Link
+              href="/book-free-audit"
+              className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-mono text-slate-400 hover:text-[#F06A1A] transition-colors pt-2"
+            >
+              <span>Engineered to keep improving.</span>
+              <span>↗</span>
+            </Link>
+          </div>
+
+          <div className="flex items-center gap-4 text-xs text-slate-500 font-mono">
+            <span>Serverless Edge</span>
+            <span>·</span>
+            <span>Sub-second Vitals</span>
+            <span>·</span>
+            <span>WCAG Accessible</span>
           </div>
         </div>
       </div>
     </footer>
-  )
+  );
 }
