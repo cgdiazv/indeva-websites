@@ -30,7 +30,7 @@ export default function Navbar() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white/90 backdrop-blur-md border-b border-gray-100 transition-all">
+    <header className="sticky top-0 z-50 w-full bg-white md:bg-white/95 md:backdrop-blur-md border-b border-gray-100 transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20 items-center">
           
@@ -161,7 +161,7 @@ export default function Navbar() {
         </div>
 
         {/* Mobile CTA at bottom of drawer */}
-        <div className="p-5 border-t border-gray-100 bg-slate-50/50">
+        <div className="p-5 border-t border-gray-100 bg-slate-50">
           <Link
             href="/book-free-audit"
             onClick={closeDrawer}
