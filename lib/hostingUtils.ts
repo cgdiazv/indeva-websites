@@ -13,6 +13,7 @@ export interface HostingAccount {
   notes?: string;
   autoRenew?: boolean;
   lastReminderSentAt?: string;
+  welcomeEmailSentAt?: string;
   stripePaymentUrl?: string;
   createdAt: string;
   updatedAt: string;
