@@ -1,5 +1,13 @@
 export const projects = [
   {
+    slug: "sp10-construction",
+    title: "SP10 Construction",
+    thumbnail: "/portfolio/sp10construction.webp",
+    description: "A modern website for commercial general contracting and custom residential construction services.",
+    liveUrl: "https://sp10construction.com",
+    tags: ["Construction", "Web Design"]
+  },
+  {
     slug: "jim-cooling-and-heating",
     title: "Jim Cooling and Heating",
     thumbnail: "/portfolio/jimhvac.webp",
