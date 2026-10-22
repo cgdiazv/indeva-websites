@@ -1,15 +1,15 @@
 'use client';
 
-import React, { useState, useTransition } from 'react';
+import React, { useState, useEffect, useTransition } from 'react';
 import type { HostingAccount } from '@/lib/hostingUtils';
 import { 
   createHostingAccount, 
   updateHostingAccount, 
   deleteHostingAccount, 
   quickRenewHosting,
-  seedHostingsFromHistoricalSales,
   generateRenewalPaymentLink,
   sendRenewalReminderEmail,
+  sendWelcomeEmail,
   runAutomatedRenewalScan
 } from '@/app/actions/hostings';
 
@@ -38,6 +38,15 @@ export default function HostingManagement({ initialHostings }: HostingManagement
   const [feedbackMsg, setFeedbackMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const [isPending, startTransition] = useTransition();
+
+  useEffect(() => {
+    const handleOpen = () => {
+      setEditingHosting(null);
+      setIsAddModalOpen(true);
+    };
+    window.addEventListener('open-add-hosting-modal', handleOpen);
+    return () => window.removeEventListener('open-add-hosting-modal', handleOpen);
+  }, []);
 
   const handleSort = (field: SortField) => {
     if (sortField === field) {
@@ -224,19 +233,27 @@ export default function HostingManagement({ initialHostings }: HostingManagement
     });
   };
 
-  const handleImportSales = () => {
-    if (!confirm('Scan historical sales data and import all hosting subscriptions? Existing domains will not be duplicated.')) return;
-
+  const handleSendWelcomeSubmit = (hostingId: string, customMessage: string) => {
     startTransition(async () => {
-      const res = await seedHostingsFromHistoricalSales();
+      const res = await sendWelcomeEmail(hostingId, customMessage);
       if (res.success) {
-        showFeedback('success', `Imported ${res.addedCount} customer hosting accounts from sales.`);
-        window.location.reload();
+        showFeedback('success', `Welcome email sent successfully to ${emailModalHosting?.customerEmail || 'customer'}!`);
+        setEmailModalHosting(null);
+        setHostings(prev => prev.map(item => {
+          if (item.id === hostingId) {
+            return {
+              ...item,
+              welcomeEmailSentAt: res.sentAt!,
+            };
+          }
+          return item;
+        }));
       } else {
-        showFeedback('error', res.error || 'Failed to import sales data.');
+        showFeedback('error', res.error || 'Failed to send welcome email.');
       }
     });
   };
+
 
   const handleRunAutoScan = () => {
     if (!confirm('Run automated scan now? This will evaluate all accounts and send renewal reminder emails to customers whose hosting is expiring in 30, 14, 7, <=3, or <=0 days (with a 48h anti-spam cooldown).')) return;
@@ -351,28 +368,6 @@ export default function HostingManagement({ initialHostings }: HostingManagement
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>
               Auto-Reminders Scan
-            </button>
-
-            <button
-              onClick={handleImportSales}
-              disabled={isPending}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg border border-gray-200 transition-colors disabled:opacity-50"
-              title="Auto-import past customer hosting purchases from sales database"
-            >
-              <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-              </svg>
-              Import From Sales
-            </button>
-
-            <button
-              onClick={() => setIsAddModalOpen(true)}
-              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 rounded-lg shadow-sm hover:shadow transition-all"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-              </svg>
-              Add Hosting Account
             </button>
           </div>
         </div>
@@ -529,7 +524,7 @@ export default function HostingManagement({ initialHostings }: HostingManagement
                       <p className="font-medium text-gray-900">No hosting accounts found</p>
                       <p className="text-xs text-gray-500">
                         {hostings.length === 0 
-                          ? 'Add your first hosting account or import existing clients from your sales records.' 
+                          ? 'Add your first hosting account to get started.' 
                           : 'Try adjusting your search query or filters.'}
                       </p>
                       {hostings.length === 0 && (
@@ -539,12 +534,6 @@ export default function HostingManagement({ initialHostings }: HostingManagement
                             className="px-3.5 py-1.5 text-xs font-medium text-white bg-orange-500 rounded-lg shadow-sm hover:bg-orange-600"
                           >
                             + Add Account
-                          </button>
-                          <button
-                            onClick={handleImportSales}
-                            className="px-3.5 py-1.5 text-xs font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 border border-gray-200"
-                          >
-                            Import From Sales
                           </button>
                         </div>
                       )}
@@ -583,7 +572,15 @@ export default function HostingManagement({ initialHostings }: HostingManagement
                             <svg className="w-3 h-3 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                             </svg>
-                            <span>Emailed {new Date(hosting.lastReminderSentAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</span>
+                            <span>Reminder {new Date(hosting.lastReminderSentAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</span>
+                          </div>
+                        )}
+                        {hosting.welcomeEmailSentAt && (
+                          <div className="text-[11px] text-emerald-700 bg-emerald-50 border border-emerald-200/60 rounded px-1.5 py-0.5 w-fit font-medium flex items-center gap-1 mt-1">
+                            <svg className="w-3 h-3 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                            </svg>
+                            <span>Welcome sent {new Date(hosting.welcomeEmailSentAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</span>
                           </div>
                         )}
                       </td>
@@ -731,18 +728,26 @@ export default function HostingManagement({ initialHostings }: HostingManagement
           onSaved={(savedHosting) => {
             setIsAddModalOpen(false);
             setEditingHosting(null);
-            showFeedback('success', editingHosting ? 'Hosting account updated.' : 'Hosting account created.');
+            const msg = editingHosting
+              ? 'Hosting account updated.'
+              : savedHosting?.welcomeEmailSent
+                ? 'Hosting account created & Welcome email sent to customer!'
+                : savedHosting?.welcomeEmailError
+                  ? `Hosting account created, but welcome email failed: ${savedHosting.welcomeEmailError}`
+                  : 'Hosting account created.';
+            showFeedback(savedHosting?.welcomeEmailError ? 'error' : 'success', msg);
             window.location.reload();
           }}
         />
       )}
 
-      {/* Send Renewal Email Reminder Modal */}
+      {/* Send Email Modal (Reminder or Welcome) */}
       {emailModalHosting && (
         <SendReminderModal
           hosting={emailModalHosting}
           onClose={() => setEmailModalHosting(null)}
           onSend={(customMsg) => handleSendReminderSubmit(emailModalHosting.id, customMsg)}
+          onSendWelcome={(customMsg) => handleSendWelcomeSubmit(emailModalHosting.id, customMsg)}
           isPending={isPending}
         />
       )}
@@ -1064,6 +1069,28 @@ function HostingFormModal({
             />
           </div>
 
+          {/* Welcome Email Checkbox (Only when creating a new account) */}
+          {!hosting && (
+            <div className="p-3 bg-amber-50/70 border border-amber-200/70 rounded-xl flex items-start gap-3">
+              <input
+                type="checkbox"
+                id="sendWelcomeEmail"
+                name="sendWelcomeEmail"
+                value="true"
+                defaultChecked
+                className="mt-0.5 h-4 w-4 rounded border-gray-300 text-orange-600 focus:ring-orange-500 cursor-pointer"
+              />
+              <label htmlFor="sendWelcomeEmail" className="cursor-pointer select-none">
+                <span className="block font-semibold text-gray-900 text-xs">
+                  Send Welcome Email immediately
+                </span>
+                <span className="block text-[11px] text-gray-500 mt-0.5 leading-relaxed">
+                  Sends an official welcome & hosting confirmation email with domain and plan specifications to the customer via Resend.
+                </span>
+              </label>
+            </div>
+          )}
+
           {/* Buttons */}
           <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
             <button
@@ -1094,20 +1121,27 @@ function SendReminderModal({
   hosting,
   onClose,
   onSend,
+  onSendWelcome,
   isPending,
 }: {
   hosting: HostingAccount;
   onClose: () => void;
   onSend: (customMsg: string) => void;
+  onSendWelcome: (customMsg: string) => void;
   isPending: boolean;
 }) {
+  const [emailType, setEmailType] = useState<'reminder' | 'welcome'>('reminder');
   const [customMessage, setCustomMessage] = useState('');
   const hasEmail = Boolean(hosting.customerEmail && hosting.customerEmail.includes('@'));
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!hasEmail) return;
-    onSend(customMessage.trim());
+    if (emailType === 'welcome') {
+      onSendWelcome(customMessage.trim());
+    } else {
+      onSend(customMessage.trim());
+    }
   };
 
   return (
@@ -1115,18 +1149,56 @@ function SendReminderModal({
       <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-gray-200">
         <div className="flex items-center justify-between pb-4 border-b border-gray-100">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 bg-amber-50 text-amber-600 rounded-lg">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-              </svg>
+            <div className={`p-2 rounded-lg ${emailType === 'welcome' ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'}`}>
+              {emailType === 'welcome' ? (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              ) : (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              )}
             </div>
             <div>
-              <h3 className="text-lg font-bold text-gray-900">Send Renewal Reminder</h3>
-              <p className="text-xs text-gray-500">Delivered via Resend with dynamic Stripe Checkout</p>
+              <h3 className="text-lg font-bold text-gray-900">
+                {emailType === 'welcome' ? 'Send Welcome Email' : 'Send Renewal Reminder'}
+              </h3>
+              <p className="text-xs text-gray-500">
+                {emailType === 'welcome'
+                  ? 'Official hosting confirmation with domain and plan specs'
+                  : 'Delivered via Resend with dynamic Stripe Checkout'}
+              </p>
             </div>
           </div>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-lg p-1">
             ✕
+          </button>
+        </div>
+
+        {/* Email Type Segmented Control */}
+        <div className="grid grid-cols-2 gap-2 mt-4 p-1 bg-gray-100 rounded-xl text-xs font-semibold">
+          <button
+            type="button"
+            onClick={() => setEmailType('reminder')}
+            className={`py-2 px-3 rounded-lg transition-all ${
+              emailType === 'reminder'
+                ? 'bg-white text-orange-600 shadow-sm'
+                : 'text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            Renewal Reminder
+          </button>
+          <button
+            type="button"
+            onClick={() => setEmailType('welcome')}
+            className={`py-2 px-3 rounded-lg transition-all ${
+              emailType === 'welcome'
+                ? 'bg-white text-emerald-600 shadow-sm'
+                : 'text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            Welcome Email
           </button>
         </div>
 
@@ -1148,6 +1220,10 @@ function SendReminderModal({
                 <span className="font-mono font-medium text-orange-600">{hosting.domain}</span>
               </div>
               <div className="flex justify-between">
+                <span className="text-slate-500">Plan:</span>
+                <span className="font-medium text-slate-800">{hosting.planName}</span>
+              </div>
+              <div className="flex justify-between">
                 <span className="text-slate-500">Renewal Due Date:</span>
                 <span className="font-medium text-slate-800">
                   {new Date(hosting.renewalDate + 'T00:00:00').toLocaleDateString('en-US', {
@@ -1165,13 +1241,22 @@ function SendReminderModal({
               </div>
             </div>
 
-            {/* Live Stripe Checkout Note */}
-            <div className="p-3 bg-orange-50/70 border border-orange-200/70 rounded-xl flex items-start gap-2.5 text-orange-950">
-              <span className="text-orange-500 text-sm mt-0.5">🔒</span>
-              <p className="text-[11px] leading-relaxed">
-                A custom Stripe Checkout payment link for <strong>${hosting.amount.toFixed(2)} USD</strong> will automatically be attached to the email. When the client pays, their hosting will auto-renew for +1 year.
-              </p>
-            </div>
+            {/* Email Type Info Callout */}
+            {emailType === 'reminder' ? (
+              <div className="p-3 bg-orange-50/70 border border-orange-200/70 rounded-xl flex items-start gap-2.5 text-orange-950">
+                <span className="text-orange-500 text-sm mt-0.5">🔒</span>
+                <p className="text-[11px] leading-relaxed">
+                  A custom Stripe Checkout payment link for <strong>${hosting.amount.toFixed(2)} USD</strong> will automatically be attached to the email. When the client pays, their hosting will auto-renew for +1 year.
+                </p>
+              </div>
+            ) : (
+              <div className="p-3 bg-emerald-50/70 border border-emerald-200/70 rounded-xl flex items-start gap-2.5 text-emerald-950">
+                <span className="text-emerald-600 text-sm mt-0.5">🎉</span>
+                <p className="text-[11px] leading-relaxed">
+                  Dispatches a branded welcome confirmation showing their <strong>active service status</strong>, plan specs, SSL security details, daily backups, and support channel contact info.
+                </p>
+              </div>
+            )}
 
             {/* Optional Note */}
             <div>
@@ -1182,7 +1267,11 @@ function SendReminderModal({
                 value={customMessage}
                 onChange={(e) => setCustomMessage(e.target.value)}
                 rows={2}
-                placeholder="e.g. As discussed, we have applied your preferred custom rate for this cycle."
+                placeholder={
+                  emailType === 'welcome'
+                    ? "e.g. Welcome aboard! We've completed the DNS migration for your website."
+                    : "e.g. As discussed, we have applied your preferred custom rate for this cycle."
+                }
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs focus:ring-2 focus:ring-orange-500 focus:outline-none"
               />
             </div>
@@ -1199,7 +1288,11 @@ function SendReminderModal({
               <button
                 type="submit"
                 disabled={isPending}
-                className="px-5 py-2 text-xs font-semibold text-white bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 rounded-lg shadow-sm hover:shadow transition-all disabled:opacity-50 flex items-center gap-1.5"
+                className={`px-5 py-2 text-xs font-semibold text-white rounded-lg shadow-sm hover:shadow transition-all disabled:opacity-50 flex items-center gap-1.5 ${
+                  emailType === 'welcome'
+                    ? 'bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700'
+                    : 'bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600'
+                }`}
               >
                 {isPending ? (
                   <>
@@ -1208,7 +1301,7 @@ function SendReminderModal({
                   </>
                 ) : (
                   <>
-                    <span>Send Reminder Email →</span>
+                    <span>{emailType === 'welcome' ? 'Send Welcome Email →' : 'Send Reminder Email →'}</span>
                   </>
                 )}
               </button>

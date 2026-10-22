@@ -11,6 +11,8 @@ interface DashboardTabsProps {
   salesCount: number;
   dueSoonCount: number;
   overdueCount: number;
+  expensesContent?: React.ReactNode;
+  expensesCount?: number;
 }
 
 export default function DashboardTabs({
@@ -19,21 +21,24 @@ export default function DashboardTabs({
   salesCount,
   dueSoonCount,
   overdueCount,
+  expensesContent,
+  expensesCount = 0,
 }: DashboardTabsProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
   
-  const initialTab = searchParams.get('tab') === 'hostings' ? 'hostings' : 'sales';
-  const [activeTab, setActiveTab] = useState<'sales' | 'hostings'>(initialTab);
+  const tabParam = searchParams.get('tab');
+  const initialTab = tabParam === 'hostings' || tabParam === 'expenses' ? tabParam : 'sales';
+  const [activeTab, setActiveTab] = useState<'sales' | 'hostings' | 'expenses'>(initialTab);
 
   useEffect(() => {
     const tabParam = searchParams.get('tab');
-    if (tabParam === 'hostings' || tabParam === 'sales') {
+    if (tabParam === 'hostings' || tabParam === 'sales' || tabParam === 'expenses') {
       setActiveTab(tabParam);
     }
   }, [searchParams]);
 
-  const switchTab = (tab: 'sales' | 'hostings') => {
+  const switchTab = (tab: 'sales' | 'hostings' | 'expenses') => {
     setActiveTab(tab);
     const params = new URLSearchParams(window.location.search);
     params.set('tab', tab);
@@ -86,16 +91,35 @@ export default function DashboardTabs({
             </span>
           )}
         </button>
+
+        <button
+          onClick={() => switchTab('expenses')}
+          className={`flex items-center gap-2.5 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all ${
+            activeTab === 'expenses'
+              ? 'bg-white text-gray-900 shadow-sm'
+              : 'text-gray-600 hover:text-gray-900 hover:bg-white/40'
+          }`}
+        >
+          <svg className={`w-4 h-4 ${activeTab === 'expenses' ? 'text-orange-500' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+          </svg>
+          Expenses (Gastos)
+          <span className="px-2 py-0.5 text-xs font-bold rounded-full bg-gray-100 text-gray-700">
+            {expensesCount}
+          </span>
+        </button>
       </div>
 
       {/* Tab Panels */}
       <div>
         {activeTab === 'sales' ? (
           <div>{salesContent}</div>
-        ) : (
+        ) : activeTab === 'hostings' ? (
           <div>
             <HostingManagement initialHostings={hostings} />
           </div>
+        ) : (
+          <div>{expensesContent}</div>
         )}
       </div>
     </div>

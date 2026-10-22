@@ -129,7 +129,7 @@ export const blogPosts: BlogPost[] = [
       </p>
       <ul class="list-disc pl-6 mb-6 text-gray-600 space-y-2">
         <li><strong>Single Source of Truth:</strong> Store product descriptions, articles, and marketing copy in one repository and distribute it anywhere via GraphQL or REST APIs.</li>
-        <li><strong>Front-End Freedom:</strong> Developers can build custom, high-performance interfaces using Next.js, React, or modern static site generators without being locked into rigid CMS template tags.</li>
+        <li><strong>Front-End Freedom:</strong> Developers can build custom, high-performance interfaces using modern edge frameworks, React, or static site generators without being locked into rigid CMS template tags.</li>
         <li><strong>Hardened Security:</strong> Because the frontend is decoupled from the content database, attackers cannot exploit standard administrative backdoors or database query vulnerabilities through public URL requests.</li>
         <li><strong>Omnichannel Readiness:</strong> Push real-time content updates to web applications, native mobile apps, digital signage, or smart devices from a single dashboard.</li>
       </ul>

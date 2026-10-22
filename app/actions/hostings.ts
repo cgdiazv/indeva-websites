@@ -2,7 +2,6 @@
 
 import { db } from '@/lib/firebaseAdmin';
 import { revalidatePath } from 'next/cache';
-import { salesData as historicalSales } from '@/data/sales';
 import { type HostingAccount, calculateRenewalStatus } from '@/lib/hostingUtils';
 import { createHostingRenewalCheckoutSession } from '@/lib/stripeRenewal';
 import { Resend } from 'resend';
@@ -70,8 +69,29 @@ export async function createHostingAccount(formData: FormData) {
     };
 
     const docRef = await db.collection('hosting_accounts').add(newAccount);
+
+    let welcomeEmailSent = false;
+    let welcomeEmailError: string | undefined = undefined;
+
+    // Send Welcome Email if enabled (checked in form) and valid email address is provided
+    const shouldSendWelcome = formData.get('sendWelcomeEmail') === 'true' || formData.get('sendWelcomeEmail') === 'on';
+    if (shouldSendWelcome && customerEmail && customerEmail.includes('@')) {
+      const emailRes = await sendWelcomeEmail(docRef.id);
+      if (emailRes.success) {
+        welcomeEmailSent = true;
+      } else {
+        welcomeEmailError = emailRes.error;
+        console.warn(`Hosting account #${docRef.id} created, but welcome email failed:`, emailRes.error);
+      }
+    }
+
     revalidatePath('/dashboard');
-    return { success: true, id: docRef.id };
+    return { 
+      success: true, 
+      id: docRef.id,
+      welcomeEmailSent,
+      welcomeEmailError,
+    };
   } catch (error: any) {
     console.error('Error creating hosting account:', error);
     return { success: false, error: error.message || 'Failed to create hosting account.' };
@@ -182,74 +202,6 @@ export async function deleteHostingAccount(id: string) {
   }
 }
 
-/**
- * Import past hosting customers from sales history (helper tool)
- */
-export async function seedHostingsFromHistoricalSales() {
-  try {
-    const existing = await db.collection('hosting_accounts').get();
-    const existingDomains = new Set(existing.docs.map(d => d.data().domain?.toLowerCase()));
-
-    // Filter sales with hosting products
-    const hostingSales = historicalSales.filter(sale => 
-      sale.customer && 
-      sale.products && 
-      sale.products.toLowerCase().includes('webhosting')
-    );
-
-    let addedCount = 0;
-    const batch = db.batch();
-
-    // Group by customer to find latest purchase
-    const customerMap = new Map<string, typeof historicalSales[0]>();
-    for (const sale of hostingSales) {
-      if (!customerMap.has(sale.customer!) || new Date(sale.date) > new Date(customerMap.get(sale.customer!)!.date)) {
-        customerMap.set(sale.customer!, sale);
-      }
-    }
-
-    for (const [customer, sale] of customerMap.entries()) {
-      const generatedDomain = customer.toLowerCase().replace(/[^a-z0-9]/g, '') + '.com';
-      if (existingDomains.has(generatedDomain)) continue;
-
-      const saleDate = new Date(sale.date);
-      const renewalDate = new Date(saleDate);
-      renewalDate.setFullYear(saleDate.getFullYear() + 1);
-      const renewalDateStr = renewalDate.toISOString().split('T')[0];
-
-      const docRef = db.collection('hosting_accounts').doc();
-      batch.set(docRef, {
-        customerName: customer,
-        customerEmail: `${customer.toLowerCase().replace(/[^a-z0-9]/g, '.')}@example.com`,
-        customerPhone: '',
-        domain: generatedDomain,
-        planName: 'Webhosting Annual Subscription',
-        amount: sale.net_sales || 86,
-        billingCycle: 'annual',
-        startDate: saleDate.toISOString().split('T')[0],
-        renewalDate: renewalDateStr,
-        status: calculateRenewalStatus(renewalDateStr, 'active'),
-        notes: `Imported from Historical Order #${sale.order_number}`,
-        autoRenew: false,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      });
-
-      existingDomains.add(generatedDomain);
-      addedCount++;
-    }
-
-    if (addedCount > 0) {
-      await batch.commit();
-    }
-
-    revalidatePath('/dashboard');
-    return { success: true, addedCount };
-  } catch (error: any) {
-    console.error('Error importing historical hostings:', error);
-    return { success: false, error: error.message || 'Failed to import historical hostings.' };
-  }
-}
 
 /**
  * Generate a dynamic Stripe Checkout payment link for a hosting account
@@ -454,6 +406,241 @@ export async function sendRenewalReminderEmail(hostingId: string, customMessage?
   } catch (error: any) {
     console.error('Error sending renewal reminder email:', error);
     return { success: false, error: error.message || 'Failed to send renewal reminder email.' };
+  }
+}
+
+/**
+ * Send an official Welcome & Hosting Confirmation email to a new or existing client via Resend
+ */
+export async function sendWelcomeEmail(hostingId: string, customMessage?: string) {
+  try {
+    const doc = await db.collection('hosting_accounts').doc(hostingId).get();
+    if (!doc.exists) {
+      return { success: false, error: 'Hosting account not found.' };
+    }
+
+    const account = { id: doc.id, ...doc.data() } as HostingAccount;
+
+    if (!account.customerEmail || !account.customerEmail.includes('@')) {
+      return { 
+        success: false, 
+        error: `Customer has no valid email address configured (${account.customerEmail || 'empty'}). Please update account with a valid email.` 
+      };
+    }
+
+    const resend = getResendClient();
+    if (!resend) {
+      return { success: false, error: 'Missing RESEND_API_KEY environment variable.' };
+    }
+
+    const startDateFormatted = new Date(
+      account.startDate + (account.startDate.includes('T') ? '' : 'T00:00:00')
+    ).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+
+    const renewalDateFormatted = new Date(
+      account.renewalDate + (account.renewalDate.includes('T') ? '' : 'T00:00:00')
+    ).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+
+    const billingCycleDisplay = account.billingCycle 
+      ? account.billingCycle.charAt(0).toUpperCase() + account.billingCycle.slice(1) 
+      : 'Annual';
+
+    const { data: emailData, error: emailError } = await resend.emails.send({
+      from: 'Indeva Websites <web@indevasa.com>',
+      to: account.customerEmail,
+      subject: `Welcome to Indeva Websites – Hosting Setup Confirmation for ${account.domain}`,
+      html: `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Welcome to Indeva Websites</title>
+        </head>
+        <body style="margin: 0; padding: 0; background-color: #f4f6f8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+          <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f4f6f8; padding: 40px 15px;">
+            <tr>
+              <td align="center">
+                <table width="600" cellpadding="0" cellspacing="0" style="max-width: 600px; width: 100%; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border: 1px solid #eaeaea;">
+                  
+                  <!-- Header -->
+                  <tr>
+                    <td style="padding: 38px 40px 28px 40px; background: linear-gradient(135deg, #FA8F27 0%, #f97316 100%); text-align: center;">
+                      <h1 style="margin: 0; color: #ffffff; font-size: 26px; font-weight: 800; letter-spacing: -0.5px;">Indeva Websites</h1>
+                      <p style="margin: 8px 0 0 0; color: #ffedd5; font-size: 13px; font-weight: 500; text-transform: uppercase; letter-spacing: 1.2px;">Official Web Hosting Confirmation</p>
+                    </td>
+                  </tr>
+
+                  <!-- Main Content -->
+                  <tr>
+                    <td style="padding: 35px 40px;">
+                      <div style="display: inline-block; background-color: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 20px; padding: 4px 12px; margin-bottom: 18px;">
+                        <span style="font-size: 12px; font-weight: 700; color: #047857;">● Service Active & Live</span>
+                      </div>
+
+                      <p style="font-size: 17px; color: #1f2937; margin: 0 0 16px 0; font-weight: 700;">
+                        Hello ${account.customerName},
+                      </p>
+                      <p style="font-size: 14px; line-height: 23px; color: #4b5563; margin: 0 0 24px 0;">
+                        Welcome to Indeva Websites! We're pleased to confirm that the web hosting environment for <strong style="color: #0f172a;">${account.domain}</strong> has been successfully configured and is actively running on our high-performance cloud infrastructure.
+                      </p>
+
+                      ${customMessage ? `
+                        <div style="background-color: #fff7ed; border-left: 4px solid #f97316; padding: 12px 16px; border-radius: 6px; margin-bottom: 24px;">
+                          <p style="margin: 0; font-size: 13px; color: #9a3412; font-style: italic;">
+                            "${customMessage}"
+                          </p>
+                        </div>
+                      ` : ''}
+
+                      <!-- Plan Summary Table -->
+                      <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 26px; border-collapse: collapse; border: 1px solid #e2e8f0; border-radius: 10px; overflow: hidden;">
+                        <tr style="background-color: #f8fafc;">
+                          <td colspan="2" style="padding: 12px 18px; font-size: 12px; color: #475569; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #e2e8f0;">
+                            Hosting Account Specifications
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding: 12px 18px; font-size: 13px; color: #64748b; border-bottom: 1px solid #f1f5f9; width: 40%;">Website Domain</td>
+                          <td style="padding: 12px 18px; font-size: 13px; color: #0f172a; font-weight: 700; border-bottom: 1px solid #f1f5f9; font-family: monospace;">
+                            <a href="https://${account.domain}" target="_blank" style="color: #ea580c; text-decoration: none;">${account.domain}</a>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding: 12px 18px; font-size: 13px; color: #64748b; border-bottom: 1px solid #f1f5f9;">Hosting Plan</td>
+                          <td style="padding: 12px 18px; font-size: 13px; color: #0f172a; font-weight: 600; border-bottom: 1px solid #f1f5f9;">
+                            ${account.planName || 'Webhosting Annual Subscription'}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding: 12px 18px; font-size: 13px; color: #64748b; border-bottom: 1px solid #f1f5f9;">Billing Cycle</td>
+                          <td style="padding: 12px 18px; font-size: 13px; color: #0f172a; font-weight: 600; border-bottom: 1px solid #f1f5f9;">
+                            ${billingCycleDisplay}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding: 12px 18px; font-size: 13px; color: #64748b; border-bottom: 1px solid #f1f5f9;">Subscription Rate</td>
+                          <td style="padding: 12px 18px; font-size: 13px; color: #0f172a; font-weight: 700; border-bottom: 1px solid #f1f5f9;">
+                            $${account.amount.toFixed(2)} USD
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding: 12px 18px; font-size: 13px; color: #64748b; border-bottom: 1px solid #f1f5f9;">Start Date</td>
+                          <td style="padding: 12px 18px; font-size: 13px; color: #0f172a; border-bottom: 1px solid #f1f5f9;">
+                            ${startDateFormatted}
+                          </td>
+                        </tr>
+                        <tr style="background-color: #fafaf9;">
+                          <td style="padding: 12px 18px; font-size: 13px; color: #0f172a; font-weight: 700;">Next Renewal Due</td>
+                          <td style="padding: 12px 18px; font-size: 13px; color: #ea580c; font-weight: 700;">
+                            ${renewalDateFormatted}
+                          </td>
+                        </tr>
+                      </table>
+
+                      <!-- Features Included Grid -->
+                      <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 26px;">
+                        <p style="margin: 0 0 12px 0; font-size: 13px; font-weight: 700; color: #0f172a; text-transform: uppercase; letter-spacing: 0.5px;">
+                          What's Included in Your Managed Hosting
+                        </p>
+                        <table width="100%" cellpadding="0" cellspacing="0">
+                          <tr>
+                            <td style="padding: 5px 0; font-size: 13px; color: #334155;">
+                              ⚡ <strong>High-Performance Cloud Infrastructure:</strong> Fast load times & global edge delivery.
+                            </td>
+                          </tr>
+                          <tr>
+                            <td style="padding: 5px 0; font-size: 13px; color: #334155;">
+                              🔒 <strong>Active SSL Certificate:</strong> Free automatic HTTPS security for all visitors.
+                            </td>
+                          </tr>
+                          <tr>
+                            <td style="padding: 5px 0; font-size: 13px; color: #334155;">
+                              🛡️ <strong>Uptime & Health Monitoring:</strong> 99.9% uptime tracking with proactive alerts.
+                            </td>
+                          </tr>
+                          <tr>
+                            <td style="padding: 5px 0; font-size: 13px; color: #334155;">
+                              💾 <strong>Automated System Backups:</strong> Secure snapshots to safeguard your website data.
+                            </td>
+                          </tr>
+                        </table>
+                      </div>
+
+                      <!-- Visit Website CTA Button -->
+                      <div style="text-align: center; margin: 28px 0 20px 0;">
+                        <a href="https://${account.domain}" target="_blank" style="display: inline-block; background: linear-gradient(135deg, #FA8F27 0%, #ea580c 100%); color: #ffffff; text-decoration: none; font-size: 15px; font-weight: 700; padding: 13px 30px; border-radius: 10px; box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3); letter-spacing: 0.2px;">
+                          Visit Your Website (${account.domain}) →
+                        </a>
+                      </div>
+
+                      <hr style="border: 0; border-top: 1px solid #f1f5f9; margin: 26px 0;">
+
+                      <!-- Support Section -->
+                      <div style="background-color: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px; padding: 16px 20px;">
+                        <p style="margin: 0 0 6px 0; font-size: 13px; font-weight: 700; color: #1e40af;">
+                          💬 Need Technical Support or Updates?
+                        </p>
+                        <p style="margin: 0; font-size: 13px; line-height: 20px; color: #1e3a8a;">
+                          If you ever need DNS changes, new email accounts, or help with your website, simply reply directly to this email or contact our support team at <a href="mailto:web@indevasa.com" style="color: #2563eb; font-weight: 600; text-decoration: underline;">web@indevasa.com</a>.
+                        </p>
+                      </div>
+
+                    </td>
+                  </tr>
+
+                  <!-- Footer -->
+                  <tr>
+                    <td style="padding: 24px 40px; background-color: #f8fafc; border-top: 1px solid #e2e8f0; text-align: center;">
+                      <p style="font-size: 12px; color: #64748b; margin: 0 0 8px 0;">
+                        Indeva Websites • High-Performance Web Development & Managed Infrastructure
+                      </p>
+                      <p style="font-size: 11px; color: #94a3b8; margin: 0;">
+                        © ${new Date().getFullYear()} Indeva Websites. All rights reserved.
+                      </p>
+                    </td>
+                  </tr>
+
+                </table>
+              </td>
+            </tr>
+          </table>
+        </body>
+        </html>
+      `,
+    });
+
+    if (emailError) {
+      console.error('Resend welcome email error:', emailError);
+      return { success: false, error: emailError.message || 'Failed to send welcome email via Resend.' };
+    }
+
+    const sentAt = new Date().toISOString();
+
+    // Update Firestore record with welcomeEmailSentAt timestamp
+    await db.collection('hosting_accounts').doc(hostingId).update({
+      welcomeEmailSentAt: sentAt,
+      updatedAt: sentAt,
+    });
+
+    revalidatePath('/dashboard');
+
+    return {
+      success: true,
+      sentAt,
+      emailId: emailData?.id,
+    };
+  } catch (error: any) {
+    console.error('Error sending welcome email:', error);
+    return { success: false, error: error.message || 'Failed to send welcome email.' };
   }
 }
 

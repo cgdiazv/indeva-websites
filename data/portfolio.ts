@@ -112,22 +112,6 @@ export const projects = [
     tags: ["E-commerce", "Web Design"]
   },
   {
-    slug: "experenta",
-    title: "Experenta",
-    thumbnail: "/portfolio/experenta.webp",
-    description: "Dynamic website design for a modern experiential brand.",
-    liveUrl: "https://experenta.com",
-    tags: ["Web Design"]
-  },
-  {
-    slug: "harvverse",
-    title: "Harvverse",
-    thumbnail: "/portfolio/harvverse.webp",
-    description: "An immersive digital experience tailored for a future-forward brand.",
-    liveUrl: "https://harvverse.com",
-    tags: ["Branding", "Web Design"]
-  },
-  {
     slug: "industria-alimenticia",
     title: "Industria Alimenticia",
     thumbnail: "/portfolio/industria.webp",
@@ -230,14 +214,6 @@ export const projects = [
     description: "Safety-focused website design for industrial and commercial clients.",
     liveUrl: "https://chispasafety.com",
     tags: ["Safety", "Web Design"]
-  },
-  {
-    slug: "esarah",
-    title: "ESARAH",
-    thumbnail: "/portfolio/esarah.webp",
-    description: "A sleek portfolio site for an international business service.",
-    liveUrl: "https://grupoand.com",
-    tags: ["Web Design"]
   },
   {
     slug: "asturias-y-asociados",
