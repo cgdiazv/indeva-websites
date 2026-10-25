@@ -49,7 +49,9 @@ export default function BlogArchivePage() {
       return (
         post.title.toLowerCase().includes('contractor') ||
         post.title.toLowerCase().includes('sales') ||
-        post.title.toLowerCase().includes('leads')
+        post.title.toLowerCase().includes('leads') ||
+        post.title.toLowerCase().includes('automation') ||
+        post.title.toLowerCase().includes('estimator')
       );
     }
     return true;
