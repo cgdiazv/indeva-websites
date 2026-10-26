@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { blogPosts } from '../blogposts';
+import { ArrowLeft, ArrowUpRight } from '@/components/icons/ArrowIcons';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -44,7 +45,8 @@ export default async function BlogPostPage({ params }: Props) {
             href="/blog"
             className="inline-flex items-center gap-1.5 text-xs font-mono text-slate-500 hover:text-[#F06A1A] transition-colors mb-8"
           >
-            <span>← Back to all insights</span>
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>Back to all insights</span>
           </Link>
 
           <div className="space-y-4">
@@ -138,9 +140,10 @@ export default async function BlogPostPage({ params }: Props) {
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hover:text-[#F06A1A] transition-colors"
+                    className="inline-flex items-center gap-1 hover:text-[#F06A1A] transition-colors"
                   >
-                    LinkedIn ↗
+                    <span>LinkedIn</span>
+                    <ArrowUpRight className="w-3 h-3" />
                   </a>
                   <span>·</span>
                   <button
@@ -167,7 +170,7 @@ export default async function BlogPostPage({ params }: Props) {
                   className="inline-flex items-center gap-1 font-semibold text-[#F06A1A] hover:underline pt-1"
                 >
                   <span>Book 15-Min Audit</span>
-                  <span>↗</span>
+                  <ArrowUpRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
             </aside>
@@ -207,7 +210,7 @@ export default async function BlogPostPage({ params }: Props) {
                     className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold text-white bg-[#F06A1A] hover:bg-[#dc580b] shadow-md transition-all active:scale-[0.98]"
                   >
                     <span>Get Your Free Growth Audit</span>
-                    <span>↗</span>
+                    <ArrowUpRight className="w-4 h-4" />
                   </Link>
                 </div>
               </div>
@@ -263,7 +266,7 @@ export default async function BlogPostPage({ params }: Props) {
                       className="inline-flex items-center gap-1 font-semibold text-[#F06A1A] hover:text-[#dc580b] transition-colors"
                     >
                       <span>Read insight</span>
-                      <span>↗</span>
+                      <ArrowUpRight className="w-4 h-4" />
                     </Link>
                   </div>
                 </article>

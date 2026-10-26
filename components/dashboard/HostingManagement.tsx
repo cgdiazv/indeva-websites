@@ -12,6 +12,7 @@ import {
   sendWelcomeEmail,
   runAutomatedRenewalScan
 } from '@/app/actions/hostings';
+import { ArrowRight, LoadingSpinner } from '@/components/icons/ArrowIcons';
 
 interface HostingManagementProps {
   initialHostings: HostingAccount[];
@@ -666,7 +667,7 @@ export default function HostingManagement({ initialHostings }: HostingManagement
                           title="Generate & copy custom Stripe checkout link"
                         >
                           {copyingId === hosting.id ? (
-                            <span className="animate-spin text-[10px]">⏳</span>
+                            <LoadingSpinner className="w-3.5 h-3.5 text-indigo-600" />
                           ) : (
                             <svg className="w-3.5 h-3.5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
@@ -1296,12 +1297,13 @@ function SendReminderModal({
               >
                 {isPending ? (
                   <>
-                    <span className="animate-spin text-xs">⏳</span>
+                    <LoadingSpinner className="w-3.5 h-3.5 text-white" />
                     <span>Sending Email via Resend...</span>
                   </>
                 ) : (
                   <>
-                    <span>{emailType === 'welcome' ? 'Send Welcome Email →' : 'Send Reminder Email →'}</span>
+                    <span>{emailType === 'welcome' ? 'Send Welcome Email' : 'Send Reminder Email'}</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
                   </>
                 )}
               </button>

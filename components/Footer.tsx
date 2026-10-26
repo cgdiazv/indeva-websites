@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { usePathname } from 'next/navigation';
+import { ArrowUpRight } from '@/components/icons/ArrowIcons';
 
 export default function Footer() {
   const pathname = usePathname();
@@ -109,7 +110,7 @@ export default function Footer() {
                 className="flex items-center justify-between w-full py-2.5 px-3 rounded-lg bg-[#F06A1A] hover:bg-[#dc580b] text-white text-xs font-semibold transition-colors"
               >
                 <span>Let&apos;s build better</span>
-                <span>↗</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
               </Link>
               <p className="text-[10px] text-slate-400 text-center mt-2.5">
                 Engineering clarity. Designing possibility.
@@ -145,7 +146,7 @@ export default function Footer() {
                 className="inline-flex items-center gap-1 text-sm text-slate-400 hover:text-[#F06A1A] transition-colors"
               >
                 <span>indevasa.com</span>
-                <span className="text-xs">↗</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
               </a>
             </div>
 
@@ -227,7 +228,7 @@ export default function Footer() {
               className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-mono text-slate-400 hover:text-[#F06A1A] transition-colors pt-2"
             >
               <span>Engineered to keep improving.</span>
-              <span>↗</span>
+              <ArrowUpRight className="w-3.5 h-3.5" />
             </Link>
           </div>
 

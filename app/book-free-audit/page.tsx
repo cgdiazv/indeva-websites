@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { ArrowLeft, ArrowUpRight } from '@/components/icons/ArrowIcons';
 
 export default function BookFreeAuditPage() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -158,9 +159,10 @@ export default function BookFreeAuditPage() {
                     href="https://indevasa.com"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm font-bold text-slate-900 hover:text-[#F06A1A] transition-colors"
+                    className="inline-flex items-center gap-1 text-sm font-bold text-slate-900 hover:text-[#F06A1A] transition-colors"
                   >
-                    indevasa.com ↗
+                    <span>indevasa.com</span>
+                    <ArrowUpRight className="w-3.5 h-3.5" />
                   </a>
                   <p className="text-xs text-slate-500 mt-1">
                     Consultations by video call. Office details shared when needed.
@@ -311,7 +313,7 @@ export default function BookFreeAuditPage() {
                         className="w-full py-4 px-6 rounded-xl text-base font-semibold text-white bg-[#F06A1A] hover:bg-[#dc580b] shadow-md transition-all active:scale-[0.98] flex items-center justify-center gap-2"
                       >
                         <span>Continue to your goals</span>
-                        <span>↗</span>
+                        <ArrowUpRight className="w-4 h-4" />
                       </button>
                       <p className="text-[11px] text-slate-400 text-center mt-3">
                         By continuing, you agree to our Privacy policy. No newsletter signup or unsolicited marketing.
@@ -383,16 +385,17 @@ export default function BookFreeAuditPage() {
                       <button
                         type="button"
                         onClick={() => setCurrentStep(1)}
-                        className="py-3.5 px-5 rounded-xl text-sm font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors"
+                        className="inline-flex items-center gap-1.5 py-3.5 px-5 rounded-xl text-sm font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors"
                       >
-                        ← Back
+                        <ArrowLeft className="w-4 h-4" />
+                        <span>Back</span>
                       </button>
                       <button
                         type="submit"
                         className="flex-1 py-4 px-6 rounded-xl text-base font-semibold text-white bg-[#F06A1A] hover:bg-[#dc580b] shadow-md transition-all active:scale-[0.98] flex items-center justify-center gap-2"
                       >
                         <span>Continue to time &amp; notes</span>
-                        <span>↗</span>
+                        <ArrowUpRight className="w-4 h-4" />
                       </button>
                     </div>
                   </form>
@@ -442,9 +445,10 @@ export default function BookFreeAuditPage() {
                         type="button"
                         onClick={() => setCurrentStep(2)}
                         disabled={isSubmitting}
-                        className="py-3.5 px-5 rounded-xl text-sm font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors"
+                        className="inline-flex items-center gap-1.5 py-3.5 px-5 rounded-xl text-sm font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors"
                       >
-                        ← Back
+                        <ArrowLeft className="w-4 h-4" />
+                        <span>Back</span>
                       </button>
                       <button
                         type="submit"
@@ -456,7 +460,7 @@ export default function BookFreeAuditPage() {
                         ) : (
                           <>
                             <span>Confirm &amp; Request 15-Min Audit</span>
-                            <span>↗</span>
+                            <ArrowUpRight className="w-4 h-4" />
                           </>
                         )}
                       </button>

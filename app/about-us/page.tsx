@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { ArrowUpRight } from '@/components/icons/ArrowIcons';
 
 export const metadata = {
   title: 'About Us | Indeva Websites',
@@ -27,14 +28,14 @@ export default function AboutUsPage() {
               className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl text-base font-semibold text-white bg-[#F06A1A] hover:bg-[#dc580b] shadow-sm transition-all"
             >
               <span>Book Free Audit</span>
-              <span>↗</span>
+              <ArrowUpRight className="w-4 h-4" />
             </Link>
             <Link
               href="/services"
               className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl text-base font-semibold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 transition-all shadow-xs"
             >
               <span>Explore Architecture</span>
-              <span>↗</span>
+              <ArrowUpRight className="w-4 h-4" />
             </Link>
           </div>
         </div>
@@ -123,7 +124,7 @@ export default function AboutUsPage() {
                   className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#F06A1A] hover:text-[#dc580b] transition-colors"
                 >
                   <span>Start a conversation</span>
-                  <span>↗</span>
+                  <ArrowUpRight className="w-4 h-4" />
                 </Link>
               </div>
             </div>
@@ -152,7 +153,7 @@ export default function AboutUsPage() {
               className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-base font-semibold text-white bg-[#F06A1A] hover:bg-[#dc580b] shadow-lg transition-all active:scale-[0.98] flex-shrink-0"
             >
               <span>Book 15-Min Audit</span>
-              <span>↗</span>
+              <ArrowUpRight className="w-5 h-5" />
             </Link>
           </div>
         </div>

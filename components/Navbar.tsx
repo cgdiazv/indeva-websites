@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { usePathname } from 'next/navigation';
+import { ArrowUpRight, ArrowRight } from '@/components/icons/ArrowIcons';
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -80,7 +81,7 @@ export default function Navbar() {
               className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-[#F06A1A] hover:bg-[#dc580b] shadow-sm hover:shadow transition-all duration-200 active:scale-[0.98]"
             >
               <span>Book Free Audit</span>
-              <span className="text-base leading-none">↗</span>
+              <ArrowUpRight className="w-4 h-4" />
             </Link>
           </div>
 
@@ -147,14 +148,14 @@ export default function Navbar() {
                 key={link.name}
                 href={link.href} 
                 onClick={closeDrawer} 
-                className={`flex items-center justify-between px-4 py-3 rounded-xl text-base font-medium transition-colors ${
+                className={`group flex items-center justify-between px-4 py-3 rounded-xl text-base font-medium transition-colors ${
                   isActive 
                     ? 'text-[#F06A1A] bg-orange-50 font-semibold' 
                     : 'text-slate-700 hover:text-[#F06A1A] hover:bg-slate-50'
                 }`}
               >
                 <span>{link.name}</span>
-                <span className="text-xs text-slate-400">→</span>
+                <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-[#F06A1A] transition-colors" />
               </Link>
             );
           })}
@@ -168,7 +169,7 @@ export default function Navbar() {
             className="flex items-center justify-center gap-2 w-full py-3.5 px-4 rounded-xl text-sm font-semibold text-white bg-[#F06A1A] hover:bg-[#dc580b] shadow-sm text-center"
           >
             <span>Book Free Audit</span>
-            <span>↗</span>
+            <ArrowUpRight className="w-4 h-4" />
           </Link>
           <p className="text-[11px] text-center text-slate-400 mt-2.5">
             15-min discovery · Zero pressure

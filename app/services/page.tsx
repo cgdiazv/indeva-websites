@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { ArrowUpRight } from '@/components/icons/ArrowIcons';
 
 export const metadata = {
   title: 'Services | Indeva Websites',
@@ -385,7 +386,7 @@ export default function ServicesPage() {
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-base font-semibold text-white bg-[#F06A1A] hover:bg-[#dc580b] shadow-lg transition-all active:scale-[0.98]"
               >
                 <span>Book 15-Min Audit</span>
-                <span>↗</span>
+                <ArrowUpRight className="w-5 h-5" />
               </Link>
               <span className="text-xs text-slate-400 font-mono">
                 Free. Focused. Zero pressure.

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { ArrowUpRight } from '@/components/icons/ArrowIcons';
 
 export default function Home() {
   return (
@@ -30,7 +31,7 @@ export default function Home() {
                   className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl text-base font-semibold text-white bg-[#F06A1A] hover:bg-[#dc580b] shadow-sm hover:shadow transition-all duration-200 active:scale-[0.98]"
                 >
                   <span>Book 15-Min Audit</span>
-                  <span className="text-lg leading-none">↗</span>
+                  <ArrowUpRight className="w-5 h-5" />
                 </Link>
 
                 <Link
@@ -38,7 +39,7 @@ export default function Home() {
                   className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl text-base font-semibold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 hover:border-slate-300 transition-all duration-200 shadow-xs"
                 >
                   <span>View Work</span>
-                  <span className="text-lg leading-none">↗</span>
+                  <ArrowUpRight className="w-5 h-5" />
                 </Link>
               </div>
 
@@ -292,7 +293,7 @@ export default function Home() {
                   className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#F06A1A] hover:text-[#dc580b] transition-colors"
                 >
                   <span>Explore our services</span>
-                  <span className="text-base">↗</span>
+                  <ArrowUpRight className="w-4 h-4" />
                 </Link>
               </div>
             </div>
@@ -332,7 +333,7 @@ export default function Home() {
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold text-slate-900 bg-white hover:bg-slate-50 border border-slate-200 shadow-xs hover:border-slate-300 transition-all"
                 >
                   <span>Meet your modern architecture</span>
-                  <span>↗</span>
+                  <ArrowUpRight className="w-4 h-4" />
                 </Link>
               </div>
             </div>
@@ -359,7 +360,7 @@ export default function Home() {
                       <span className="font-bold text-slate-900 text-base group-hover:text-[#F06A1A] transition-colors">
                         Experience layer
                       </span>
-                      <span className="text-slate-400 group-hover:text-[#F06A1A] transition-colors">↗</span>
+                      <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-[#F06A1A] transition-colors" />
                     </div>
                     <p className="text-xs sm:text-sm text-slate-500 font-mono">
                       Modern frontend · Fast, accessible interfaces
@@ -375,7 +376,7 @@ export default function Home() {
                       <span className="font-bold text-slate-900 text-base group-hover:text-[#F06A1A] transition-colors">
                         Content & operations
                       </span>
-                      <span className="text-slate-400 group-hover:text-[#F06A1A] transition-colors">↗</span>
+                      <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-[#F06A1A] transition-colors" />
                     </div>
                     <p className="text-xs sm:text-sm text-slate-500 font-mono">
                       Headless CMS · CRM · Payments
@@ -391,7 +392,7 @@ export default function Home() {
                       <span className="font-bold text-slate-900 text-base group-hover:text-[#F06A1A] transition-colors">
                         Cloud foundation
                       </span>
-                      <span className="text-slate-400 group-hover:text-[#F06A1A] transition-colors">↗</span>
+                      <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-[#F06A1A] transition-colors" />
                     </div>
                     <p className="text-xs sm:text-sm text-slate-500 font-mono">
                       Serverless functions · Edge delivery
@@ -434,7 +435,7 @@ export default function Home() {
                   className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-base font-semibold text-white bg-[#F06A1A] hover:bg-[#dc580b] shadow-lg transition-all active:scale-[0.98]"
                 >
                   <span>Book 15-Min Audit</span>
-                  <span className="text-lg leading-none">↗</span>
+                  <ArrowUpRight className="w-5 h-5" />
                 </Link>
                 <span className="text-xs text-slate-400 font-mono">
                   Free. Focused. Zero pressure.

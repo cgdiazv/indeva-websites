@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { blogPosts } from './blogposts';
+import { ArrowUpRight } from '@/components/icons/ArrowIcons';
 
 export default function BlogArchivePage() {
   const [activeCategory, setActiveCategory] = useState('All insights');
@@ -121,7 +122,7 @@ export default function BlogArchivePage() {
 
                     <span className="text-[#F06A1A] font-semibold text-sm flex items-center gap-1 group-hover:translate-x-1 transition-transform">
                       <span>Read the insight</span>
-                      <span>↗</span>
+                      <ArrowUpRight className="w-4 h-4" />
                     </span>
                   </div>
                 </div>
@@ -220,7 +221,7 @@ export default function BlogArchivePage() {
                     className="inline-flex items-center gap-1 font-semibold text-[#F06A1A] hover:text-[#dc580b] transition-colors"
                   >
                     <span>Read insight</span>
-                    <span>↗</span>
+                    <ArrowUpRight className="w-4 h-4" />
                   </Link>
                 </div>
               </article>
@@ -247,7 +248,7 @@ export default function BlogArchivePage() {
               className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-sm font-semibold text-white bg-[#F06A1A] hover:bg-[#dc580b] shadow-md transition-all active:scale-[0.98] flex-shrink-0"
             >
               <span>Get Your Free Growth Audit</span>
-              <span>↗</span>
+              <ArrowUpRight className="w-4 h-4" />
             </Link>
           </div>
         </div>

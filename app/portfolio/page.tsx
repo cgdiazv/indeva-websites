@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { projects } from '@/data/portfolio';
+import { ArrowUpRight, ArrowDownRight } from '@/components/icons/ArrowIcons';
 
 export default function PortfolioPage() {
   const [activeCategory, setActiveCategory] = useState('All work');
@@ -57,8 +58,9 @@ export default function PortfolioPage() {
             ))}
           </div>
 
-          <p className="text-xs text-slate-400 font-mono pt-2">
-            Showing {filteredProjects.length} platforms · Explore the thinking behind the interface ↘
+          <p className="text-xs text-slate-400 font-mono pt-2 inline-flex items-center gap-1.5">
+            <span>Showing {filteredProjects.length} platforms · Explore the thinking behind the interface</span>
+            <ArrowDownRight className="w-3.5 h-3.5 text-slate-400" />
           </p>
         </div>
       </section>
@@ -155,7 +157,7 @@ export default function PortfolioPage() {
                       className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-800 bg-slate-100 hover:bg-[#F06A1A] hover:text-white transition-all duration-200"
                     >
                       <span>View Live Site</span>
-                      <span>↗</span>
+                      <ArrowUpRight className="w-4 h-4" />
                     </a>
                   </div>
                 </div>
@@ -230,7 +232,7 @@ export default function PortfolioPage() {
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-base font-semibold text-white bg-[#F06A1A] hover:bg-[#dc580b] shadow-lg transition-all active:scale-[0.98]"
               >
                 <span>Book 15-Min Audit</span>
-                <span>↗</span>
+                <ArrowUpRight className="w-5 h-5" />
               </Link>
               <span className="text-xs text-slate-400 font-mono">
                 Free. Focused. Zero pressure.
