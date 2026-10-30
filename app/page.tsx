@@ -56,8 +56,7 @@ export default function Home() {
                 
                 {/* Header status bar */}
                 <div className="flex items-center justify-between pb-6 border-b border-slate-800/80">
-                  <div className="flex items-center gap-2 text-xs font-mono text-slate-400">
-                    <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <div className="text-xs font-mono text-slate-400">
                     <span>indeva / production</span>
                   </div>
                   <span className="px-2.5 py-0.5 rounded-md text-[11px] font-mono uppercase tracking-wider bg-slate-800 text-slate-300 border border-slate-700/60">
