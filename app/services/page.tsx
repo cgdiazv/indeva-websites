@@ -93,7 +93,7 @@ export default function ServicesPage() {
                 </h3>
 
                 <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-                  Connect the moments between interest and revenue. Stripe payments trigger CRM updates, Resend invoicing and automated scheduling, without the copy-paste.
+                  Connect the moments between interest and revenue. Online payments trigger CRM updates, automated invoicing and scheduling, without the copy-paste.
                 </p>
 
                 {/* Workflow pipeline graphic */}
@@ -132,9 +132,9 @@ export default function ServicesPage() {
               </div>
 
               <div className="flex flex-wrap gap-2 pt-8">
-                <span className="px-3 py-1 rounded-lg text-xs font-medium bg-slate-100 text-slate-600">Stripe</span>
+                <span className="px-3 py-1 rounded-lg text-xs font-medium bg-slate-100 text-slate-600">Payments</span>
                 <span className="px-3 py-1 rounded-lg text-xs font-medium bg-slate-100 text-slate-600">CRM</span>
-                <span className="px-3 py-1 rounded-lg text-xs font-medium bg-slate-100 text-slate-600">Resend</span>
+                <span className="px-3 py-1 rounded-lg text-xs font-medium bg-slate-100 text-slate-600">Email automation</span>
               </div>
             </div>
 

@@ -378,7 +378,7 @@ export default function HostingManagement({ initialHostings }: HostingManagement
           <div className="flex items-center gap-1.5 overflow-x-auto py-1">
             <button
               onClick={() => setStatusFilter('all')}
-              className={`px-3 py-1 text-xs font-medium rounded-full transition-colors whitespace-nowrap ${
+              className={`px-3 py-1 text-xs font-medium rounded-lg transition-colors whitespace-nowrap ${
                 statusFilter === 'all'
                   ? 'bg-gray-900 text-white'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -388,7 +388,7 @@ export default function HostingManagement({ initialHostings }: HostingManagement
             </button>
             <button
               onClick={() => setStatusFilter('pending_renewal')}
-              className={`px-3 py-1 text-xs font-medium rounded-full transition-colors whitespace-nowrap ${
+              className={`px-3 py-1 text-xs font-medium rounded-lg transition-colors whitespace-nowrap ${
                 statusFilter === 'pending_renewal'
                   ? 'bg-amber-500 text-white'
                   : 'bg-amber-50 text-amber-700 hover:bg-amber-100'
@@ -398,7 +398,7 @@ export default function HostingManagement({ initialHostings }: HostingManagement
             </button>
             <button
               onClick={() => setStatusFilter('overdue')}
-              className={`px-3 py-1 text-xs font-medium rounded-full transition-colors whitespace-nowrap ${
+              className={`px-3 py-1 text-xs font-medium rounded-lg transition-colors whitespace-nowrap ${
                 statusFilter === 'overdue'
                   ? 'bg-rose-600 text-white'
                   : 'bg-rose-50 text-rose-700 hover:bg-rose-100'
@@ -408,7 +408,7 @@ export default function HostingManagement({ initialHostings }: HostingManagement
             </button>
             <button
               onClick={() => setStatusFilter('active')}
-              className={`px-3 py-1 text-xs font-medium rounded-full transition-colors whitespace-nowrap ${
+              className={`px-3 py-1 text-xs font-medium rounded-lg transition-colors whitespace-nowrap ${
                 statusFilter === 'active'
                   ? 'bg-emerald-600 text-white'
                   : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'
@@ -418,7 +418,7 @@ export default function HostingManagement({ initialHostings }: HostingManagement
             </button>
             <button
               onClick={() => setStatusFilter('suspended')}
-              className={`px-3 py-1 text-xs font-medium rounded-full transition-colors whitespace-nowrap ${
+              className={`px-3 py-1 text-xs font-medium rounded-lg transition-colors whitespace-nowrap ${
                 statusFilter === 'suspended'
                   ? 'bg-gray-700 text-white'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'

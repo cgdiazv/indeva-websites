@@ -84,7 +84,7 @@ export default function Footer() {
           
           {/* Mobile phone teaser card preview from Figma */}
           <div className="lg:col-span-4 flex justify-center lg:justify-start">
-            <div className="w-full max-w-[280px] bg-gradient-to-b from-slate-900 to-black p-4 rounded-[28px] border border-slate-800 shadow-2xl relative overflow-hidden group">
+            <div className="w-full max-w-[280px] bg-gradient-to-b from-slate-900 to-black p-4 rounded-2xl border border-slate-800 shadow-2xl relative overflow-hidden group">
               <div className="flex items-center justify-between text-[10px] text-slate-400 font-mono mb-3">
                 <span>3:16</span>
                 <span className="flex items-center gap-1">
