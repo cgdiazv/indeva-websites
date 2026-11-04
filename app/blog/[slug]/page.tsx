@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { blogPosts } from '../blogposts';
 import { ArrowLeft, ArrowUpRight } from '@/components/icons/ArrowIcons';
+import CopyLinkButton from './CopyLinkButton';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -146,16 +147,7 @@ export default async function BlogPostPage({ params }: Props) {
                     <ArrowUpRight className="w-3 h-3" />
                   </a>
                   <span>·</span>
-                  <button
-                    onClick={() => {
-                      if (typeof window !== 'undefined') {
-                        navigator.clipboard?.writeText(window.location.href);
-                      }
-                    }}
-                    className="hover:text-[#F06A1A] transition-colors"
-                  >
-                    Copy link
-                  </button>
+                  <CopyLinkButton />
                 </div>
               </div>
 
