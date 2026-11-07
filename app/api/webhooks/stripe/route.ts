@@ -1,11 +1,12 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { db } from '@/lib/firebaseAdmin';
-import { getNextOrderNumber } from '@/lib/orderCounter';
+import { recordStripeSale } from '@/lib/stripeSale';
+import { isHostingCheckoutInvoice } from '@/lib/stripeInvoiceOrigin';
 import { Resend } from 'resend';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_dummy_key_for_build', {
-  apiVersion: '2025-10-28' as any,
+  apiVersion: '2025-10-28' as NonNullable<ConstructorParameters<typeof Stripe>[1]>['apiVersion'],
 });
 
 function getResendClient() {
@@ -26,9 +27,10 @@ export async function POST(request: Request) {
     if (!sig) throw new Error('Missing stripe-signature header');
     if (!endpointSecret) throw new Error('STRIPE_WEBHOOK_SECRET is not configured');
     event = stripe.webhooks.constructEvent(body, sig, endpointSecret);
-  } catch (err: any) {
-    console.error(`❌ Webhook signature verification failed:`, err.message);
-    return NextResponse.json({ error: `Webhook Error: ${err.message}` }, { status: 400 });
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'Unknown signature verification error';
+    console.error(`❌ Webhook signature verification failed:`, message);
+    return NextResponse.json({ error: `Webhook Error: ${message}` }, { status: 400 });
   }
 
   // 2. Handle successful INITIAL subscription sign-up & One-time checkouts
@@ -47,60 +49,45 @@ export async function POST(request: Request) {
           totalItems = lineItems.data.reduce((acc, item) => acc + (item.quantity || 0), 0);
         }
       } catch (lineError) {
-        console.log('ℹ️ Could not pull standard line items, using mode default.');
+        console.error('ℹ️ Could not pull standard line items, using mode default:', lineError);
       }
 
-      const stripeReference = (session.invoice as string) || session.id || '-';
+      const invoiceId = typeof session.invoice === 'string' ? session.invoice : session.invoice?.id;
+      const stripeReference = invoiceId || session.id;
+      const customerName = session.customer_details?.name || 'Unknown Customer';
+      const customerEmail = session.customer_details?.email;
+      const netSales = (session.amount_total || 0) / 100;
+      const discount = session.total_details?.breakdown?.discounts?.[0]?.discount;
+      const coupon = discount && 'coupon' in discount ? discount.coupon : undefined;
+      const couponApplied = typeof coupon === 'object' && coupon && 'id' in coupon
+        ? String(coupon.id) : '-';
+      const isHostingRenewal = session.metadata?.type === 'hosting_renewal';
+      if (isHostingRenewal && !session.metadata?.hosting_id) {
+        throw new Error(`Hosting renewal session ${session.id} has no hosting account ID`);
+      }
 
-      // Deduplication check: verify this checkout session or its invoice hasn't already been recorded
-      const refsToCheck = [session.id];
-      if (session.invoice) refsToCheck.push(session.invoice as string);
-      const existingSale = await db.collection('sales')
-        .where('stripe_reference', 'in', refsToCheck)
-        .limit(1)
-        .get();
+      const salePayload = {
+        date: new Date().toISOString(),
+        status: session.payment_status === 'paid' ? 'Completed' : 'Pending',
+        customer: String(customerName),
+        customer_type: session.customer ? 'Registered' : 'Guest',
+        products: String(productNames || 'Subscription Plan'),
+        items_sold: Number(totalItems) || 1,
+        coupons: String(couponApplied),
+        net_sales: Number(netSales) || 0,
+        attribution: isHostingRenewal ? 'Hosting Renewal' : (session.metadata?.utm_source || 'Direct'),
+        stripe_reference: stripeReference,
+      };
+      const { orderNumber, created } = await recordStripeSale(
+        db,
+        [session.id, ...(invoiceId ? [invoiceId] : [])],
+        salePayload,
+        isHostingRenewal && session.payment_status === 'paid' ? session.metadata?.hosting_id : undefined
+      );
 
-      let orderNumber: number;
-      const isAlreadyRecorded = !existingSale.empty;
-
-      if (isAlreadyRecorded) {
+      if (!created) {
         console.log(`ℹ️ Sale already recorded for session ${session.id} (ref: ${stripeReference}), skipping duplicate sale insertion.`);
-        orderNumber = existingSale.docs[0].data().order_number;
       } else {
-        // Generate sequential numeric order number
-        orderNumber = await getNextOrderNumber();
-
-        const customerName = session.customer_details?.name || 'Unknown Customer';
-        const customerEmail = session.customer_details?.email;
-        const netSales = (session.amount_total || 0) / 100;
-
-        let couponApplied = '-';
-        const totalDetails = session.total_details as any;
-        if (totalDetails?.breakdown?.discounts?.length > 0) {
-          couponApplied = totalDetails.breakdown.discounts[0]?.discount?.coupon?.id || '-';
-        }
-
-        const isHostingRenewal = session.metadata?.type === 'hosting_renewal';
-        const attribution = isHostingRenewal 
-          ? 'Hosting Renewal' 
-          : (session.metadata?.utm_source || 'Direct');
-
-        const salePayload = {
-          date: new Date().toISOString(),
-          order_number: orderNumber,
-          status: session.payment_status === 'paid' ? 'Completed' : 'Pending',
-          customer: String(customerName),
-          customer_type: session.customer ? 'Registered' : 'Guest',
-          products: String(productNames || 'Subscription Plan'),
-          items_sold: Number(totalItems) || 1,
-          coupons: String(couponApplied),
-          net_sales: Number(netSales) || 0,
-          attribution: String(attribution),
-          stripe_reference: String(stripeReference),
-        };
-
-        // Save to Firestore sales collection
-        await db.collection('sales').add(salePayload);
         console.log(`Base synced: ✅ Sale successfully logged to Firebase for order #${orderNumber}`);
 
         // Send Custom HTML Email via Resend if email exists
@@ -141,39 +128,6 @@ export async function POST(request: Request) {
         }
       }
 
-      // If this was a Hosting Renewal, auto-advance the client's hosting renewal date in Firestore
-      const isHostingRenewal = session.metadata?.type === 'hosting_renewal';
-      if (isHostingRenewal && session.metadata?.hosting_id) {
-        try {
-          const hostingRef = db.collection('hosting_accounts').doc(session.metadata.hosting_id);
-          const hostingDoc = await hostingRef.get();
-          if (hostingDoc.exists) {
-            const hostingData = hostingDoc.data();
-            const currentRenewal = new Date(hostingData?.renewalDate || new Date());
-            let nextRenewal = new Date(currentRenewal);
-            nextRenewal.setFullYear(nextRenewal.getFullYear() + 1);
-
-            const today = new Date();
-            if (nextRenewal < today) {
-              nextRenewal = new Date(today);
-              nextRenewal.setFullYear(today.getFullYear() + 1);
-            }
-
-            const nextRenewalStr = nextRenewal.toISOString().split('T')[0];
-
-            await hostingRef.update({
-              renewalDate: nextRenewalStr,
-              status: 'active',
-              lastPaidOrderNumber: orderNumber,
-              updatedAt: new Date().toISOString(),
-            });
-            console.log(`Hosting auto-renewed: ✅ Hosting account #${session.metadata.hosting_id} (${hostingData?.domain}) renewed until ${nextRenewalStr}`);
-          }
-        } catch (hostingRenewalErr) {
-          console.error('❌ Error auto-advancing hosting renewal in Firestore:', hostingRenewalErr);
-        }
-      }
-
     } catch (dbError) {
       console.error('❌ Error processing or saving data:', dbError);
       return NextResponse.json({ error: 'Database insertion failed' }, { status: 500 });
@@ -185,20 +139,12 @@ export async function POST(request: Request) {
     const invoice = event.data.object as Stripe.Invoice;
 
     try {
-      const stripeReference = invoice.number || invoice.id || '-';
-
-      // Deduplication check: verify this invoice hasn't already been processed
-      const existingSale = await db.collection('sales')
-        .where('stripe_reference', 'in', [invoice.id, invoice.number].filter(Boolean))
-        .limit(1)
-        .get();
-
-      if (!existingSale.empty) {
-        console.log(`ℹ️ Sale already exists for invoice ${invoice.id} (${invoice.number}), skipping duplicate.`);
-        return NextResponse.json({ received: true, message: 'Already processed' });
+      if (await isHostingCheckoutInvoice(stripe, invoice)) {
+        console.log(`ℹ️ Invoice ${invoice.id} belongs to a hosting checkout; the checkout records the sale.`);
+        return NextResponse.json({ received: true, message: 'Hosting checkout invoice' });
       }
 
-      const orderNumber = await getNextOrderNumber();
+      const stripeReference = invoice.number || invoice.id || '-';
       const customerName = invoice.customer_name || invoice.customer_email || 'Subscription Customer';
       const customerEmail = invoice.customer_email;
       const netSales = (invoice.amount_paid || 0) / 100;
@@ -226,7 +172,6 @@ export async function POST(request: Request) {
 
       const salePayload = {
         date: paymentDate,
-        order_number: orderNumber,
         status: 'Completed',
         customer: String(customerName),
         customer_type: 'Registered',
@@ -238,8 +183,13 @@ export async function POST(request: Request) {
         stripe_reference: String(stripeReference),
       };
 
-      // Save record seamlessly to Firestore
-      await db.collection('sales').add(salePayload);
+      const { orderNumber, created } = await recordStripeSale(
+        db, [invoice.id, ...(invoice.number ? [invoice.number] : [])], salePayload
+      );
+      if (!created) {
+        console.log(`ℹ️ Sale already exists for invoice ${invoice.id} (${invoice.number}), skipping duplicate.`);
+        return NextResponse.json({ received: true, message: 'Already processed' });
+      }
       console.log(`Invoice synced: ✅ Payment captured for invoice #${orderNumber} (${stripeReference})`);
 
       // Email customer invoice receipt statement via Resend

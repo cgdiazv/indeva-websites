@@ -43,6 +43,9 @@ export async function createHostingRenewalCheckoutSession(
       },
       invoice_creation: {
         enabled: true,
+        invoice_data: {
+          metadata: { type: 'hosting_renewal_checkout' },
+        },
       },
       success_url: `${origin}/thank-you?session_id={CHECKOUT_SESSION_ID}&renewal=true`,
       cancel_url: `${origin}`,
@@ -53,11 +56,11 @@ export async function createHostingRenewalCheckoutSession(
       url: session.url,
       sessionId: session.id,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error creating Stripe renewal checkout session:', error);
     return {
       success: false,
-      error: error.message || 'Failed to generate Stripe checkout session.',
+      error: error instanceof Error ? error.message : 'Failed to generate Stripe checkout session.',
     };
   }
 }

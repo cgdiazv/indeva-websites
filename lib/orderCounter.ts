@@ -1,5 +1,9 @@
 import { db } from '@/lib/firebaseAdmin';
 
+export function nextOrderNumber(lastOrderNumber: unknown): number {
+  return typeof lastOrderNumber === 'number' ? lastOrderNumber + 1 : 4642;
+}
+
 /**
  * Retrieves the next sequential order number using an atomic transaction.
  * If the counter does not exist yet in Firestore, it initializes starting at 4642.
@@ -10,24 +14,17 @@ export async function getNextOrderNumber(): Promise<number> {
 
   return await db.runTransaction(async (transaction) => {
     const counterDoc = await transaction.get(counterRef);
-    let nextOrderNumber = 4642;
-
-    if (counterDoc.exists) {
-      const data = counterDoc.data();
-      if (typeof data?.lastOrderNumber === 'number') {
-        nextOrderNumber = data.lastOrderNumber + 1;
-      }
-    }
+    const orderNumber = nextOrderNumber(counterDoc.data()?.lastOrderNumber);
 
     transaction.set(
       counterRef,
       {
-        lastOrderNumber: nextOrderNumber,
+        lastOrderNumber: orderNumber,
         updatedAt: new Date().toISOString(),
       },
       { merge: true }
     );
 
-    return nextOrderNumber;
+    return orderNumber;
   });
 }

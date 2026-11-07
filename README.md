@@ -1,5 +1,23 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Stripe hosting renewals
+
+Hosting renewal checkout payments are recorded from the Checkout webhook; their
+automatically generated invoices are not separate sales. Newly created checkout
+invoices carry a renewal marker. Older links can be matched when Stripe exposes
+the invoice's payment intent and its associated Checkout session. Stripe sales
+and hosting renewal dates are recorded atomically so
+webhook retries do not duplicate a sale or advance a renewal twice. Stripe lookup
+or database errors cause a webhook failure so Stripe can retry.
+
+Existing duplicate sales are not removed automatically. Verify the Stripe
+payment references before deleting any historical duplicate from the dashboard.
+
+Run the webhook regression tests with `node --test tests\stripe-webhooks.test.mjs`.
+Renewal checkout links return clients to the thank-you page, which verifies the
+Checkout session before confirming payment; audit submissions retain their own
+confirmation message. Run the page tests with `node --test tests\thank-you.test.mjs`.
+
 ## Getting Started
 
 First, run the development server:
