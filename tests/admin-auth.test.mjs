@@ -4,13 +4,16 @@ import fs from 'node:fs';
 import path from 'node:path';
 import Module from 'node:module';
 import { fileURLToPath } from 'node:url';
+import React from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+import { QRCodeSVG } from 'qrcode.react';
 import ts from 'typescript';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 function load(file, dependencies = {}) {
   const filename = path.join(root, file);
   const source = ts.transpileModule(fs.readFileSync(filename, 'utf8'), {
-    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, esModuleInterop: true },
+    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, esModuleInterop: true, jsx: ts.JsxEmit.ReactJSX },
   }).outputText;
   const loaded = new Module(filename);
   loaded.filename = filename;
@@ -22,6 +25,38 @@ function load(file, dependencies = {}) {
 }
 
 const claims = { uid: 'admin-uid', email_verified: true, auth_time: Math.floor(Date.now() / 1000), firebase: { sign_in_second_factor: 'totp' } };
+
+test('authenticator enrollment renders the Firebase TOTP URI as a local QR code and retains the manual key', () => {
+  const uri = 'otpauth://totp/Indeva:test?secret=TESTSECRET&issuer=Indeva';
+  const secret = {
+    secretKey: 'TESTSECRET',
+    generateQrCodeUrl(account, issuer) {
+      assert.equal(account, undefined);
+      assert.equal(issuer, 'Indeva');
+      return uri;
+    },
+  };
+  let stateIndex = 0;
+  let qrValue;
+  const component = load('components/dashboard/EnrollAuthenticator.tsx', {
+    react: {
+      useState(initial) { return [stateIndex++ === 3 ? secret : initial, () => {}]; },
+      useEffect() {},
+      useRef(initial) { return { current: initial }; },
+    },
+    'firebase/app': { FirebaseError: class FirebaseError extends Error {} },
+    'firebase/auth': { PhoneMultiFactorGenerator: { FACTOR_ID: 'phone' } },
+    'qrcode.react': { QRCodeSVG(props) { qrValue = props.value; return React.createElement(QRCodeSVG, props); } },
+    '@/app/actions/auth': {},
+  });
+  const html = renderToStaticMarkup(component.default({ auth: {}, resolver: { hints: [] }, onCancel() {} }));
+  assert.equal(qrValue, uri);
+  assert.match(html, /<svg/);
+  assert.match(html, /<path/);
+  assert.match(html, /TESTSECRET/);
+  assert.match(html, /Código del autenticador/);
+});
+
 function fixture() {
   let cookie;
   let currentClaims = claims;

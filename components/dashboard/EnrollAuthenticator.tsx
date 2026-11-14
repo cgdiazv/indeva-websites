@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { FirebaseError } from 'firebase/app';
+import { QRCodeSVG } from 'qrcode.react';
 import {
   multiFactor, PhoneAuthProvider, PhoneMultiFactorGenerator,
   RecaptchaVerifier, TotpMultiFactorGenerator,
@@ -135,7 +136,9 @@ export default function EnrollAuthenticator({ auth, resolver, onCancel }: {
     <div className="space-y-4">
       <h3 className="font-bold text-gray-900">Configurar aplicación de autenticación</h3>
       {done ? <p className="text-sm text-emerald-700">Autenticador registrado. Vuelve a iniciar sesión con tu correo, contraseña y el código de la aplicación.</p> : secret ? <>
-        <p className="text-sm text-gray-700">Agrega esta clave en tu aplicación de autenticación. No la compartas.</p>
+        <p className="text-sm text-gray-700">Escanea este código QR con tu aplicación de autenticación. No compartas el código QR ni la clave.</p>
+        <QRCodeSVG value={secret.generateQrCodeUrl(undefined, 'Indeva')} size={216} marginSize={4} title="Código QR de configuración del autenticador" />
+        <p className="text-sm text-gray-700">Si no puedes escanearlo, agrega esta clave manualmente:</p>
         <div className="font-mono break-all bg-gray-100 p-3 rounded" aria-label="Clave del autenticador">{secret.secretKey}</div>
         <label className="block text-sm text-gray-700">Código del autenticador
           <input value={totpCode} onChange={event => setTotpCode(event.target.value)} inputMode="numeric" autoComplete="one-time-code" className="block w-full mt-1 px-3 py-2 border border-gray-300 rounded-md" />

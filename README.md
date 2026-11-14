@@ -64,9 +64,11 @@ dashboard access. Existing sessions and the old shared password are invalid.
    Use Firebase's secure account-recovery procedures if the factor is lost.
    If the account already has phone MFA, use the login page instead: after
    entering the password, verify the existing phone factor using reCAPTCHA and
-   SMS, then add the displayed secret to the authenticator app and confirm its
-   code. This enrollment flow does not grant dashboard access using phone MFA;
-   sign in again with TOTP afterward. The Firebase project must have both phone
+   SMS, then scan the QR code with an authenticator app (or enter the displayed
+   secret manually) and confirm its code. Do not share the QR code or secret.
+   The QR code is generated locally in the browser. This enrollment flow does
+   not grant dashboard access using phone MFA; sign in again with TOTP afterward.
+   The Firebase project must have both phone
    MFA and TOTP enabled, and its authorized domains and SMS region policy must
    allow the sign-in. See Firebase's
    [TOTP setup instructions](https://firebase.google.com/docs/auth/web/totp-mfa).
