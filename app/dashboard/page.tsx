@@ -4,6 +4,8 @@ import type { ExpenseRecord } from '@/lib/expenseUtils';
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
 import SalesManagement from '@/components/dashboard/SalesManagement';
 import ExpensesManagement from '@/components/dashboard/ExpensesManagement';
+import { requireAdminSession } from '@/lib/adminSession';
+import { redirect } from 'next/navigation';
 
 // Bypass caching so your sales dashboard is always real-time
 export const dynamic = 'force-dynamic';
@@ -77,6 +79,12 @@ function filterRecords<T extends { date?: string }>(items: T[], period: string =
 }
 
 export default async function SalesDashboard({ searchParams }: PageProps) {
+  try {
+    await requireAdminSession();
+  } catch (error) {
+    console.error('Dashboard authorization failed:', error);
+    redirect('/acceder');
+  }
   const resolvedSearchParams = await searchParams;
   const period = resolvedSearchParams.period || 'all';
   const startDate = resolvedSearchParams.startDate;

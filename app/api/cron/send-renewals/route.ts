@@ -9,15 +9,14 @@ export const dynamic = 'force-dynamic';
  * URL: /api/cron/send-renewals
  */
 export async function GET(request: Request) {
-  // Optional security check if CRON_SECRET is configured
   const authHeader = request.headers.get('authorization');
   const cronSecret = process.env.CRON_SECRET;
 
-  if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
+  if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const result = await runAutomatedRenewalScan();
+  const result = await runAutomatedRenewalScan(cronSecret);
   return NextResponse.json(result, { status: result.success ? 200 : 500 });
 }
 

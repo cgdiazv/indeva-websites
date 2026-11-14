@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useTransition } from 'react';
 import DashboardDateFilter from '@/components/DashboardDateFilter';
+import RocketMoneyImport from '@/components/dashboard/RocketMoneyImport';
 import { useRouter } from 'next/navigation';
 import {
   type ExpenseRecord,
@@ -389,6 +390,8 @@ export default function ExpensesManagement({
           )}
         </div>
       </div>
+
+      <RocketMoneyImport />
 
       {/* Expenses Table */}
       <div className="bg-white rounded-xl shadow-xs overflow-hidden border border-slate-200/80">

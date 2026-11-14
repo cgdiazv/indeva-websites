@@ -3,6 +3,7 @@
 import { db } from '@/lib/firebaseAdmin';
 import { revalidatePath } from 'next/cache';
 import { getNextOrderNumber } from '@/lib/orderCounter';
+import { requireAdminSession } from '@/lib/adminSession';
 
 export interface ManualSaleInput {
   customerName: string;
@@ -24,6 +25,7 @@ export interface ManualSaleInput {
  * and refreshes the dashboard view.
  */
 export async function createManualSale(input: ManualSaleInput) {
+  await requireAdminSession();
   try {
     const customerName = input.customerName?.trim();
     if (!customerName) {
@@ -124,6 +126,7 @@ export async function createManualSale(input: ManualSaleInput) {
  * Deletes a manual sale entry from Firestore
  */
 export async function deleteManualSale(saleId: string) {
+  await requireAdminSession();
   try {
     if (!saleId) return { success: false, error: 'Sale ID is required.' };
     const saleRef = db.collection('sales').doc(saleId);

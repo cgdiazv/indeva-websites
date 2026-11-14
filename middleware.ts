@@ -5,7 +5,7 @@ export function middleware(request: NextRequest) {
   // Check if trying to access the dashboard
   if (request.nextUrl.pathname.startsWith('/dashboard')) {
     // Check for admin session cookie
-    const hasAdminSession = request.cookies.has('admin_session');
+    const hasAdminSession = request.cookies.has('__session');
     
     // If no session, redirect to login page
     if (!hasAdminSession) {

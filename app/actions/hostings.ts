@@ -1,5 +1,8 @@
 'use server';
 
+import { createHash, timingSafeEqual } from 'node:crypto';
+import { requireAdminSession } from '@/lib/adminSession';
+
 import { db } from '@/lib/firebaseAdmin';
 import { revalidatePath } from 'next/cache';
 import { type HostingAccount, calculateRenewalStatus } from '@/lib/hostingUtils';
@@ -16,6 +19,7 @@ function getResendClient() {
  * Fetch all hosting accounts sorted by renewal date ascending (earliest renewals first)
  */
 export async function getHostingAccounts(): Promise<HostingAccount[]> {
+  await requireAdminSession();
   try {
     const snapshot = await db.collection('hosting_accounts').orderBy('renewalDate', 'asc').get();
     return snapshot.docs.map(doc => ({
@@ -32,6 +36,7 @@ export async function getHostingAccounts(): Promise<HostingAccount[]> {
  * Create a new hosting account
  */
 export async function createHostingAccount(formData: FormData) {
+  await requireAdminSession();
   try {
     const customerName = (formData.get('customerName') as string)?.trim();
     const customerEmail = (formData.get('customerEmail') as string)?.trim() || '';
@@ -102,6 +107,7 @@ export async function createHostingAccount(formData: FormData) {
  * Update an existing hosting account
  */
 export async function updateHostingAccount(id: string, formData: FormData) {
+  await requireAdminSession();
   try {
     const customerName = (formData.get('customerName') as string)?.trim();
     const customerEmail = (formData.get('customerEmail') as string)?.trim() || '';
@@ -151,6 +157,7 @@ export async function updateHostingAccount(id: string, formData: FormData) {
  * Quick-renew a hosting account (advances renewal date by 1 year or cycle)
  */
 export async function quickRenewHosting(id: string, yearsToAdd: number = 1) {
+  await requireAdminSession();
   try {
     const doc = await db.collection('hosting_accounts').doc(id).get();
     if (!doc.exists) {
@@ -192,6 +199,7 @@ export async function quickRenewHosting(id: string, yearsToAdd: number = 1) {
  * Delete a hosting account
  */
 export async function deleteHostingAccount(id: string) {
+  await requireAdminSession();
   try {
     await db.collection('hosting_accounts').doc(id).delete();
     revalidatePath('/dashboard');
@@ -207,6 +215,7 @@ export async function deleteHostingAccount(id: string) {
  * Generate a dynamic Stripe Checkout payment link for a hosting account
  */
 export async function generateRenewalPaymentLink(hostingId: string) {
+  await requireAdminSession();
   try {
     const doc = await db.collection('hosting_accounts').doc(hostingId).get();
     if (!doc.exists) {
@@ -243,6 +252,11 @@ export async function generateRenewalPaymentLink(hostingId: string) {
  * Send an automated / manual renewal reminder email with the dynamic Stripe Checkout link via Resend
  */
 export async function sendRenewalReminderEmail(hostingId: string, customMessage?: string) {
+  await requireAdminSession();
+  return sendRenewalReminderEmailInternal(hostingId, customMessage);
+}
+
+async function sendRenewalReminderEmailInternal(hostingId: string, customMessage?: string) {
   try {
     const doc = await db.collection('hosting_accounts').doc(hostingId).get();
     if (!doc.exists) {
@@ -413,6 +427,7 @@ export async function sendRenewalReminderEmail(hostingId: string, customMessage?
  * Send an official Welcome & Hosting Confirmation email to a new or existing client via Resend
  */
 export async function sendWelcomeEmail(hostingId: string, customMessage?: string) {
+  await requireAdminSession();
   try {
     const doc = await db.collection('hosting_accounts').doc(hostingId).get();
     if (!doc.exists) {
@@ -648,7 +663,11 @@ export async function sendWelcomeEmail(hostingId: string, customMessage?: string
  * Automated Scanner that evaluates all hosting accounts and sends renewal reminder emails
  * to customers whose hosting is expiring in 30, 14, 7, <=3, or <=0 days (with anti-spam safeguards).
  */
-export async function runAutomatedRenewalScan() {
+export async function runAutomatedRenewalScan(cronSecret?: string) {
+  const expected = process.env.CRON_SECRET;
+  const validCronSecret = typeof cronSecret === 'string' && cronSecret.length <= 1024 && !!expected &&
+    timingSafeEqual(createHash('sha256').update(cronSecret).digest(), createHash('sha256').update(expected).digest());
+  if (!validCronSecret) await requireAdminSession();
   try {
     const snapshot = await db.collection('hosting_accounts').get();
     const accounts = snapshot.docs.map(doc => ({
@@ -746,7 +765,7 @@ export async function runAutomatedRenewalScan() {
       }
 
       // Send the reminder
-      const sendRes = await sendRenewalReminderEmail(account.id);
+      const sendRes = await sendRenewalReminderEmailInternal(account.id);
       if (sendRes.success) {
         sentCount++;
         details.push({

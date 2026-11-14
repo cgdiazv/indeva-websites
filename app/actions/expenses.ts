@@ -3,6 +3,7 @@
 import { db } from '@/lib/firebaseAdmin';
 import { revalidatePath } from 'next/cache';
 import type { ExpenseRecord } from '@/lib/expenseUtils';
+import { requireAdminSession } from '@/lib/adminSession';
 
 export interface CreateExpenseInput {
   title: string;
@@ -19,6 +20,7 @@ export interface CreateExpenseInput {
  * Fetch all expenses from Firestore ordered by date descending
  */
 export async function getExpenses(): Promise<ExpenseRecord[]> {
+  await requireAdminSession();
   try {
     const snapshot = await db.collection('expenses').orderBy('date', 'desc').get();
     return snapshot.docs.map(doc => ({
@@ -35,6 +37,7 @@ export async function getExpenses(): Promise<ExpenseRecord[]> {
  * Create a new expense record in Firestore
  */
 export async function createExpense(input: CreateExpenseInput) {
+  await requireAdminSession();
   try {
     const title = input.title?.trim();
     if (!title) {
@@ -85,6 +88,7 @@ export async function createExpense(input: CreateExpenseInput) {
  * Update an existing expense in Firestore
  */
 export async function updateExpense(id: string, input: Partial<CreateExpenseInput>) {
+  await requireAdminSession();
   try {
     if (!id) {
       return { success: false, error: 'Expense ID is required.' };
@@ -140,6 +144,7 @@ export async function updateExpense(id: string, input: Partial<CreateExpenseInpu
  * Delete an expense from Firestore
  */
 export async function deleteExpense(id: string) {
+  await requireAdminSession();
   try {
     if (!id) {
       return { success: false, error: 'Expense ID is required.' };
